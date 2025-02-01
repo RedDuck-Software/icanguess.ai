@@ -2,6 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { INestApplication, Logger, ValidationPipe } from '@nestjs/common';
+import * as session from 'express-session';
+import { Session } from 'express-session';
 
 function setupSwagger<T>(app: INestApplication<T>, prefix: string) {
   const config = new DocumentBuilder()
@@ -27,9 +29,21 @@ async function bootstrap() {
     }),
   );
 
+  app.use(
+    session({
+      name: 'siwe-quickstart',
+      secret: 'siwe-quickstart-secret',
+      resave: true,
+      saveUninitialized: true,
+      cookie: { secure: false, sameSite: true },
+    }),
+  );
+
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
   setupSwagger(app, globalPrefix);
+
+  app.enableCors();
 
   const port = process.env.PORT || 3000;
   await app.listen(port);
