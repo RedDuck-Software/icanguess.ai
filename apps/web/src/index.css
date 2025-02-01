@@ -1,12 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap');
-
-@font-face {
-  font-family: 'Rubik One Regular';
-  src: url('/fonts/RubikOne-Regular.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-}
+@import url(https://fonts.googleapis.com/css?family=Space+Mono:regular,italic,700,700italic);
+@import url(https://fonts.googleapis.com/css?family=Roboto+Mono:100,200,300,regular,500,600,700,100italic,200italic,300italic,italic,500italic,600italic,700italic);
 
 @tailwind base;
 @tailwind components;
@@ -77,22 +70,21 @@
 }
 
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 10px;
   height: 4px;
+  background: #191b1d;
 }
 ::-webkit-scrollbar-thumb {
-  background: #28ccaf;
-  border-radius: 8px;
+  background: #393939;
 }
 ::-webkit-scrollbar-track {
   box-shadow: inset 0 0 5px rgba(255, 255, 255, 0);
-  border-radius: 10px;
 }
 
 @layer base {
   * {
     @apply antialiased;
-    font-family: 'Rubik', sans-serif;
+    font-family: 'Roboto Mono', 'monospace';
   }
 
   body {

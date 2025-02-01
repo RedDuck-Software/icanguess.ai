@@ -17,10 +17,15 @@ module.exports = {
     },
     extend: {
       fontFamily: {
-        rubik: ['Rubik', 'sans-serif'],
-        rubikOne: ['Rubik Mono One', 'monospace'],
+        roboto: ['Roboto Mono', 'monospace'],
+        space: ['Space Mono', 'monospace'],
       },
       colors: {
+        dark: '#1E2022',
+        'light-gray': '#C6D3D3',
+        gray: '#CAC3D7',
+        'dark-gray': '#393939',
+        purple: '#CAC3D7',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

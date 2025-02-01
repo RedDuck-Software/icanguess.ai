@@ -1,11 +1,15 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { FC, PropsWithChildren } from 'react';
 
+import { WagmiProvider } from './wagmi-provider';
+
 const queryClient = new QueryClient();
 
 const Providers: FC<PropsWithChildren> = ({ children }) => {
   return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      <WagmiProvider>{children}</WagmiProvider>
+    </QueryClientProvider>
   );
 };
 
