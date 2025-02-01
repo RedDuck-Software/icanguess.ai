@@ -1,13 +1,7 @@
-# Sample Hardhat Project
+# icanguess.ai contracts project
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a Hardhat Ignition module that deploys that contract.
+# Deployed addresses
 
-Try running some of the following tasks:
-
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat ignition deploy ./ignition/modules/Lock.ts
-```
+Network | GuessInstance (easy mode)
+--- | --- |
+sepolia | 0x2D445088ddA9dcAcDFc9b8e49C3aAb88c348a6EC
