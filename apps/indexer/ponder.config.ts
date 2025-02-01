@@ -41,8 +41,8 @@ export default createConfig({
   contracts: {
     UnverifiedContract: {
       abi: guessInstanceAbi,
-      startBlock: 7617291,
-      address: "0xe5957f88bB8dfF49960285710624B61d76484237",
+      startBlock: 7617754,
+      address: "0x2D445088ddA9dcAcDFc9b8e49C3aAb88c348a6EC",
       network: "sepolia",
     },
   },
