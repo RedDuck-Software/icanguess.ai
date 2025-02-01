@@ -4,6 +4,6 @@
   status = 200
 
 [build]
-  base = "."
+  base = "apps/web"
   publish = "/dist"
   command = "yarn install && yarn workspace web build" 

@@ -1,9 +1,10 @@
 /* eslint-disable no-inline-styles/no-inline-styles */
-import { forwardRef } from 'react';
+import { forwardRef, useRef } from 'react';
 
 import { Card } from '../ui/card';
 
 import { cn } from '@/lib/utils';
+import { useInView, motion } from 'framer-motion';
 
 const words = [
   'access',
@@ -71,18 +72,7 @@ export const About = forwardRef<HTMLDivElement>((_, ref) => {
               </p>
               <div className="flex flex-wrap justify-center gap-2.5">
                 {numbers.map((num) => (
-                  <div
-                    key={num}
-                    className={cn(
-                      'flex w-[200px] gap-1 rounded-[6px] bg-dark px-5 py-4 font-roboto text-[20px]',
-                      num === 4 || num === 9 ? 'mr-20' : '',
-                    )}
-                  >
-                    <p className="text-white/50">
-                      {num < 9 ? '0' + (num + 1) : num + 1}.
-                    </p>
-                    <p className="text-white">{words[num]}</p>
-                  </div>
+                  <TypingEffect key={num} num={num} text={words[num]} />
                 ))}
               </div>
             </div>
@@ -104,3 +94,32 @@ export const About = forwardRef<HTMLDivElement>((_, ref) => {
     </section>
   );
 });
+
+export function TypingEffect({ text, num }: { text: string; num: number }) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
+
+  return (
+    <div
+      ref={ref}
+      className={cn(
+        'flex w-[200px] gap-1 rounded-[6px] bg-dark px-5 py-4 font-roboto text-[20px]',
+        num === 4 || num === 9 ? 'mr-20' : '',
+      )}
+    >
+      <p className="text-white/50">{num < 9 ? '0' + (num + 1) : num + 1}.</p>
+      <p className="text-white">
+        {text.split('').map((letter, index) => (
+          <motion.span
+            key={index}
+            initial={{ opacity: 0 }}
+            animate={isInView ? { opacity: 1 } : {}}
+            transition={{ duration: 0.2, delay: num * index * 0.1 }}
+          >
+            {letter}
+          </motion.span>
+        ))}
+      </p>
+    </div>
+  );
+}
