@@ -7,7 +7,7 @@ import Providers from '@/providers/Providers';
 const DefaultLayout = memo(() => {
   return (
     <Providers>
-      <div className="font-quicksand relative">
+      <div className="font-roboto relative py-10">
         <Suspense fallback={<PageLoader screen />}>
           <Outlet />
         </Suspense>
