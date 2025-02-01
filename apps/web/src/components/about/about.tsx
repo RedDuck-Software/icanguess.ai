@@ -1,10 +1,10 @@
 /* eslint-disable no-inline-styles/no-inline-styles */
+import { useInView, motion } from 'framer-motion';
 import { forwardRef, useRef } from 'react';
 
 import { Card } from '../ui/card';
 
 import { cn } from '@/lib/utils';
-import { useInView, motion } from 'framer-motion';
 
 const words = [
   'access',
@@ -97,7 +97,7 @@ export const About = forwardRef<HTMLDivElement>((_, ref) => {
 
 export function TypingEffect({ text, num }: { text: string; num: number }) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
+  const isInView = useInView(ref, { once: false });
 
   return (
     <div
@@ -114,7 +114,7 @@ export function TypingEffect({ text, num }: { text: string; num: number }) {
             key={index}
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : {}}
-            transition={{ duration: 0.2, delay: num * index * 0.1 }}
+            transition={{ duration: 1 * Math.random(), delay: index * 0.3 }}
           >
             {letter}
           </motion.span>
