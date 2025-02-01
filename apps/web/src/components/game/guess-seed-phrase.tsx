@@ -14,7 +14,7 @@ const numbers = Array.from({ length: 12 }, (_, i) => i);
 
 export const GuessSeedPhrase = ({ words }: GuessSeedPhraseProps) => {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: false });
+  const isInView = useInView(ref, { once: true });
 
   return (
     <Card className="w-2/3 flex-col gap-10 p-10" variant={'dark'} radius={20}>
