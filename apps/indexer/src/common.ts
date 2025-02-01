@@ -1,7 +1,8 @@
-import { Context, Event } from "ponder:registry";
-import { replaceBigInts } from "@ponder/utils";
-import { Hex, Address } from "viem";
-import { eventsQueue } from "../ponder.config";
+import { Context, Event } from 'ponder:registry';
+import { replaceBigInts } from '@ponder/utils';
+import { Hex, Address } from 'viem';
+import { eventsQueue } from '../ponder.config';
+
 export const getCurrentRoundInfo = (
   timestamp: bigint,
   roundDuration: bigint,
@@ -16,7 +17,7 @@ export const getCurrentRoundInfo = (
 };
 
 export type EventNotification = {
-  eventType: "round-initialized" | "deposited" | "claim";
+  eventType: 'round-initialized' | 'deposited' | 'claim';
   eventData: any;
   chainId: number;
   txCaller: Address;
@@ -26,7 +27,7 @@ export type EventNotification = {
 };
 
 export const notifyEvent = async <TEvData extends Object>(
-  evType: EventNotification["eventType"],
+  evType: EventNotification['eventType'],
   data: TEvData,
   ev: Event,
   context: Context,
@@ -43,5 +44,5 @@ export const notifyEvent = async <TEvData extends Object>(
 
   const payloadSerialized = replaceBigInts(payload, (v) => String(v));
 
-  await eventsQueue.add("event-notifications", payloadSerialized);
+  await eventsQueue.add('event-notifications', payloadSerialized);
 };
