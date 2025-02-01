@@ -44,7 +44,8 @@ export class AuthService {
 
     try {
       siweMessage = new SiweMessage(message);
-    } catch {
+    } catch (e) {
+      console.log('e ==>', e);
       throw new UnauthorizedException('Invalid SIWE message');
     }
 
@@ -53,7 +54,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid nonce');
     }
 
-    const expectedDomain = process.env.SIWE_DOMAIN || 'localhost:3000';
+    const expectedDomain = process.env.SIWE_DOMAIN || 'localhost:5173';
     if (siweMessage.domain !== expectedDomain) {
       throw new UnauthorizedException(
         `Invalid domain. Expected ${expectedDomain} but got ${siweMessage.domain}`,

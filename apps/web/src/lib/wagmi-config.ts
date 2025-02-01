@@ -1,6 +1,7 @@
 import { arbitrum, mainnet } from '@reown/appkit/networks';
 import { createAppKit } from '@reown/appkit/react';
 import { WagmiAdapter } from '@reown/appkit-adapter-wagmi';
+
 import { siweConfig } from './sive';
 
 // 0. Setup queryClient
