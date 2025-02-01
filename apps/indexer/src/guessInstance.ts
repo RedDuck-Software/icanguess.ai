@@ -1,26 +1,33 @@
-import { ponder } from "ponder:registry";
-import { getCurrentRoundInfo, notifyEvent } from "./common";
-import { guessInstanceAbi } from "../abis/guessInstanceAbi";
-import { claim, deposit, round } from "ponder:schema";
+import { ponder } from 'ponder:registry';
+import { getCurrentRoundInfo, notifyEvent } from './common';
+import { guessInstanceAbi } from '../abis/guessInstanceAbi';
+import { claim, deposit, round } from 'ponder:schema';
 
-ponder.on("UnverifiedContract:RoundInitialized", async ({ context, event }) => {
-  const [roundStartBuffer, roundDuration] = await context.client.multicall({
-    allowFailure: false,
-    contracts: [
-      {
-        abi: guessInstanceAbi,
-        functionName: "roundStartBuffer",
-        args: [],
-        address: event.log.address,
-      },
-      {
-        abi: guessInstanceAbi,
-        functionName: "roundDuration",
-        args: [],
-        address: event.log.address,
-      },
-    ],
-  });
+ponder.on('UnverifiedContract:RoundInitialized', async ({ context, event }) => {
+  const [roundStartBuffer, roundDuration, guessPassAmount] =
+    await context.client.multicall({
+      allowFailure: false,
+      contracts: [
+        {
+          abi: guessInstanceAbi,
+          functionName: 'roundStartBuffer',
+          args: [],
+          address: event.log.address,
+        },
+        {
+          abi: guessInstanceAbi,
+          functionName: 'roundDuration',
+          args: [],
+          address: event.log.address,
+        },
+        {
+          abi: guessInstanceAbi,
+          functionName: 'guessPassAmount',
+          args: [],
+          address: event.log.address,
+        },
+      ],
+    });
 
   const { currentRoundId, roundEnd, roundStart, roundStartBufferEnd } =
     getCurrentRoundInfo(event.block.timestamp, roundDuration, roundStartBuffer);
@@ -35,12 +42,13 @@ ponder.on("UnverifiedContract:RoundInitialized", async ({ context, event }) => {
     totalDeposited: 0n,
     target: event.args.target,
     roundStartBufferEndTs: roundStartBufferEnd,
+    guessPassAmount: guessPassAmount,
   });
 
-  await notifyEvent("round-initialized", evData, event, context);
+  await notifyEvent('round-initialized', evData, event, context);
 });
 
-ponder.on("UnverifiedContract:Deposited", async ({ context, event }) => {
+ponder.on('UnverifiedContract:Deposited', async ({ context, event }) => {
   const evData = await context.db.insert(deposit).values({
     id: event.log.id,
     amount: event.args.amount,
@@ -48,16 +56,21 @@ ponder.on("UnverifiedContract:Deposited", async ({ context, event }) => {
     user: event.args.user,
   });
 
-  await context.db
+  const updatedRound = await context.db
     .update(round, { id: event.args.roundId.toString() + event.log.address })
     .set((v) => ({
       totalDeposited: v.totalDeposited + event.args.amount,
     }));
 
-  await notifyEvent("deposited", evData, event, context);
+  await notifyEvent(
+    'deposited',
+    { ...evData, boughtAttempts: updatedRound.guessPassAmount },
+    event,
+    context,
+  );
 });
 
-ponder.on("UnverifiedContract:Claim", async ({ context, event }) => {
+ponder.on('UnverifiedContract:Claim', async ({ context, event }) => {
   const evData = await context.db.insert(claim).values({
     id: event.log.id,
     receiver: event.args.receiver,
@@ -71,5 +84,5 @@ ponder.on("UnverifiedContract:Claim", async ({ context, event }) => {
       claimedAt: event.block.timestamp,
     }));
 
-  await notifyEvent("claim", evData, event, context);
+  await notifyEvent('claim', evData, event, context);
 });
