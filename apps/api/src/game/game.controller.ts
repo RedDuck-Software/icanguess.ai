@@ -35,7 +35,6 @@ export class GameController {
 
   @Get('sessions')
   @ApiOperation({ summary: 'Gets all game sessions for a mode' })
-  // @ApiQuery({ type: GetSessionsDto })
   @ApiResponse({ status: 201, description: 'Signature created successfully.' })
   async getAllSession(@Query() startGameDto: GetSessionsDto) {
     const sessions = await this.gameService.getSessions(startGameDto.mode);
