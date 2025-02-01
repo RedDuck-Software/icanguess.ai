@@ -32,17 +32,15 @@ export type GetRoundsResponse = {
   };
 };
 export const GET_ROUNDS = gql`
-  query GetRounds($contract: String) {
+  query GetRounds($contract: String!) {
     guessInstance(id: $contract) {
-      items {
-        contract
-        guessPassAmount
-        roundDuration
-        roundStartBuffer
-        platformFee
-        platformFeeReceiver
-        depositPrice
-      }
+      contract
+      guessPassAmount
+      roundDuration
+      roundStartBuffer
+      platformFee
+      platformFeeReceiver
+      depositPrice
     }
     rounds(
       orderBy: "roundId"

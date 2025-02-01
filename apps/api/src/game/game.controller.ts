@@ -1,5 +1,12 @@
-import { Controller, Post, Body, Get } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
+import { Controller, Post, Body, Get, Query, Param } from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBody,
+  ApiParam,
+  ApiQuery,
+} from '@nestjs/swagger';
 import { SignaturesService } from '../signatures/signatures.service';
 import { StartGameDto } from './dtos/start-game.dto';
 import { GetSessionsDto } from './dtos/get-sessions.dto';
@@ -28,9 +35,9 @@ export class GameController {
 
   @Get('sessions')
   @ApiOperation({ summary: 'Gets all game sessions for a mode' })
-  @ApiBody({ type: GetSessionsDto })
+  // @ApiQuery({ type: GetSessionsDto })
   @ApiResponse({ status: 201, description: 'Signature created successfully.' })
-  async getAllSession(@Body() startGameDto: GetSessionsDto) {
+  async getAllSession(@Query() startGameDto: GetSessionsDto) {
     const sessions = await this.gameService.getSessions(startGameDto.mode);
     return { sessions };
   }

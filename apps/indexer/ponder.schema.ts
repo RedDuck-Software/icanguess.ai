@@ -23,6 +23,7 @@ export const round = onchainTable('round', (t) => ({
   claimed: t.boolean().notNull(),
   claimedAt: t.bigint(),
 
+  participants: t.bigint().notNull(),
   roundId: t.bigint().notNull(),
   roundStartTs: t.bigint().notNull(),
   roundEndTs: t.bigint().notNull(),

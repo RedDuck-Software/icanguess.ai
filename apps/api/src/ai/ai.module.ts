@@ -3,7 +3,7 @@ import { User } from '@prisma/client';
 import { AiService } from './ai.service';
 
 @Module({
-  imports: [AiService],
+  exports: [AiService],
   providers: [AiService],
 })
 export class AiModule {}

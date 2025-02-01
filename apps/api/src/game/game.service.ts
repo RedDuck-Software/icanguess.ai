@@ -36,6 +36,7 @@ export class GameService {
   }
 
   private async _getGameSessions(contract: Address) {
+    console.log('aboba1');
     const res = await this.gqlService.getQueryResult<GetRoundsResponse>(
       this.indexerUrl,
       GET_ROUNDS,
@@ -43,10 +44,11 @@ export class GameService {
         contract,
       },
     );
+    console.log('aboba2');
 
     console.log({ res });
 
-    const currentTs = Math.floor(new Date().getTime());
+    const currentTs = Math.floor(new Date().getTime() / 1000);
 
     const [lastRound, prevRound] = res.rounds.items;
 
@@ -64,7 +66,7 @@ export class GameService {
         rewardsPool:
           BigInt(lastRound?.totalDeposited ?? '0') +
           BigInt(prevRound?.claimed ? '0' : (prevRound?.totalDeposited ?? '0')),
-        participants: +lastRound.participants,
+        participants: +(lastRound?.participants ?? '0'),
         roundId: currentRoundId,
         roundStartTs: roundStart,
         roundEndTs: roundEnd,
@@ -73,15 +75,15 @@ export class GameService {
         rewardsPool: 0n,
         participants: 0,
         roundId: currentRoundId + 1n,
-        roundStartTs: roundEnd + 1n,
-        roundEndTs: roundDur + roundEnd + 1n,
+        roundStartTs: roundEnd,
+        roundEndTs: roundDur + roundEnd,
       },
       {
         rewardsPool: 0n,
         participants: 0,
-        roundId: currentRoundId + 1n,
-        roundStartTs: roundEnd + 1n,
-        roundEndTs: roundDur + roundEnd + 1n,
+        roundId: currentRoundId + 2n,
+        roundStartTs: roundDur + roundEnd,
+        roundEndTs: roundDur * 2n + roundEnd,
       },
     ];
   }

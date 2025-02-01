@@ -91,6 +91,7 @@ ponder.on('guessInstance:RoundInitialized', async ({ context, event }) => {
     target: event.args.target,
     roundStartBufferEndTs: roundStartBufferEnd,
     guessInstanceId: event.log.address,
+    participants: 0n,
   });
 
   await notifyEvent('round-initialized', evData, event, context);
