@@ -22,12 +22,13 @@ contract GuessInstance is Initializable {
 
     uint256 public depositPrice;
     uint256 public guessPassAmount;
+    uint256 public lastRoundId;
 
     SignaturesVerification.SignatureVerifier public startSignatureVerifier;
 
     mapping(uint256 => RoundInfo) public roundInfos;
 
-    uint256[] private _gap;
+    uint256[50] private _gap;
 
     event RoundInitialized(uint256 indexed roundId, address indexed target);
     event Deposited(
@@ -157,6 +158,19 @@ contract GuessInstance is Initializable {
             _currentRoundId
         );
         roundInfos[_currentRoundId].guessTarget = target;
+
+        if (
+            lastRoundId != _currentRoundId &&
+            roundInfos[_currentRoundId].claimed == false
+        ) {
+            uint256 toMigrate = roundInfos[lastRoundId].totalDeposited;
+            // move deposits from last round to current
+            roundInfos[_currentRoundId].totalDeposited += toMigrate;
+            roundInfos[lastRoundId].totalDeposited = 0;
+
+            lastRoundId = _currentRoundId;
+            emit Deposited(_currentRoundId, address(0), toMigrate);
+        }
 
         emit RoundInitialized(_currentRoundId, target);
     }
