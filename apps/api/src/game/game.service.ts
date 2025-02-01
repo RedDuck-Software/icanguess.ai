@@ -36,7 +36,6 @@ export class GameService {
   }
 
   private async _getGameSessions(contract: Address) {
-    console.log('aboba1');
     const res = await this.gqlService.getQueryResult<GetRoundsResponse>(
       this.indexerUrl,
       GET_ROUNDS,
@@ -44,9 +43,6 @@ export class GameService {
         contract,
       },
     );
-    console.log('aboba2');
-
-    console.log({ res });
 
     const currentTs = Math.floor(new Date().getTime() / 1000);
 
