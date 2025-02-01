@@ -1,7 +1,7 @@
 import { createConfig } from "ponder";
 import { http } from "viem";
 
-import { UnverifiedContractAbi } from "./abis/UnverifiedContractAbi";
+import { guessInstanceAbi } from "./abis/guessInstanceAbi";
 
 export default createConfig({
   networks: {
@@ -12,7 +12,7 @@ export default createConfig({
   },
   contracts: {
     UnverifiedContract: {
-      abi: UnverifiedContractAbi,
+      abi: guessInstanceAbi,
       address: "0xe07b7a36aBa131572041C56da53Aa2381ad05A2f",
       network: "sepolia",
     },
