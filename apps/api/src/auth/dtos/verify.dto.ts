@@ -3,6 +3,14 @@ import { IsNotEmpty, IsString } from 'class-validator';
 
 export class VerifyDto {
   @ApiProperty({
+    example: '0x7115240a3d2b58112C74968fEA7cdea944D9b10c',
+    description: 'Wallet address',
+  })
+  @IsString()
+  @IsNotEmpty()
+  wallet: string;
+
+  @ApiProperty({
     example: 'message-asd',
     description: 'Verify message',
   })
