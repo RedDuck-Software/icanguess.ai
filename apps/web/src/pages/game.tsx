@@ -63,9 +63,7 @@ export default function Game() {
         <Mode />
         <Rules />
       </div>
-      <div className="px-[90px]">
-        <Footer isDark={false} />
-      </div>
+      <Footer isDark={false} />
     </div>
   );
 }

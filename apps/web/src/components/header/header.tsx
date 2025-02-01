@@ -1,11 +1,14 @@
 import { useAppKit } from '@reown/appkit/react';
 import { useInView, motion } from 'framer-motion';
 import { useRef } from 'react';
+import { NavLink } from 'react-router-dom';
 import { useAccount } from 'wagmi';
 
 import { Button } from '../ui/button';
 import { Card } from '../ui/card';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+
+import { routes } from '@/router';
 
 export const Header = () => {
   const { open } = useAppKit();
@@ -24,7 +27,9 @@ export const Header = () => {
           radius={8}
           className="items-center justify-between px-5 py-6"
         >
-          <h1 className="font-space text-2xl text-white">icanguess.ai</h1>
+          <NavLink to={routes.root} className="font-space text-2xl text-white">
+            icanguess.ai
+          </NavLink>
           {address ? (
             <Popover>
               <PopoverTrigger disabled={!address} asChild>

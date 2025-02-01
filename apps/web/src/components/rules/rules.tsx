@@ -1,6 +1,6 @@
 import { forwardRef } from 'react';
-import { Card } from '../ui/card';
 
+import { Card } from '../ui/card';
 const rules = [
   'Lorem ipsum dolor sit amet consectetur. At pharetra facilisis magna at orci gravida donec sit turpis. ',
   'Purus congue augue pharetra ornare amet. ',
