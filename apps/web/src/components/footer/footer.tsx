@@ -1,4 +1,5 @@
 import { Figma, Github, Send } from 'lucide-react';
+
 import { Card } from '../ui/card';
 
 /* eslint-disable no-inline-styles/no-inline-styles */
@@ -60,7 +61,7 @@ export const Footer = ({ isDark }: Props) => {
       </div>
     </section>
   ) : (
-    <section className="relative z-30 h-[78vh] w-full">
+    <section className="relative z-30 h-[78vh] max-h-[800px] w-full">
       <Card
         className="h-full w-full flex-col gap-10 rounded-b-none p-10"
         variant={'dark'}

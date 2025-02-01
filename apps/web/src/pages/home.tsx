@@ -8,6 +8,7 @@ import { MainText } from '@/components/landing/main-text';
 import { Mode } from '@/components/mode/mode';
 import { Rules } from '@/components/rules/rules';
 import { Team } from '@/components/team/team';
+import { Header } from '@/components/header/header';
 
 export default function Home() {
   const sectionsRef = useRef<HTMLDivElement[]>([]);
@@ -51,13 +52,20 @@ export default function Home() {
 
   return (
     <>
-      <div className="flex min-h-screen flex-col gap-10 bg-white px-[90px] pt-[100px]">
+      <div className="flex min-h-screen flex-col gap-10 bg-white px-[90px]">
         <div
           ref={(el) => el && (sectionsRef.current[0] = el)}
-          className="mb-10"
+          className="h-[calc(100vh-156px)]"
         >
-          <MainText />
-          <JoinGame />
+          <div className="pt-10">
+            <Header />
+          </div>
+          <div className="pt-[100px]">
+            <MainText />
+          </div>
+          <div className="3xl:pt-[40vh] pt-[28vh]">
+            <JoinGame />
+          </div>
         </div>
         <div ref={ref}>
           <motion.div

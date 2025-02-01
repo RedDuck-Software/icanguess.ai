@@ -16,7 +16,7 @@ export const Header = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
   return (
-    <div ref={ref} className="px-[90px] pt-10">
+    <div ref={ref} className="px-[90px]">
       <motion.div
         initial={{ y: -500 }}
         animate={isInView ? { y: 0 } : {}}

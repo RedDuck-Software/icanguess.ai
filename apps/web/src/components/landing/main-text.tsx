@@ -6,7 +6,7 @@ export const MainText = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
   return (
-    <h1 ref={ref} className="mb-[26vh] font-space text-[80px] text-dark">
+    <h1 ref={ref} className="font-space text-[80px] text-dark">
       {text.split('').map((letter, index) => (
         <motion.span
           key={index}

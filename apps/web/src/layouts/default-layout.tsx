@@ -10,7 +10,6 @@ const DefaultLayout = memo(() => {
   return (
     <Providers>
       <div className="relative bg-white font-roboto">
-        <Header />
         <div
           style={{
             backgroundImage: "url('/Noise.png')",
