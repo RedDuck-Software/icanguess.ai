@@ -4,6 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { QueueProcessorModule } from './queue-processor/processor.module';
 import { BullModule } from '@nestjs/bullmq';
 import { SignaturesModule } from './signatures/signatures.module';
+import { GameModule } from './game/game.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { SignaturesModule } from './signatures/signatures.module';
         };
       },
     }),
+    GameModule,
   ],
   controllers: [],
   providers: [],
