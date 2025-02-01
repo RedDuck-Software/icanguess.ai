@@ -1,5 +1,5 @@
 import { ponder } from "ponder:registry";
-import { getCurrentRoundInfo } from "./common";
+import { getCurrentRoundInfo, notifyEvent } from "./common";
 import { guessInstanceAbi } from "../abis/guessInstanceAbi";
 import { claim, deposit, round } from "ponder:schema";
 
@@ -25,9 +25,10 @@ ponder.on("UnverifiedContract:RoundInitialized", async ({ context, event }) => {
   const { currentRoundId, roundEnd, roundStart, roundStartBufferEnd } =
     getCurrentRoundInfo(event.block.timestamp, roundDuration, roundStartBuffer);
 
-  await context.db.insert(round).values({
-    id: currentRoundId.toString(),
+  const evData = await context.db.insert(round).values({
+    id: currentRoundId.toString() + event.log.address,
     claimed: false,
+    contract: event.log.address,
     roundEndTs: roundEnd,
     roundStartTs: roundStart,
     roundId: currentRoundId,
@@ -35,21 +36,40 @@ ponder.on("UnverifiedContract:RoundInitialized", async ({ context, event }) => {
     target: event.args.target,
     roundStartBufferEndTs: roundStartBufferEnd,
   });
+
+  await notifyEvent("round-initialized", evData, event, context);
 });
 
 ponder.on("UnverifiedContract:Deposited", async ({ context, event }) => {
-  await context.db.insert(deposit).values({
+  const evData = await context.db.insert(deposit).values({
     id: event.log.id,
     amount: event.args.amount,
     roundId: event.args.roundId,
     user: event.args.user,
   });
+
+  await context.db
+    .update(round, { id: event.args.roundId.toString() + event.log.address })
+    .set((v) => ({
+      totalDeposited: v.totalDeposited + event.args.amount,
+    }));
+
+  await notifyEvent("deposited", evData, event, context);
 });
 
 ponder.on("UnverifiedContract:Claim", async ({ context, event }) => {
-  await context.db.insert(claim).values({
+  const evData = await context.db.insert(claim).values({
     id: event.log.id,
     receiver: event.args.receiver,
     roundId: event.args.roundId,
   });
+
+  await context.db
+    .update(round, { id: event.args.roundId.toString() + event.log.address })
+    .set(() => ({
+      claimed: true,
+      claimedAt: event.block.timestamp,
+    }));
+
+  await notifyEvent("claim", evData, event, context);
 });

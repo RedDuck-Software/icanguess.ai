@@ -2,26 +2,28 @@ import { onchainTable } from "ponder";
 
 export const round = onchainTable("round", (t) => ({
   id: t.text().primaryKey(),
-  target: t.hex(),
+  target: t.hex().notNull(),
 
-  totalDeposited: t.bigint(),
-  claimed: t.boolean(),
+  contract: t.hex().notNull(),
+  totalDeposited: t.bigint().notNull(),
+  claimed: t.boolean().notNull(),
+  claimedAt: t.bigint(),
 
-  roundId: t.bigint(),
-  roundStartTs: t.bigint(),
-  roundEndTs: t.bigint(),
-  roundStartBufferEndTs: t.bigint(),
+  roundId: t.bigint().notNull(),
+  roundStartTs: t.bigint().notNull(),
+  roundEndTs: t.bigint().notNull(),
+  roundStartBufferEndTs: t.bigint().notNull(),
 }));
 
 export const claim = onchainTable("claim", (t) => ({
   id: t.text().primaryKey(),
-  roundId: t.bigint(),
-  receiver: t.hex(),
+  roundId: t.bigint().notNull(),
+  receiver: t.hex().notNull(),
 }));
 
 export const deposit = onchainTable("deposit", (t) => ({
   id: t.text().primaryKey(),
-  roundId: t.bigint(),
-  user: t.hex(),
-  amount: t.bigint(),
+  roundId: t.bigint().notNull(),
+  user: t.hex().notNull(),
+  amount: t.bigint().notNull(),
 }));
