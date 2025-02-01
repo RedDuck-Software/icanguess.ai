@@ -1,0 +1,16 @@
+enum Role {
+  USER
+  ADMIN
+}
+
+model User {
+  id        String  @id @default(uuid())
+  roles     Role[]  @default([])
+  isBlocked Boolean @default(false)
+  wallet    String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("user")
+}
