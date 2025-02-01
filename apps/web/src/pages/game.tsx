@@ -73,7 +73,9 @@ export default function Game() {
         </div>
       </section>
       <section className="flex gap-10 px-[90px]">
-        <GuessSeedPhrase />
+        <GuessSeedPhrase
+          words={['BIBA', 'ABOBA', 'AZIRA', 'PLEASE', 'LESGO']}
+        />
         <GameTimer />
       </section>
       <section className="mb-[200px] flex gap-10 px-[90px]">

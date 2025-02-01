@@ -7,11 +7,11 @@ import { Header } from '@/components/header/header';
 import { Mode } from '@/components/mode/mode';
 import { Rules } from '@/components/rules/rules';
 import { Card } from '@/components/ui/card';
-import { routes } from '@/router';
 import { useSectionScroll } from '@/hooks/use-section-scroll';
+import { routes } from '@/router';
 
 export default function Games() {
-  const { isInView, sectionsRef, ref } = useSectionScroll();
+  const { sectionsRef } = useSectionScroll();
 
   return (
     <div
