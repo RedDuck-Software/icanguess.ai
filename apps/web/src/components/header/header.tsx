@@ -10,7 +10,7 @@ export const Header = () => {
   const { address } = useAccount();
 
   return (
-    <div className="px-[90px]">
+    <div className="px-[90px] pt-10">
       <Card
         variant={'dark'}
         radius={8}

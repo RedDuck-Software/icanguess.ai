@@ -2,6 +2,7 @@ import { PreviousAnswers } from '@/components/game/answer/previous-answers';
 import { YourAnswer } from '@/components/game/answer/your-answer';
 import { GuessSeedPhrase } from '@/components/game/guess-seed-phrase';
 import { GameTimer } from '@/components/game/timer/game-timer';
+import { Rules } from '@/components/rules/rules';
 import { Card } from '@/components/ui/card';
 
 export default function Game() {
@@ -48,6 +49,7 @@ export default function Game() {
         <YourAnswer />
         <PreviousAnswers />
       </section>
+      <Rules />
     </div>
   );
 }

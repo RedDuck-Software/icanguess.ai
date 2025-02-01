@@ -11,6 +11,7 @@ const cardVariants = cva('flex items-center', {
       dark: 'bg-dark',
     },
     radius: {
+      50: 'rounded-[50px]',
       20: 'rounded-[20px]',
       8: 'rounded-[8px]',
     },
