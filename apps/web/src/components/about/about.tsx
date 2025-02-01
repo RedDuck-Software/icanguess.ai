@@ -72,6 +72,7 @@ export const About = forwardRef<HTMLDivElement>((_, ref) => {
               <div className="flex flex-wrap justify-center gap-2.5">
                 {numbers.map((num) => (
                   <div
+                    key={num}
                     className={cn(
                       'flex w-[200px] gap-1 rounded-[6px] bg-dark px-5 py-4 font-roboto text-[20px]',
                       num === 4 || num === 9 ? 'mr-20' : '',
