@@ -1,22 +1,34 @@
 /* eslint-disable no-inline-styles/no-inline-styles */
 import { motion, AnimatePresence } from 'framer-motion'; // Добавлен AnimatePresence
+import type { HtmlHTMLAttributes } from 'react';
 import { useEffect, useState } from 'react';
 
 import { Card } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 
-export const GameTimer = () => {
-  const desiredTimestamp = 1788414165 * 1000; // Переводим в миллисекунды
-  const [timeLeft, setTimeLeft] = useState(getRemainingTime(desiredTimestamp));
+interface Props extends HtmlHTMLAttributes<HTMLDivElement> {
+  timestamp?: number;
+}
+
+export const GameTimer = ({
+  timestamp = 17384497180000, // Default to 1 hour from now
+  className,
+}: Props) => {
+  const [timeLeft, setTimeLeft] = useState(getRemainingTime(timestamp));
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTimeLeft(getRemainingTime(desiredTimestamp));
+      setTimeLeft(getRemainingTime(timestamp));
     }, 1000);
     return () => clearInterval(interval);
-  }, [desiredTimestamp]);
+  }, [timestamp]);
 
   return (
-    <Card className="w-1/3 flex-col gap-10 p-10" variant={'dark'} radius={20}>
+    <Card
+      className={cn('w-1/3 flex-col gap-10 p-10', className)}
+      variant={'dark'}
+      radius={20}
+    >
       <div className="flex w-full items-center justify-between gap-4">
         <TimeUnit label="Hours" value={timeLeft.hours} />
         <p className="text-2xl text-[#A6A6A6]">:</p>

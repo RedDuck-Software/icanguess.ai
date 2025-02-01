@@ -1,5 +1,4 @@
-import { motion, useInView } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
+import { motion } from 'framer-motion';
 
 import { About } from '@/components/about/about';
 import { Footer } from '@/components/footer/footer';
@@ -9,47 +8,10 @@ import { MainText } from '@/components/landing/main-text';
 import { Mode } from '@/components/mode/mode';
 import { Rules } from '@/components/rules/rules';
 import { Team } from '@/components/team/team';
+import { useSectionScroll } from '@/hooks/use-section-scroll';
 
 export default function Home() {
-  const sectionsRef = useRef<HTMLDivElement[]>([]);
-  const [isScrolling, setIsScrolling] = useState(false);
-  const [currentSection, setCurrentSection] = useState(0);
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
-  useEffect(() => {
-    const handleScroll = (event: WheelEvent) => {
-      if (isScrolling) return;
-      setIsScrolling(true);
-
-      const delta = event.deltaY;
-      let nextSectionIndex = currentSection;
-
-      if (delta > 0 && currentSection < sectionsRef.current.length - 1) {
-        // Scroll down
-        nextSectionIndex = currentSection + 1;
-      } else if (delta < 0 && currentSection > 0) {
-        // Scroll up
-        nextSectionIndex = currentSection - 1;
-      }
-
-      if (nextSectionIndex !== currentSection) {
-        if (nextSectionIndex === 0) {
-          scrollTo({ top: 0, behavior: 'smooth' });
-        } else {
-          sectionsRef.current[nextSectionIndex]?.scrollIntoView({
-            behavior: 'smooth',
-          });
-        }
-        setCurrentSection(nextSectionIndex);
-      }
-
-      setTimeout(() => setIsScrolling(false), 600); // Reset scroll lock after smooth scroll
-    };
-
-    window.addEventListener('wheel', handleScroll, { passive: false });
-    return () => window.removeEventListener('wheel', handleScroll);
-  }, [currentSection, isScrolling]);
-
+  const { isInView, sectionsRef, ref } = useSectionScroll();
   return (
     <>
       <div className="flex min-h-screen flex-col gap-10 bg-white px-[90px]">
@@ -80,7 +42,7 @@ export default function Home() {
         <Rules ref={(el) => el && (sectionsRef.current[3] = el)} />
         <Team ref={(el) => el && (sectionsRef.current[4] = el)} />
       </div>
-      <Footer isDark={true} />
+      <Footer isDark={true} ref={(el) => el && (sectionsRef.current[5] = el)} />
     </>
   );
 }

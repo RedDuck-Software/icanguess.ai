@@ -1,6 +1,10 @@
+/* eslint-disable no-inline-styles/no-inline-styles */
 import { forwardRef } from 'react';
+import { NavLink } from 'react-router-dom';
 
 import { Card } from '../ui/card';
+
+import { routes } from '@/router';
 
 export const Mode = forwardRef<HTMLDivElement>((_, ref) => {
   return (
@@ -9,8 +13,16 @@ export const Mode = forwardRef<HTMLDivElement>((_, ref) => {
         className="h-full w-full flex-col overflow-hidden"
         variant={'light-gray'}
         radius={50}
+        lightNoise
       >
-        <div className="flex w-full bg-purple p-10">
+        <div
+          style={{
+            backgroundImage: "url('/Noise2.png')",
+            backgroundRepeat: 'repeat',
+            backgroundSize: 'auto',
+          }}
+          className="flex w-full bg-purple p-10"
+        >
           <div className="flex flex-1 items-center justify-center gap-5">
             <p className="font-space text-[24px] uppercase text-dark">
               Change mode
@@ -23,11 +35,18 @@ export const Mode = forwardRef<HTMLDivElement>((_, ref) => {
           </div>
         </div>
         <div ref={ref} className="flex h-full w-full">
-          <div className="relative flex h-full flex-1 flex-col items-center justify-center gap-20 bg-purple px-20">
+          <div
+            style={{
+              backgroundImage: "url('/Noise2.png')",
+              backgroundRepeat: 'repeat',
+              backgroundSize: 'auto',
+            }}
+            className="relative flex h-full flex-1 flex-col items-center justify-center gap-20 bg-purple px-20"
+          >
             <img
               src="/icons/blocks.svg"
               alt="blocks"
-              className="absolute bottom-8 right-8"
+              className="absolute bottom-8 right-8 opacity-60"
             />
             <div className="flex flex-col">
               <h2 className="font-space text-[110px] text-dark">Easy Mode</h2>
@@ -37,7 +56,7 @@ export const Mode = forwardRef<HTMLDivElement>((_, ref) => {
               </p>
             </div>
             <div className="w-full">
-              <button className="flex items-center gap-5">
+              <NavLink to={routes.games} className="flex items-center gap-5">
                 <div className="flex h-14 w-14 items-center justify-center rounded-full border border-dark">
                   <img
                     src="/icons/arrow-down.svg"
@@ -48,7 +67,7 @@ export const Mode = forwardRef<HTMLDivElement>((_, ref) => {
                 <p className="font-space text-[30px] uppercase text-dark">
                   join session
                 </p>
-              </button>
+              </NavLink>
             </div>
           </div>
 
@@ -61,7 +80,7 @@ export const Mode = forwardRef<HTMLDivElement>((_, ref) => {
               </p>
             </div>
             <div className="w-full">
-              <button className="flex items-center gap-5">
+              <NavLink to={routes.games} className="flex items-center gap-5">
                 <div className="flex h-14 w-14 items-center justify-center rounded-full border border-dark">
                   <img
                     src="/icons/arrow-down.svg"
@@ -72,7 +91,7 @@ export const Mode = forwardRef<HTMLDivElement>((_, ref) => {
                 <p className="font-space text-[30px] uppercase text-dark">
                   join session
                 </p>
-              </button>
+              </NavLink>
             </div>
           </div>
         </div>

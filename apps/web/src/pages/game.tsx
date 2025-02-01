@@ -1,4 +1,6 @@
 /* eslint-disable no-inline-styles/no-inline-styles */
+import { NavLink } from 'react-router-dom';
+
 import { Footer } from '@/components/footer/footer';
 import { PreviousAnswers } from '@/components/game/answer/previous-answers';
 import { YourAnswer } from '@/components/game/answer/your-answer';
@@ -8,6 +10,7 @@ import { Header } from '@/components/header/header';
 import { Mode } from '@/components/mode/mode';
 import { Rules } from '@/components/rules/rules';
 import { Card } from '@/components/ui/card';
+import { routes } from '@/router';
 
 export default function Game() {
   return (
@@ -24,6 +27,20 @@ export default function Game() {
       </div>
       <section className="px-[90px]">
         <div className="flex w-full items-center gap-10">
+          <NavLink className={'flex-1'} to={routes.games}>
+            <Card
+              variant={'light-gray'}
+              className="h-[125px] flex-1 justify-center gap-2.5 px-10 py-8"
+              radius={20}
+            >
+              <img
+                src="/icons/arrow-down.svg"
+                alt="arrow"
+                className="rotate-90"
+              />
+              <p className="font-space text-[30px] uppercase">sessions</p>
+            </Card>
+          </NavLink>
           <Card
             variant={'light-gray'}
             className="h-[125px] flex-1 justify-between px-10 py-8"

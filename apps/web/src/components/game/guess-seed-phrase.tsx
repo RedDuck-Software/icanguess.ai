@@ -14,7 +14,7 @@ export const GuessSeedPhrase = () => {
         {numbers.map((num) => (
           <div
             className={cn(
-              'flex w-[200px] gap-1 border px-5 py-4 font-roboto text-[20px]',
+              'flex w-[200px] gap-1 rounded-[6px] border bg-dark-gray px-5 py-4 font-roboto text-[20px]',
               words[num] ? 'border-[#646464]' : 'border-dark-gray',
             )}
           >

@@ -12,6 +12,7 @@ function lazyWithRetry(dynamicImportFn: () => any) {
 
 export const routes = {
   root: '/',
+  games: '/games',
   game: '/:id',
 } as const;
 
@@ -27,6 +28,10 @@ export const router = createBrowserRouter([
       {
         path: routes.game,
         Component: lazyWithRetry(() => import('@/pages/game')),
+      },
+      {
+        path: routes.games,
+        Component: lazyWithRetry(() => import('@/pages/games')),
       },
       {
         path: '*',
