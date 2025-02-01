@@ -24,7 +24,7 @@ const networks = [mainnet, arbitrum];
 export const wagmiAdapter = new WagmiAdapter({
   networks,
   projectId,
-  ssr: true,
+  ssr: false,
 });
 
 // 5. Create modal

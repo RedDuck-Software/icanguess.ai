@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { INestApplication, Logger, ValidationPipe } from '@nestjs/common';
 import * as session from 'express-session';
-import { Session } from 'express-session';
+import * as cookieParser from 'cookie-parser';
 
 function setupSwagger<T>(app: INestApplication<T>, prefix: string) {
   const config = new DocumentBuilder()
@@ -29,6 +29,7 @@ async function bootstrap() {
     }),
   );
 
+  app.use(cookieParser());
   app.use(
     session({
       name: 'siwe-quickstart',
@@ -43,7 +44,13 @@ async function bootstrap() {
   app.setGlobalPrefix(globalPrefix);
   setupSwagger(app, globalPrefix);
 
-  app.enableCors();
+  const isProd = process.env.NODE_ENV === 'production';
+  app.enableCors({
+    origin: isProd ? process.env.FRONTEND_URL : 'http://localhost:5173',
+    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Accept'],
+  });
 
   const port = process.env.PORT || 3000;
   await app.listen(port);

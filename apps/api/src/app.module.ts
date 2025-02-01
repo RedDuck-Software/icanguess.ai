@@ -5,11 +5,14 @@ import { QueueProcessorModule } from './queue-processor/processor.module';
 import { BullModule } from '@nestjs/bullmq';
 import { AiModule } from './ai/ai.module';
 import { GraphqlModule } from './graphql/graphql.module';
+import { SignaturesModule } from './signatures/signatures.module';
+import { GameModule } from './game/game.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
+    SignaturesModule,
     QueueProcessorModule,
     AiModule,
     GraphqlModule,
@@ -25,6 +28,7 @@ import { GraphqlModule } from './graphql/graphql.module';
         };
       },
     }),
+    GameModule,
   ],
   controllers: [],
   providers: [],

@@ -44,8 +44,7 @@ export class AuthService {
 
     try {
       siweMessage = new SiweMessage(message);
-    } catch (e) {
-      console.log('e ==>', e);
+    } catch {
       throw new UnauthorizedException('Invalid SIWE message');
     }
 
