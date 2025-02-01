@@ -17,13 +17,13 @@ const configs = {
 
 const deploy = async (hre: HardhatRuntimeEnvironment) => {
   const [deployer, signer] = await hre.ethers.getSigners();
-  const guessInstantsFactory =
-    await hre.ethers.getContractFactory("GuessInstants");
+  const guessInstanceFactory =
+    await hre.ethers.getContractFactory("GuessInstance");
 
   const config = configs[hre.network.config.chainId!];
 
   await hre.upgrades.deployProxy(
-    guessInstantsFactory,
+    guessInstanceFactory,
     [
       config.roundDuration,
       config.roundStartBuffer,

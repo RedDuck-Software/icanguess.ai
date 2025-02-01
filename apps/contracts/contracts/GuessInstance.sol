@@ -5,7 +5,7 @@ pragma solidity 0.8.28;
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "./libraries/SignaturesVerification.sol";
 
-contract GuessInstants is Initializable {
+contract GuessInstance is Initializable {
     using SignaturesVerification for SignaturesVerification.SignatureVerifier;
 
     error AlreadyClaimed(uint256 roundId);

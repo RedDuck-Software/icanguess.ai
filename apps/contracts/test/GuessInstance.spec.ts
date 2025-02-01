@@ -1,6 +1,6 @@
 import hre from "hardhat";
 import { parseUnits } from "ethers";
-describe("GuessInstants", function () {
+describe("GuessInstance", function () {
   // We define a fixture to reuse the same setup in every test.
   // We use loadFixture to run this setup once, snapshot that state,
   // and reset Hardhat Network to that snapshot in every test.
@@ -17,12 +17,12 @@ describe("GuessInstants", function () {
 
     // Contracts are deployed using the first signer/account by default
 
-    const guessInstantsFactory =
-      await hre.ethers.getContractFactory("GuessInstants");
+    const guessInstanceFactory =
+      await hre.ethers.getContractFactory("GuessInstance");
 
-    const guessInstants = await guessInstantsFactory.deploy();
+    const guessInstance = await guessInstanceFactory.deploy();
 
-    await guessInstants.initialize(
+    await guessInstance.initialize(
       roundDuration,
       roundStartBuffer,
       platformFee,
@@ -33,7 +33,7 @@ describe("GuessInstants", function () {
     );
 
     return {
-      guessInstants,
+      guessInstance,
       roundDuration,
       roundStartBuffer,
       platformFee,
