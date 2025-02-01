@@ -1,14 +1,22 @@
+/* eslint-disable no-inline-styles/no-inline-styles */
 import { Suspense, memo } from 'react';
 import { Outlet } from 'react-router-dom';
 
+import { Header } from '@/components/header/header';
 import { PageLoader } from '@/components/page-loader/page-loader';
 import Providers from '@/providers/Providers';
-import { Header } from '@/components/header/header';
 
 const DefaultLayout = memo(() => {
   return (
     <Providers>
-      <div className="relative py-10 font-roboto">
+      <div
+        style={{
+          backgroundImage: "url('/Noise.png')",
+          backgroundRepeat: 'repeat',
+          backgroundSize: 'auto',
+        }}
+        className="relative bg-dark py-10 font-roboto"
+      >
         <Header />
         <Suspense fallback={<PageLoader screen />}>
           <Outlet />
