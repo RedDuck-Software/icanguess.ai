@@ -1,7 +1,7 @@
 import { useAppKit } from '@reown/appkit/react';
 import { useInView, motion } from 'framer-motion';
 import { useRef } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { useAccount } from 'wagmi';
 
 import { Button } from '../ui/button';
@@ -15,11 +15,14 @@ export const Header = () => {
   const { address } = useAccount();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
+
+  const location = useLocation();
+  const isLanding = location.pathname === routes.root;
   return (
     <div ref={ref} className="px-[90px]">
       <motion.div
-        initial={{ y: -500 }}
-        animate={isInView ? { y: 0 } : {}}
+        initial={{ y: isLanding ? -500 : 0 }}
+        animate={isInView && isLanding ? { y: 0 } : {}}
         transition={{ duration: 1, delay: 2.3 }}
       >
         <Card

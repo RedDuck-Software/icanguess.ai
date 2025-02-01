@@ -3,12 +3,12 @@ import { useEffect, useRef, useState } from 'react';
 
 import { About } from '@/components/about/about';
 import { Footer } from '@/components/footer/footer';
+import { Header } from '@/components/header/header';
 import { JoinGame } from '@/components/landing/join-game';
 import { MainText } from '@/components/landing/main-text';
 import { Mode } from '@/components/mode/mode';
 import { Rules } from '@/components/rules/rules';
 import { Team } from '@/components/team/team';
-import { Header } from '@/components/header/header';
 
 export default function Home() {
   const sectionsRef = useRef<HTMLDivElement[]>([]);

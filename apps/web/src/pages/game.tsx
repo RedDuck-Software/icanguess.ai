@@ -4,6 +4,7 @@ import { PreviousAnswers } from '@/components/game/answer/previous-answers';
 import { YourAnswer } from '@/components/game/answer/your-answer';
 import { GuessSeedPhrase } from '@/components/game/guess-seed-phrase';
 import { GameTimer } from '@/components/game/timer/game-timer';
+import { Header } from '@/components/header/header';
 import { Mode } from '@/components/mode/mode';
 import { Rules } from '@/components/rules/rules';
 import { Card } from '@/components/ui/card';
@@ -16,8 +17,11 @@ export default function Game() {
         backgroundRepeat: 'repeat',
         backgroundSize: 'auto',
       }}
-      className="flex min-h-screen flex-col gap-10 bg-dark pt-[100px]"
+      className="flex min-h-screen flex-col gap-10 bg-dark"
     >
+      <div className="pb-[100px] pt-10">
+        <Header />
+      </div>
       <section className="px-[90px]">
         <div className="flex w-full items-center gap-10">
           <Card

@@ -888,24 +888,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lottiefiles/dotlottie-react@npm:^0.12.3":
-  version: 0.12.3
-  resolution: "@lottiefiles/dotlottie-react@npm:0.12.3"
-  dependencies:
-    "@lottiefiles/dotlottie-web": "npm:0.40.1"
-  peerDependencies:
-    react: ^17 || ^18 || ^19
-  checksum: 10c0/2b92c1af4c0c1dcc1bbab5ad11904a5ec6e2d13c3b2b67c83f3b97669a565086ef06c5dd496365790b425d57898613b0d5b8daff57c09e864e2ccb414fc7f0f8
-  languageName: node
-  linkType: hard
-
-"@lottiefiles/dotlottie-web@npm:0.40.1":
-  version: 0.40.1
-  resolution: "@lottiefiles/dotlottie-web@npm:0.40.1"
-  checksum: 10c0/1815bf92befaf887229a34b64f67acef4a3433aff951695d9e0d449f3dc098042d2e9c37275a6281768bab9a5a1dd91ff70646fe60f8d5abe8d4b525a380277d
-  languageName: node
-  linkType: hard
-
 "@metamask/eth-json-rpc-provider@npm:^1.0.0":
   version: 1.0.1
   resolution: "@metamask/eth-json-rpc-provider@npm:1.0.1"
@@ -8442,7 +8424,6 @@ __metadata:
   resolution: "template-vite-tailwind-shadcn@workspace:."
   dependencies:
     "@formkit/auto-animate": "npm:^0.8.2"
-    "@lottiefiles/dotlottie-react": "npm:^0.12.3"
     "@radix-ui/react-popover": "npm:^1.1.5"
     "@radix-ui/react-slot": "npm:^1.1.1"
     "@reown/appkit": "npm:^1.6.5"

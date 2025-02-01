@@ -1,11 +1,14 @@
 import { useInView, motion } from 'framer-motion';
 import { useRef } from 'react';
+import { NavLink } from 'react-router-dom';
+
+import { routes } from '@/router';
 
 export const JoinGame = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
   return (
-    <div ref={ref}>
+    <NavLink to={routes.game} ref={ref}>
       <motion.button
         initial={{ x: -500, opacity: 0 }}
         animate={isInView ? { x: 0, opacity: 1 } : {}}
@@ -23,6 +26,6 @@ export const JoinGame = () => {
           join session
         </p>
       </motion.button>
-    </div>
+    </NavLink>
   );
 };
