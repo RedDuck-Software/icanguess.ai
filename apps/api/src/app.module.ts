@@ -3,11 +3,13 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { QueueProcessorModule } from './queue-processor/processor.module';
 import { BullModule } from '@nestjs/bullmq';
+import { SignaturesModule } from './signatures/signatures.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
+    SignaturesModule,
     QueueProcessorModule,
     BullModule.forRootAsync({
       inject: [ConfigService],

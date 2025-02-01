@@ -4,6 +4,7 @@ import { User } from '@prisma/client';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PrismaService } from '../../database/prisma.service';
 import { ConfigService } from '@nestjs/config';
+import { Request } from 'express';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -13,17 +14,19 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     private readonly prismaService: PrismaService,
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        (req: Request) => {
+          return (req?.cookies?.token as string) ?? null;
+        },
+      ]),
       ignoreExpiration: false,
       secretOrKey: configService.getOrThrow('JWT_SECRET'),
     });
   }
 
-  async validate(payload: unknown): Promise<unknown> {
-    console.log('payload ==>', payload);
-
+  async validate(payload: { wallet: string }): Promise<unknown> {
     const user: User | null = await this.prismaService.user
-      .findFirst({ where: { wallet: payload as string } })
+      .findFirst({ where: { wallet: payload.wallet } })
       .catch((err) => {
         this.logger.error(err);
         return null;

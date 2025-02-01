@@ -5,6 +5,7 @@ const API_BASE_URL =
 
 export const publicClient = axios.create({
   baseURL: API_BASE_URL,
+  withCredentials: true,
 });
 
 export const privateClient = axios.create({
