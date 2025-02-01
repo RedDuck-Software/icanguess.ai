@@ -6,4 +6,4 @@
 [build]
   base = "apps/web"
   publish = "apps/web/dist"
-  command = "yarn install && yarn workspace @icanguess.ai/web build" 
+  command = "yarn install && yarn workspace web build" 
