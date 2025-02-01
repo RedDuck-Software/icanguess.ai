@@ -1,0 +1,387 @@
+{
+  "manifestVersion": "3.2",
+  "proxies": [
+    {
+      "address": "0xe5957f88bB8dfF49960285710624B61d76484237",
+      "txHash": "0xb1b383dbda12927c4d6392c699f37e792b2b26c761dcbe260b00b6150f18a00b",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x2D445088ddA9dcAcDFc9b8e49C3aAb88c348a6EC",
+      "txHash": "0xa2d5bd22f4119e69a4f292e463a7758b348d9483272efc2a2ecf1840fb427006",
+      "kind": "transparent"
+    }
+  ],
+  "impls": {
+    "42115a93588bfb43c1aa056e23ded514c797457e9a4bf0b198f91f279fc04361": {
+      "address": "0x940722cfD23B5164871016A190D3b69c3C586c62",
+      "txHash": "0x54de154589a37810301032955877cf565a5a4aa1fffb045781fb3265e986cb5f",
+      "layout": {
+        "solcVersion": "0.8.28",
+        "storage": [
+          {
+            "label": "roundDuration",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_uint256",
+            "contract": "GuessInstance",
+            "src": "contracts/GuessInstance.sol:18"
+          },
+          {
+            "label": "roundStartBuffer",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_uint256",
+            "contract": "GuessInstance",
+            "src": "contracts/GuessInstance.sol:19"
+          },
+          {
+            "label": "platformFee",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_uint256",
+            "contract": "GuessInstance",
+            "src": "contracts/GuessInstance.sol:20"
+          },
+          {
+            "label": "platformFeeReceiver",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_address",
+            "contract": "GuessInstance",
+            "src": "contracts/GuessInstance.sol:21"
+          },
+          {
+            "label": "depositPrice",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_uint256",
+            "contract": "GuessInstance",
+            "src": "contracts/GuessInstance.sol:23"
+          },
+          {
+            "label": "guessPassAmount",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_uint256",
+            "contract": "GuessInstance",
+            "src": "contracts/GuessInstance.sol:24"
+          },
+          {
+            "label": "startSignatureVerifier",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_struct(SignatureVerifier)5855_storage",
+            "contract": "GuessInstance",
+            "src": "contracts/GuessInstance.sol:26"
+          },
+          {
+            "label": "roundInfos",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_mapping(t_uint256,t_struct(RoundInfo)5521_storage)",
+            "contract": "GuessInstance",
+            "src": "contracts/GuessInstance.sol:28"
+          },
+          {
+            "label": "_gap",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_array(t_uint256)dyn_storage",
+            "contract": "GuessInstance",
+            "src": "contracts/GuessInstance.sol:30"
+          }
+        ],
+        "types": {
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_struct(InitializableStorage)7_storage": {
+            "label": "struct Initializable.InitializableStorage",
+            "members": [
+              {
+                "label": "_initialized",
+                "type": "t_uint64",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "_initializing",
+                "type": "t_bool",
+                "offset": 8,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_uint64": {
+            "label": "uint64",
+            "numberOfBytes": "8"
+          },
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_uint256)dyn_storage": {
+            "label": "uint256[]",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_struct(RoundInfo)5521_storage)": {
+            "label": "mapping(uint256 => struct GuessInstance.RoundInfo)",
+            "numberOfBytes": "32"
+          },
+          "t_struct(RoundInfo)5521_storage": {
+            "label": "struct GuessInstance.RoundInfo",
+            "members": [
+              {
+                "label": "guessTarget",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "totalDeposited",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "1"
+              },
+              {
+                "label": "claimed",
+                "type": "t_bool",
+                "offset": 0,
+                "slot": "2"
+              }
+            ],
+            "numberOfBytes": "96"
+          },
+          "t_struct(SignatureVerifier)5855_storage": {
+            "label": "struct SignaturesVerification.SignatureVerifier",
+            "members": [
+              {
+                "label": "signatureCreator",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          }
+        },
+        "namespaces": {
+          "erc7201:openzeppelin.storage.Initializable": [
+            {
+              "contract": "Initializable",
+              "label": "_initialized",
+              "type": "t_uint64",
+              "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:69",
+              "offset": 0,
+              "slot": "0"
+            },
+            {
+              "contract": "Initializable",
+              "label": "_initializing",
+              "type": "t_bool",
+              "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:73",
+              "offset": 8,
+              "slot": "0"
+            }
+          ]
+        }
+      }
+    },
+    "2329b3eee94ebe19226dae4f0f2047d292df745d0f9ba49029780dffec213caf": {
+      "address": "0x5327FC82B930FABEd36D1105ec5Ca25C49F34539",
+      "txHash": "0x8e623b3a715fb7a939483cd73bccf659cb37ae98b141d3e970aed9c8dca64a0e",
+      "layout": {
+        "solcVersion": "0.8.28",
+        "storage": [
+          {
+            "label": "roundDuration",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_uint256",
+            "contract": "GuessInstance",
+            "src": "contracts/GuessInstance.sol:18"
+          },
+          {
+            "label": "roundStartBuffer",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_uint256",
+            "contract": "GuessInstance",
+            "src": "contracts/GuessInstance.sol:19"
+          },
+          {
+            "label": "platformFee",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_uint256",
+            "contract": "GuessInstance",
+            "src": "contracts/GuessInstance.sol:20"
+          },
+          {
+            "label": "platformFeeReceiver",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_address",
+            "contract": "GuessInstance",
+            "src": "contracts/GuessInstance.sol:21"
+          },
+          {
+            "label": "depositPrice",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_uint256",
+            "contract": "GuessInstance",
+            "src": "contracts/GuessInstance.sol:23"
+          },
+          {
+            "label": "guessPassAmount",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_uint256",
+            "contract": "GuessInstance",
+            "src": "contracts/GuessInstance.sol:24"
+          },
+          {
+            "label": "lastRoundId",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_uint256",
+            "contract": "GuessInstance",
+            "src": "contracts/GuessInstance.sol:25"
+          },
+          {
+            "label": "startSignatureVerifier",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_struct(SignatureVerifier)5904_storage",
+            "contract": "GuessInstance",
+            "src": "contracts/GuessInstance.sol:27"
+          },
+          {
+            "label": "roundInfos",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_mapping(t_uint256,t_struct(RoundInfo)5524_storage)",
+            "contract": "GuessInstance",
+            "src": "contracts/GuessInstance.sol:29"
+          },
+          {
+            "label": "_gap",
+            "offset": 0,
+            "slot": "9",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "GuessInstance",
+            "src": "contracts/GuessInstance.sol:31"
+          }
+        ],
+        "types": {
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_struct(InitializableStorage)7_storage": {
+            "label": "struct Initializable.InitializableStorage",
+            "members": [
+              {
+                "label": "_initialized",
+                "type": "t_uint64",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "_initializing",
+                "type": "t_bool",
+                "offset": 8,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_uint64": {
+            "label": "uint64",
+            "numberOfBytes": "8"
+          },
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]",
+            "numberOfBytes": "1600"
+          },
+          "t_mapping(t_uint256,t_struct(RoundInfo)5524_storage)": {
+            "label": "mapping(uint256 => struct GuessInstance.RoundInfo)",
+            "numberOfBytes": "32"
+          },
+          "t_struct(RoundInfo)5524_storage": {
+            "label": "struct GuessInstance.RoundInfo",
+            "members": [
+              {
+                "label": "guessTarget",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "totalDeposited",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "1"
+              },
+              {
+                "label": "claimed",
+                "type": "t_bool",
+                "offset": 0,
+                "slot": "2"
+              }
+            ],
+            "numberOfBytes": "96"
+          },
+          "t_struct(SignatureVerifier)5904_storage": {
+            "label": "struct SignaturesVerification.SignatureVerifier",
+            "members": [
+              {
+                "label": "signatureCreator",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          }
+        },
+        "namespaces": {
+          "erc7201:openzeppelin.storage.Initializable": [
+            {
+              "contract": "Initializable",
+              "label": "_initialized",
+              "type": "t_uint64",
+              "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:69",
+              "offset": 0,
+              "slot": "0"
+            },
+            {
+              "contract": "Initializable",
+              "label": "_initializing",
+              "type": "t_bool",
+              "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:73",
+              "offset": 8,
+              "slot": "0"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

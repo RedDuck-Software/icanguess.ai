@@ -1,70 +1,59 @@
 import {
-  type SIWESession,
-  type SIWEVerifyMessageArgs,
-  type SIWECreateMessageArgs,
   createSIWEConfig,
   formatMessage,
+  type SIWECreateMessageArgs,
+  type SIWESession,
+  type SIWEVerifyMessageArgs,
 } from '@reown/appkit-siwe';
-import { SiweMessage } from 'siwe';
+import type { Address } from 'viem';
 
-const BASE_URL = 'http://localhost:8080';
+import { getNonce } from '../api/get-nonce.ts';
+import { getSession as getSessionApi } from '../api/get-session.ts';
 
-/* Function that returns the user's session - this should come from your SIWE backend */
-async function getSession() {
-  const res = await fetch(BASE_URL + '/session', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    credentials: 'include',
-  });
-  if (!res.ok) {
-    throw new Error('Network response was not ok');
+import { postVerify } from '@/api/post-verify.ts';
+
+async function getSession(): Promise<SIWESession | null> {
+  try {
+    const data = await getSessionApi();
+    if (!data) return null;
+
+    if (!data || !data.address) return null;
+
+    return data as SIWESession;
+  } catch {
+    return null;
   }
-
-  const data = await res.json();
-
-  const isValidData =
-    typeof data === 'object' &&
-    typeof data.address === 'string' &&
-    typeof data.chainId === 'number';
-
-  return isValidData ? (data as SIWESession) : null;
 }
 
-/* Use your SIWE server to verify if the message and the signature are valid */
-const verifyMessage = async ({ message, signature }: SIWEVerifyMessageArgs) => {
+const verifyMessage = async (args: SIWEVerifyMessageArgs) => {
   try {
-    const response = await fetch(BASE_URL + '/verify', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      mode: 'cors',
-      body: JSON.stringify({ message, signature }),
-      credentials: 'include',
-    });
+    const { message, signature, data } = args as SIWEVerifyMessageArgs & {
+      data: { accountAddress: Address };
+    };
 
-    if (!response.ok) {
+    const { accountAddress } = data as { accountAddress: Address };
+    console.log({ message, signature, accountAddress });
+    const response = await postVerify(message, signature, accountAddress);
+
+    if (!response.data) {
       return false;
     }
 
-    const result = await response.json();
-    return result === true;
-  } catch (error) {
+    return true;
+  } catch {
     return false;
   }
 };
 
-// The verifySignature is not working with social logins and emails with non deployed smart accounts
-// for this reason we recommend using the viem to verify the signature
-// import { verifySignature } from '@reown/appkit-siwe'
-// const isValid = await verifySignature({ address, message, signature, chainId, projectId })
+function createMessage({ address, ...args }: SIWECreateMessageArgs) {
+  return formatMessage(args, address);
+}
 
-// Check the full example for signOut and getNonce functions ...
+async function signOut() {
+  localStorage.removeItem('token');
+  return true;
+}
 
-/* Create a SIWE configuration object */
 export const siweConfig = createSIWEConfig({
   getMessageParams: async () => ({
     domain: window.location.host,
@@ -72,22 +61,9 @@ export const siweConfig = createSIWEConfig({
     chains: [1, 2020],
     statement: 'Please sign with your account',
   }),
-  createMessage: ({ address, ...args }: SIWECreateMessageArgs) =>
-    formatMessage(args, address),
-
-  getNonce: async () => {
-    //This is only an example, substitute it with your actual nonce getter.
-    const nonce = 'YOUR_NONCE_GETTER';
-    if (!nonce) {
-      throw new Error('Failed to get nonce!');
-    }
-    return nonce;
-  },
+  createMessage,
+  getNonce,
   getSession,
   verifyMessage,
-  signOut: async () => {
-    return true;
-    //Example
-    // Implement your Sign out function
-  },
+  signOut,
 });

@@ -2,12 +2,12 @@ import { motion, useInView } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 
 import { About } from '@/components/about/about';
+import { Footer } from '@/components/footer/footer';
 import { JoinGame } from '@/components/landing/join-game';
 import { MainText } from '@/components/landing/main-text';
 import { Mode } from '@/components/mode/mode';
 import { Rules } from '@/components/rules/rules';
 import { Team } from '@/components/team/team';
-import { Footer } from '@/components/footer/footer';
 
 export default function Home() {
   const sectionsRef = useRef<HTMLDivElement[]>([]);

@@ -1,6 +1,7 @@
 import { arbitrum, mainnet } from '@reown/appkit/networks';
 import { createAppKit } from '@reown/appkit/react';
 import { WagmiAdapter } from '@reown/appkit-adapter-wagmi';
+
 import { siweConfig } from './sive';
 
 // 0. Setup queryClient
@@ -23,7 +24,7 @@ const networks = [mainnet, arbitrum];
 export const wagmiAdapter = new WagmiAdapter({
   networks,
   projectId,
-  ssr: true,
+  ssr: false,
 });
 
 // 5. Create modal

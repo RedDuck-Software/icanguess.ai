@@ -23,8 +23,49 @@ model User {
   roles     Role[]  @default([])
   isBlocked Boolean @default(false)
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @updatedAt @map("updated_at")
+  UserRound UserRound[]
 
   @@map("user")
+}
+
+model Round {
+  id String @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+
+  roundId  Int
+  contract String
+
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @updatedAt @map("updated_at")
+  UserRound UserRound[]
+
+  @@map("round")
+}
+
+model UserRound {
+  attemptsBought Int @default(0)
+  attemptsUsed   Int @default(0)
+
+  user           User             @relation(fields: [userWallet], references: [wallet])
+  round          Round            @relation(fields: [roundId], references: [id])
+  userWallet     String
+  roundId        String           @db.Uuid
+  userRoundGuess UserRoundGuess[]
+
+  @@id([userWallet, roundId])
+  @@map("user_round")
+}
+
+model UserRoundGuess {
+  id String @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+
+  userPromt   String
+  temperature Int
+
+  userRound           UserRound @relation(fields: [userRoundUserWallet, userRoundRoundId], references: [userWallet, roundId])
+  userRoundUserWallet String
+  userRoundRoundId    String    @db.Uuid
+
+  @@map("user_round_guess")
 }
