@@ -9,6 +9,7 @@ contract GuessInstance is Initializable {
     using SignaturesVerification for SignaturesVerification.SignatureVerifier;
 
     error AlreadyClaimed(uint256 roundId);
+    error AlreadyInitialized();
     error InvalidSigner(address target, address actual);
     error RoundIsNotInitialized(uint256 roundId);
     error EthTransferFailed();
@@ -162,6 +163,10 @@ contract GuessInstance is Initializable {
         bytes memory _sigPayload,
         uint256 _currentRoundId
     ) private returns (address target) {
+        if (roundInfos[_currentRoundId].guessTarget != address(0)) {
+            revert AlreadyInitialized();
+        }
+
         target = startSignatureVerifier.verifyStartSignature(
             _sigPayload,
             _currentRoundId
@@ -171,7 +176,10 @@ contract GuessInstance is Initializable {
 
         uint256 _lastRoundId = lastRoundId;
 
+        emit RoundInitialized(_currentRoundId, target);
+
         if (
+            _lastRoundId != 0 &&
             _lastRoundId != _currentRoundId &&
             roundInfos[_lastRoundId].claimed == false
         ) {
@@ -183,7 +191,5 @@ contract GuessInstance is Initializable {
             lastRoundId = _currentRoundId;
             emit Deposited(_currentRoundId, address(0), toMigrate);
         }
-
-        emit RoundInitialized(_currentRoundId, target);
     }
 }

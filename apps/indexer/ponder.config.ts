@@ -33,7 +33,7 @@ export const eventsQueue = new Queue<EventNotification>('event-notifications', {
 });
 
 export const addresses = {
-  [sepolia.id]: [getAddress('0x386c87Cc3b048Caba18F0638095CDa32F08eB24A')],
+  [sepolia.id]: [getAddress('0xD46D8f9e1B03bC0BFDa065A1797d45c64d66902c')],
 };
 
 export default createConfig({
@@ -48,7 +48,7 @@ export default createConfig({
       abi: guessInstanceAbi,
       network: {
         sepolia: {
-          startBlock: 7617754,
+          startBlock: 7619668,
           address: addresses[sepolia.id],
         },
       },

@@ -16,7 +16,7 @@ import { SignaturesModule } from '../signatures/signatures.module';
       provide: INDEXER_URL,
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
-        return config.get<string>('INDEXER_URL', 'http://localhost:42069');
+        return config.get<string>('INDEXER_URL', 'http://localhost:42070');
       },
     },
   ],

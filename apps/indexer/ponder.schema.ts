@@ -30,14 +30,27 @@ export const round = onchainTable('round', (t) => ({
   roundStartBufferEndTs: t.bigint().notNull(),
 }));
 
+export const userRound = onchainTable('userRound', (t) => ({
+  id: t.text().primaryKey(),
+  user: t.hex(),
+  roundId: t.text(),
+}));
+
 export const guessInstanceRelations = relations(guessInstance, ({ many }) => ({
   rounds: many(round),
 }));
 
-export const roundRelations = relations(round, ({ one }) => ({
+export const roundRelations = relations(round, ({ one, many }) => ({
+  userRounds: many(userRound),
   guessInstance: one(guessInstance, {
     fields: [round.guessInstanceId],
     references: [guessInstance.id],
+  }),
+}));
+export const userRoundRelations = relations(userRound, ({ one }) => ({
+  round: one(round, {
+    fields: [userRound.roundId],
+    references: [round.id],
   }),
 }));
 

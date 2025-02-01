@@ -47,7 +47,7 @@ const deploy = async (hre: HardhatRuntimeEnvironment) => {
   const [deployer, signer, testTarget] = await hre.ethers.getSigners();
   const guessInstance = await hre.ethers.getContractAt(
     'GuessInstance',
-    '0x386c87Cc3b048Caba18F0638095CDa32F08eB24A',
+    '0xD46D8f9e1B03bC0BFDa065A1797d45c64d66902c',
   );
 
   const timestamp = BigInt(Math.floor(new Date().getTime() / 1000));

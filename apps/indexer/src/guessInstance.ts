@@ -1,7 +1,7 @@
 import { ponder } from 'ponder:registry';
 import { getCurrentRoundInfo, notifyEvent } from './common';
 import { guessInstanceAbi } from '../abis/guessInstanceAbi';
-import { claim, deposit, guessInstance, round } from 'ponder:schema';
+import { claim, deposit, guessInstance, round, userRound } from 'ponder:schema';
 import { addresses } from '../ponder.config';
 
 ponder.on('guessInstance:setup', async ({ context, event }) => {
@@ -80,6 +80,12 @@ ponder.on('guessInstance:RoundInitialized', async ({ context, event }) => {
       res!.roundStartBuffer,
     );
 
+  const existing = await context.db.find(round, {
+    id: currentRoundId.toString() + event.log.address,
+  });
+
+  if (existing) return;
+
   const evData = await context.db.insert(round).values({
     id: currentRoundId.toString() + event.log.address,
     claimed: false,
@@ -109,11 +115,24 @@ ponder.on('guessInstance:Deposited', async ({ context, event }) => {
     user: event.args.user,
   });
 
-  await context.db
-    .update(round, { id: event.args.roundId.toString() + event.log.address })
-    .set((v) => ({
-      totalDeposited: v.totalDeposited + event.args.amount,
-    }));
+  const rId = event.args.roundId.toString() + event.log.address;
+
+  const userRoundEntity = await context.db.find(userRound, {
+    id: rId + event.args.user,
+  });
+
+  if (!userRoundEntity) {
+    await context.db.insert(userRound).values({
+      id: rId + event.args.user,
+      roundId: rId,
+      user: event.transaction.from,
+    });
+  }
+
+  await context.db.update(round, { id: rId }).set((v) => ({
+    totalDeposited: v.totalDeposited + event.args.amount,
+    participants: v.participants + (userRoundEntity ? 0n : 1n),
+  }));
 
   await notifyEvent(
     'deposited',

@@ -9,6 +9,7 @@ export const createStartPayload = async (
   signer: SignerWithAddress,
   target: string,
   roundId: bigint,
+  chainId: number,
 ) => {
   const signMsg = keccak256(
     ethers.solidityPacked(
@@ -16,7 +17,7 @@ export const createStartPayload = async (
       [
         roundId,
         target,
-        BigInt(31337).valueOf(),
+        BigInt(chainId).valueOf(),
         keccak256(Buffer.from('icanguess.io.signatures.start')),
       ],
     ),
@@ -47,7 +48,7 @@ const deploy = async (hre: HardhatRuntimeEnvironment) => {
   const [deployer, signer, testTarget] = await hre.ethers.getSigners();
   const guessInstance = await hre.ethers.getContractAt(
     'GuessInstance',
-    '0x386c87Cc3b048Caba18F0638095CDa32F08eB24A',
+    '0xD46D8f9e1B03bC0BFDa065A1797d45c64d66902c',
   );
 
   const timestamp = BigInt(Math.floor(new Date().getTime() / 1000));
@@ -58,12 +59,19 @@ const deploy = async (hre: HardhatRuntimeEnvironment) => {
     signer,
     testTarget.address,
     currentRoundId,
+    hre.network.config.chainId!,
   );
 
-  const tx = await guessInstance.depositWithSig(payload, {
+  // const tx = await guessInstance.depositWithSig(payload, {
+  //   value: parseUnits('0.003'),
+  //   // gasLimit: 300_000,
+  // });
+
+  const tx = await guessInstance.deposit({
     value: parseUnits('0.003'),
-    gasLimit: 300_000,
+    // gasLimit: 300_000,
   });
+
   console.log(tx.hash);
 };
 

@@ -59,7 +59,6 @@ library SignaturesVerification {
             _payloadHash.toEthSignedMessageHash().recover(_signature) !=
             verifier.signatureCreator
         ) {
-            // FIXME:
             // revert SignatureVerificationFailed();
         }
     }
