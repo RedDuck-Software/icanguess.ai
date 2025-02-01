@@ -44,10 +44,8 @@ model Round {
 }
 
 model UserRound {
-  id String @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-
-  attemptsBought Int
-  attemptsUsed   Int
+  attemptsBought Int @default(0)
+  attemptsUsed   Int @default(0)
 
   user           User             @relation(fields: [userWallet], references: [wallet])
   round          Round            @relation(fields: [roundId], references: [id])
@@ -55,7 +53,7 @@ model UserRound {
   roundId        String           @db.Uuid
   userRoundGuess UserRoundGuess[]
 
-  @@unique([userWallet, roundId])
+  @@id([userWallet, roundId])
   @@map("user_round")
 }
 
@@ -65,8 +63,9 @@ model UserRoundGuess {
   userPromt   String
   temperature Int
 
-  userRound   UserRound @relation(fields: [userRoundId], references: [id])
-  userRoundId String    @db.Uuid
+  userRound           UserRound @relation(fields: [userRoundUserWallet, userRoundRoundId], references: [userWallet, roundId])
+  userRoundUserWallet String
+  userRoundRoundId    String    @db.Uuid
 
   @@map("user_round_guess")
 }

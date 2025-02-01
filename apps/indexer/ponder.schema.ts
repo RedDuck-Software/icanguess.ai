@@ -1,6 +1,6 @@
-import { onchainTable } from "ponder";
+import { onchainTable } from 'ponder';
 
-export const round = onchainTable("round", (t) => ({
+export const round = onchainTable('round', (t) => ({
   id: t.text().primaryKey(),
   target: t.hex().notNull(),
 
@@ -9,19 +9,20 @@ export const round = onchainTable("round", (t) => ({
   claimed: t.boolean().notNull(),
   claimedAt: t.bigint(),
 
+  guessPassAmount: t.bigint().notNull(),
   roundId: t.bigint().notNull(),
   roundStartTs: t.bigint().notNull(),
   roundEndTs: t.bigint().notNull(),
   roundStartBufferEndTs: t.bigint().notNull(),
 }));
 
-export const claim = onchainTable("claim", (t) => ({
+export const claim = onchainTable('claim', (t) => ({
   id: t.text().primaryKey(),
   roundId: t.bigint().notNull(),
   receiver: t.hex().notNull(),
 }));
 
-export const deposit = onchainTable("deposit", (t) => ({
+export const deposit = onchainTable('deposit', (t) => ({
   id: t.text().primaryKey(),
   roundId: t.bigint().notNull(),
   user: t.hex().notNull(),
