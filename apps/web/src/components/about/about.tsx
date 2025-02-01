@@ -79,7 +79,7 @@ export const About = forwardRef<HTMLDivElement>((_, ref) => {
                     )}
                   >
                     <p className="text-white/50">
-                      {num < 10 ? '0' + (num + 1) : num + 1}.
+                      {num < 9 ? '0' + (num + 1) : num + 1}.
                     </p>
                     <p className="text-white">{words[num]}</p>
                   </div>
