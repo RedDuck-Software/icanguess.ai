@@ -9,7 +9,7 @@ const rules = [
   'met diam lorem at libero lorem cursus faucibus ut.',
 ];
 
-export const Rules = forwardRef<HTMLDivElement>((props, ref) => {
+export const Rules = forwardRef<HTMLDivElement>((_, ref) => {
   return (
     <section className="relative z-30 h-[98vh] w-full">
       <Card

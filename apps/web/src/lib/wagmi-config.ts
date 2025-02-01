@@ -30,6 +30,7 @@ export const wagmiAdapter = new WagmiAdapter({
 // 5. Create modal
 createAppKit({
   adapters: [wagmiAdapter],
+  // @ts-expect-error ABOBA
   networks,
   projectId,
   metadata,

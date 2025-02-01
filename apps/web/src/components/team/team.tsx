@@ -37,7 +37,7 @@ const members = [
   },
 ] satisfies MemberProps[];
 
-export const Team = forwardRef<HTMLDivElement>((props, ref) => {
+export const Team = forwardRef<HTMLDivElement>((_, ref) => {
   return (
     <section className="z-1 relative h-[98vh] w-full">
       <div

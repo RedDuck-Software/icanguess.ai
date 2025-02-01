@@ -21,7 +21,7 @@ const words = [
 ];
 const numbers = Array.from({ length: 12 }, (_, i) => i);
 
-export const About = forwardRef<HTMLDivElement>((props, ref) => {
+export const About = forwardRef<HTMLDivElement>((_, ref) => {
   return (
     <section className="relative h-[98vh] w-full">
       <div className="absolute -left-[90px] top-24 z-[3] h-[200vh] w-screen rounded-b-[50px] bg-dark"></div>

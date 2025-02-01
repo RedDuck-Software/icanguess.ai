@@ -2,7 +2,7 @@ import { forwardRef } from 'react';
 
 import { Card } from '../ui/card';
 
-export const Mode = forwardRef<HTMLDivElement>((props, ref) => {
+export const Mode = forwardRef<HTMLDivElement>((_, ref) => {
   return (
     <section className="h-[98vh] w-full">
       <Card

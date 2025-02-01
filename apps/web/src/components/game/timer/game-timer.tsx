@@ -4,9 +4,7 @@ import { useEffect, useState } from 'react';
 
 import { Card } from '@/components/ui/card';
 
-type Props = {};
-
-export const GameTimer = (props: Props) => {
+export const GameTimer = () => {
   const desiredTimestamp = 1788414165 * 1000; // Переводим в миллисекунды
   const [timeLeft, setTimeLeft] = useState(getRemainingTime(desiredTimestamp));
 

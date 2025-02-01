@@ -2,7 +2,6 @@
 import { Suspense, memo } from 'react';
 import { Outlet } from 'react-router-dom';
 
-import { Footer } from '@/components/footer/footer';
 import { Header } from '@/components/header/header';
 import { PageLoader } from '@/components/page-loader/page-loader';
 import Providers from '@/providers/Providers';

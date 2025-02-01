@@ -1,12 +1,10 @@
-import React from 'react';
 import { Card } from '../ui/card';
-import { cn } from '@/lib/utils';
 
-type Props = {};
+import { cn } from '@/lib/utils';
 
 const words = ['aboba', 'biba', 'miba', 'jiba'];
 const numbers = Array.from({ length: 12 }, (_, i) => i);
-export const GuessSeedPhrase = (props: Props) => {
+export const GuessSeedPhrase = () => {
   return (
     <Card className="w-2/3 flex-col gap-10 p-10" variant={'dark'} radius={20}>
       <p className="text-center font-space text-[30px] uppercase text-white">

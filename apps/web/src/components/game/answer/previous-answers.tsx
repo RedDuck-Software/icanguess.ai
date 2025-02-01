@@ -1,9 +1,6 @@
 import { Card } from '@/components/ui/card';
-import React from 'react';
 
-type Props = {};
-
-export const PreviousAnswers = (props: Props) => {
+export const PreviousAnswers = () => {
   return (
     <Card className="w-1/3 flex-col gap-10 p-10" variant={'dark'} radius={20}>
       <div className="flex w-full gap-10">

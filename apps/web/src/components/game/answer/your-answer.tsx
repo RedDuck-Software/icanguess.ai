@@ -2,9 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 
-type Props = {};
-
-export const YourAnswer = (props: Props) => {
+export const YourAnswer = () => {
   return (
     <Card className="w-2/3 flex-col gap-10 p-10" variant={'dark'} radius={20}>
       <div className="flex w-full gap-10">
