@@ -28,6 +28,11 @@ export class GameService {
       },
     );
 
+    const currentTs = Math.floor(new Date().getTime());
+    // const {} = this.getCurrentRoundInfo(currentTs);
+
+    const [lastRound, prevRound] = res.rounds.items;
+
     console.log({ res });
   }
 
