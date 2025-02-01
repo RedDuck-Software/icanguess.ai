@@ -39,7 +39,7 @@ export const YourAnswer = (props: Props) => {
         </div>
         <Button className="h-full flex-1">Connect Wallet</Button>
       </div>
-      <p className="font-roboto text-[16px] text-white">
+      <p className="w-full font-roboto text-[16px] text-white">
         *If you run out of attempts, you can buy more for 20 ETH
       </p>
     </Card>
