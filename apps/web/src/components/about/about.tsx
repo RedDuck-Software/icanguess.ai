@@ -70,7 +70,7 @@ export const About = forwardRef<HTMLDivElement>((_, ref) => {
               <p className="text-center font-roboto text-[20px] uppercase text-white">
                 guess the Seed phrase
               </p>
-              <div className="flex flex-wrap justify-center gap-2.5">
+              <div className="flex w-[670px] flex-wrap justify-center gap-2.5">
                 {numbers.map((num) => (
                   <TypingEffect key={num} num={num} text={words[num]} />
                 ))}
