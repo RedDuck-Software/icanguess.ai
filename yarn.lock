@@ -2732,7 +2732,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nomicfoundation/hardhat-verify@npm:^2.0.0":
+"@nomicfoundation/hardhat-verify@npm:^2.0.12":
   version: 2.0.12
   resolution: "@nomicfoundation/hardhat-verify@npm:2.0.12"
   dependencies:
@@ -6724,7 +6724,7 @@ __metadata:
     "@nomicfoundation/hardhat-ignition-ethers": "npm:^0.15.0"
     "@nomicfoundation/hardhat-network-helpers": "npm:^1.0.0"
     "@nomicfoundation/hardhat-toolbox": "npm:^5.0.0"
-    "@nomicfoundation/hardhat-verify": "npm:^2.0.0"
+    "@nomicfoundation/hardhat-verify": "npm:^2.0.12"
     "@nomicfoundation/ignition-core": "npm:^0.15.9"
     "@openzeppelin/contracts": "npm:^5.2.0"
     "@openzeppelin/contracts-upgradeable": "npm:^5.2.0"
