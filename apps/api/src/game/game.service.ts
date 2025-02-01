@@ -1,11 +1,22 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { User } from '@prisma/client';
 import { GraphqlService } from 'src/graphql/graphql.service';
-import { Address } from 'viem';
+import { Address, getAddress } from 'viem';
 import { GET_ROUNDS, GetRoundsResponse } from './game.queues';
+import { sepolia } from 'viem/chains';
+
 export const INDEXER_URL = 'INDEXER_URL' as const;
 
-export type GameMode = 'easy' | 'hard';
+export enum GameMode {
+  EASY = 'easy',
+  HARD = 'hard',
+}
+
+const contractAddresses = {
+  [sepolia.id]: {
+    ['easy']: getAddress('0x2D445088ddA9dcAcDFc9b8e49C3aAb88c348a6EC'),
+    ['hard']: getAddress('0x2D445088ddA9dcAcDFc9b8e49C3aAb88c348a6EC'), // FIXME:
+  },
+};
 
 @Injectable()
 export class GameService {
@@ -16,7 +27,12 @@ export class GameService {
   ) {}
 
   async getSessions(mode: GameMode) {
-    return {};
+    return await this._getGameSessions(
+      contractAddresses[
+        // FIXME: use chain id from .env
+        sepolia.id
+      ][mode],
+    );
   }
 
   private async _getGameSessions(contract: Address) {
@@ -28,12 +44,46 @@ export class GameService {
       },
     );
 
+    console.log({ res });
+
     const currentTs = Math.floor(new Date().getTime());
-    // const {} = this.getCurrentRoundInfo(currentTs);
 
     const [lastRound, prevRound] = res.rounds.items;
 
-    console.log({ res });
+    const roundDur = BigInt(res.guessInstance.roundDuration);
+
+    const { currentRoundId, roundEnd, roundStart, roundStartBufferEnd } =
+      this.getCurrentRoundInfo(
+        BigInt(currentTs),
+        BigInt(res.guessInstance.roundDuration),
+        BigInt(res.guessInstance.roundStartBuffer),
+      );
+
+    return [
+      {
+        rewardsPool:
+          BigInt(lastRound?.totalDeposited ?? '0') +
+          BigInt(prevRound?.claimed ? '0' : (prevRound?.totalDeposited ?? '0')),
+        participants: +lastRound.participants,
+        roundId: currentRoundId,
+        roundStartTs: roundStart,
+        roundEndTs: roundEnd,
+      },
+      {
+        rewardsPool: 0n,
+        participants: 0,
+        roundId: currentRoundId + 1n,
+        roundStartTs: roundEnd + 1n,
+        roundEndTs: roundDur + roundEnd + 1n,
+      },
+      {
+        rewardsPool: 0n,
+        participants: 0,
+        roundId: currentRoundId + 1n,
+        roundStartTs: roundEnd + 1n,
+        roundEndTs: roundDur + roundEnd + 1n,
+      },
+    ];
   }
 
   getCurrentRoundInfo = (
