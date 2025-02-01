@@ -20,12 +20,30 @@ const cardVariants = cva('flex items-center', {
 
 export interface CardProps
   extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof cardVariants> {}
+    VariantProps<typeof cardVariants> {
+  lightNoise?: boolean;
+  darkNoise?: boolean;
+}
 
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
-  ({ className, variant, radius, ...props }, ref) => {
+  ({ className, variant, lightNoise, darkNoise, radius, ...props }, ref) => {
     return (
       <div
+        style={
+          lightNoise
+            ? {
+                backgroundImage: "url('/Noise2.png')",
+                backgroundRepeat: 'repeat',
+                backgroundSize: 'auto',
+              }
+            : darkNoise
+              ? {
+                  backgroundImage: "url('/Noise.png')",
+                  backgroundRepeat: 'repeat',
+                  backgroundSize: 'auto',
+                }
+              : {}
+        }
         className={cn(cardVariants({ variant, radius, className }))}
         ref={ref}
         {...props}

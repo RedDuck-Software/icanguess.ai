@@ -1,18 +1,28 @@
+/* eslint-disable no-inline-styles/no-inline-styles */
+import { Footer } from '@/components/footer/footer';
 import { PreviousAnswers } from '@/components/game/answer/previous-answers';
 import { YourAnswer } from '@/components/game/answer/your-answer';
 import { GuessSeedPhrase } from '@/components/game/guess-seed-phrase';
 import { GameTimer } from '@/components/game/timer/game-timer';
+import { Mode } from '@/components/mode/mode';
 import { Rules } from '@/components/rules/rules';
 import { Card } from '@/components/ui/card';
 
 export default function Game() {
   return (
-    <div className="flex min-h-screen flex-col gap-10 pt-[100px]">
+    <div
+      style={{
+        backgroundImage: "url('/Noise.png')",
+        backgroundRepeat: 'repeat',
+        backgroundSize: 'auto',
+      }}
+      className="flex min-h-screen flex-col gap-10 bg-dark pt-[100px]"
+    >
       <section className="px-[90px]">
         <div className="flex w-full items-center gap-10">
           <Card
             variant={'light-gray'}
-            className="flex-1 justify-between px-10 py-8"
+            className="h-[125px] flex-1 justify-between px-10 py-8"
             radius={20}
           >
             <p className="font-space text-[30px] uppercase">Attempts</p>
@@ -24,7 +34,7 @@ export default function Game() {
           </Card>
           <Card
             variant={'light-gray'}
-            className="flex-1 justify-between px-10 py-8"
+            className="h-[125px] flex-1 justify-between px-10 py-8"
             radius={20}
           >
             <p className="font-space text-[30px] uppercase">Reward Pool</p>
@@ -45,11 +55,17 @@ export default function Game() {
         <GuessSeedPhrase />
         <GameTimer />
       </section>
-      <section className="flex gap-10 px-[90px]">
+      <section className="mb-[200px] flex gap-10 px-[90px]">
         <YourAnswer />
         <PreviousAnswers />
       </section>
-      <Rules />
+      <div className="flex flex-col gap-20 px-[90px]">
+        <Mode />
+        <Rules />
+      </div>
+      <div className="px-[90px]">
+        <Footer isDark={false} />
+      </div>
     </div>
   );
 }

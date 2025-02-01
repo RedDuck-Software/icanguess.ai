@@ -10,19 +10,19 @@ import Providers from '@/providers/Providers';
 const DefaultLayout = memo(() => {
   return (
     <Providers>
-      <div
-        style={{
-          backgroundImage: "url('/Noise.png')",
-          backgroundRepeat: 'repeat',
-          backgroundSize: 'auto',
-        }}
-        className="relative bg-dark font-roboto"
-      >
+      <div className="relative bg-white font-roboto">
         <Header />
-        <Suspense fallback={<PageLoader screen />}>
-          <Outlet />
-        </Suspense>
-        <Footer />
+        <div
+          style={{
+            backgroundImage: "url('/Noise.png')",
+            backgroundRepeat: 'repeat',
+            backgroundSize: 'auto',
+          }}
+        >
+          <Suspense fallback={<PageLoader screen />}>
+            <Outlet />
+          </Suspense>
+        </div>
       </div>
     </Providers>
   );
