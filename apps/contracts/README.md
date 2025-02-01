@@ -4,4 +4,4 @@
 
 Network | GuessInstance (easy mode)
 --- | --- |
-sepolia | 0x2D445088ddA9dcAcDFc9b8e49C3aAb88c348a6EC
+sepolia | 0x386c87Cc3b048Caba18F0638095CDa32F08eB24A

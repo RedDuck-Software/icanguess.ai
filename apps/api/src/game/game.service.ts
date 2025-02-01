@@ -13,8 +13,8 @@ export enum GameMode {
 
 const contractAddresses = {
   [sepolia.id]: {
-    ['easy']: getAddress('0x2D445088ddA9dcAcDFc9b8e49C3aAb88c348a6EC'),
-    ['hard']: getAddress('0x2D445088ddA9dcAcDFc9b8e49C3aAb88c348a6EC'), // FIXME:
+    ['easy']: getAddress('0x386c87Cc3b048Caba18F0638095CDa32F08eB24A'),
+    ['hard']: getAddress('0x386c87Cc3b048Caba18F0638095CDa32F08eB24A'), // FIXME:
   },
 };
 

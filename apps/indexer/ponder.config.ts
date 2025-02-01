@@ -33,7 +33,7 @@ export const eventsQueue = new Queue<EventNotification>('event-notifications', {
 });
 
 export const addresses = {
-  [sepolia.id]: [getAddress('0x2D445088ddA9dcAcDFc9b8e49C3aAb88c348a6EC')],
+  [sepolia.id]: [getAddress('0x386c87Cc3b048Caba18F0638095CDa32F08eB24A')],
 };
 
 export default createConfig({
