@@ -8,9 +8,11 @@ import { MainText } from '@/components/landing/main-text';
 import { Mode } from '@/components/mode/mode';
 import { Rules } from '@/components/rules/rules';
 import { Team } from '@/components/team/team';
+import { useSessions } from '@/hooks/queries/use-sessions';
 import { useSectionScroll } from '@/hooks/use-section-scroll';
 
 export default function Home() {
+  useSessions();
   const { isInView, sectionsRef, ref } = useSectionScroll();
   return (
     <>

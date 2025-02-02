@@ -9,29 +9,32 @@ import { formatTimeFromSecToHuman } from '../../../lib/utils';
 import { gameAbi } from '@/abi/game-abi';
 import { Card } from '@/components/ui/card';
 import { contractAddress } from '@/constants/constants';
+import type { Session } from '@/hooks/queries/use-sessions';
 import { cn, formatTimeFromSecToDate } from '@/lib/utils';
 
 interface Props extends HtmlHTMLAttributes<HTMLDivElement> {
   timestamp?: number;
+  session?: Session | null;
 }
 
-export const GameTimer = ({
-  timestamp, // Default to 1 hour from now
-  className,
-}: Props) => {
+export const GameTimer = ({ className, session }: Props) => {
   const { data: currentRoundInfo } = useReadContract({
     abi: gameAbi,
     address: contractAddress,
     functionName: 'getCurrentRoundInfo',
   });
 
-  const endTimeSeconds = currentRoundInfo?.[2]
-    ? Number(currentRoundInfo[2].toString())
-    : null;
+  const endTimeSeconds = session
+    ? session.roundEndTs
+    : currentRoundInfo?.[2]
+      ? Number(currentRoundInfo[2].toString())
+      : null;
 
-  const startTimeSeconds = currentRoundInfo?.[1]
-    ? Number(currentRoundInfo[1].toString())
-    : null;
+  const startTimeSeconds = session
+    ? session.roundStartTs
+    : currentRoundInfo?.[1]
+      ? Number(currentRoundInfo[1].toString())
+      : null;
 
   const [timeLeft, setTimeLeft] = useState({
     hours: 0,
@@ -45,7 +48,7 @@ export const GameTimer = ({
       setTimeLeft(getRemainingTime(endTimeSeconds * 1000));
     }, 1000);
     return () => clearInterval(interval);
-  }, [endTimeSeconds, timestamp]);
+  }, [endTimeSeconds]);
 
   return (
     <Card

@@ -1,5 +1,7 @@
 /* eslint-disable no-inline-styles/no-inline-styles */
+import { useMemo } from 'react';
 import { NavLink } from 'react-router-dom';
+import { formatUnits } from 'viem';
 
 import { Footer } from '@/components/footer/footer';
 import { GameTimer } from '@/components/game/timer/game-timer';
@@ -7,20 +9,17 @@ import { Header } from '@/components/header/header';
 import { Mode } from '@/components/mode/mode';
 import { Rules } from '@/components/rules/rules';
 import { Card } from '@/components/ui/card';
+import type { Session as ISession } from '@/hooks/queries/use-sessions';
+import { useSessions } from '@/hooks/queries/use-sessions';
 import { useSectionScroll } from '@/hooks/use-section-scroll';
-import { routes } from '@/router';
-import { Session as ISession, useSessions } from '@/hooks/queries/use-sessions';
-import { useMemo } from 'react';
-import { formatUnits } from 'viem';
 
 export default function Games() {
   const { data } = useSessions();
-  console.log(data);
 
   const sessions = useMemo(() => {
     if (!data) return [];
     return data.data.sessions;
-  }, []);
+  }, [data]);
 
   const { sectionsRef } = useSectionScroll();
 
@@ -92,7 +91,11 @@ const Session = ({ session, index }: { session: ISession; index: number }) => {
           />
         </div>
       </Card>
-      <GameTimer className="w-full" />
+      <GameTimer
+        className="w-full"
+        timestamp={session.roundEndTs}
+        session={session}
+      />
     </NavLink>
   );
 };
