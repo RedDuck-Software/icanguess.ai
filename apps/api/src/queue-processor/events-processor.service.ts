@@ -88,7 +88,7 @@ export class EventProcessorService extends WorkerHost {
         let userRound = await db.userRound.findFirst({
           where: {
             roundId: round.id,
-            userWallet: ev.eventData.user,
+            userWallet: ev.eventData.user.toLowerCase(),
           },
         });
 
@@ -96,7 +96,7 @@ export class EventProcessorService extends WorkerHost {
           userRound = await db.userRound.create({
             data: {
               roundId: round.id,
-              userWallet: ev.eventData.user,
+              userWallet: ev.eventData.user.toLowerCase(),
             },
           });
         }
@@ -105,7 +105,7 @@ export class EventProcessorService extends WorkerHost {
           where: {
             userWallet_roundId: {
               roundId: round.id,
-              userWallet: ev.eventData.user,
+              userWallet: ev.eventData.user.toLowerCase(),
             },
           },
           data: {

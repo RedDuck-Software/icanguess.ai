@@ -75,6 +75,22 @@ export class RoundService {
     return { roundId: newRound.roundId, signature, targetAddress };
   }
 
+  async getGuessingHistory(roundId: number, userWallet: string) {
+    const targetRound = await this.prismaService.round.findFirst({
+      where: { roundId },
+    });
+    if (!targetRound) throw new BadRequestException('Round is not active');
+
+    const history = await this.prismaService.userRoundGuess.findMany({
+      where: {
+        userRoundRoundId: targetRound.id,
+        userRoundUserWallet: userWallet.toLowerCase(),
+      },
+    });
+
+    return history;
+  }
+
   async tryGuess(
     roundId: number,
     userWallet: string,
@@ -109,7 +125,7 @@ export class RoundService {
     const userRound = await this.prismaService.userRound.findUnique({
       where: {
         userWallet_roundId: {
-          userWallet,
+          userWallet: userWallet.toLowerCase(),
           roundId: targetRound.id,
         },
       },
@@ -127,7 +143,7 @@ export class RoundService {
     await this.prismaService.userRound.update({
       where: {
         userWallet_roundId: {
-          userWallet,
+          userWallet: userWallet.toLowerCase(),
           roundId: targetRound.id,
         },
       },
@@ -151,7 +167,7 @@ export class RoundService {
         userPromt: prompt,
         temperature: response.temperature,
         guessesWord: response.guessedWord,
-        userRoundUserWallet: userWallet,
+        userRoundUserWallet: userWallet.toLowerCase(),
         userRoundRoundId: targetRound.id,
       },
     });

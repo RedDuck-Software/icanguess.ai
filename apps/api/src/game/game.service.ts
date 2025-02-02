@@ -41,7 +41,7 @@ export class GameService {
     const dbUser = await this.db.userRound.findFirst({
       where: {
         round: { contract, roundId },
-        userWallet: user,
+        userWallet: user.toLowerCase(),
       },
     });
 

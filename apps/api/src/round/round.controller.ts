@@ -1,8 +1,18 @@
-import { Controller, Post, Body, Param, ParseIntPipe } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Param,
+  ParseIntPipe,
+  Get,
+  Req,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { RoundService } from './round.service';
 import { StartRoundDto } from './dtos/start-round.dto';
 import { TryGuessDto } from './dtos/try-guess.dto';
+import { Request } from 'express';
+import { Public } from 'src/auth/guards/public.decorator';
 
 @ApiTags('Rounds')
 @Controller('rounds')
@@ -29,5 +39,18 @@ export class RoundController {
   }> {
     const { prompt, walletAddress } = tryGuessDto;
     return await this.roundService.tryGuess(roundId, walletAddress, prompt);
+  }
+
+  @Get(':roundId/guess/history')
+  async getGuessingHistory(
+    @Param('roundId', ParseIntPipe) roundId: number,
+    @Req() req: Request,
+  ) {
+    return {
+      history: await this.roundService.getGuessingHistory(
+        roundId,
+        req.user.wallet,
+      ),
+    };
   }
 }
