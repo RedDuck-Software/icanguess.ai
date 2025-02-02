@@ -1,4 +1,4 @@
-import { arbitrum, mainnet } from '@reown/appkit/networks';
+import { arbitrum, mainnet, sepolia } from '@reown/appkit/networks';
 import { createAppKit } from '@reown/appkit/react';
 import { WagmiAdapter } from '@reown/appkit-adapter-wagmi';
 
@@ -18,7 +18,7 @@ const metadata = {
 };
 
 // 3. Set the networks
-const networks = [mainnet, arbitrum];
+const networks = [sepolia];
 
 // 4. Create Wagmi Adapter
 export const wagmiAdapter = new WagmiAdapter({

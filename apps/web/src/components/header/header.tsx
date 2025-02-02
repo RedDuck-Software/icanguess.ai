@@ -1,4 +1,5 @@
 import { useAppKit } from '@reown/appkit/react';
+import { useDisconnect } from '@reown/appkit/react';
 import { useInView, motion } from 'framer-motion';
 import { useRef } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
@@ -8,9 +9,8 @@ import { Button } from '../ui/button';
 import { Card } from '../ui/card';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 
-import { routes } from '@/router';
 import { shortenAddress } from '@/lib/utils';
-import { useDisconnect } from '@reown/appkit/react';
+import { routes } from '@/router';
 
 export const Header = () => {
   const { open } = useAppKit();

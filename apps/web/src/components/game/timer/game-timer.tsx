@@ -2,26 +2,50 @@
 import { motion, AnimatePresence } from 'framer-motion'; // Добавлен AnimatePresence
 import type { HtmlHTMLAttributes } from 'react';
 import { useEffect, useState } from 'react';
+import { useReadContract } from 'wagmi';
 
+import { formatTimeFromSecToHuman } from '../../../lib/utils';
+
+import { gameAbi } from '@/abi/game-abi';
 import { Card } from '@/components/ui/card';
-import { cn } from '@/lib/utils';
+import { contractAddress } from '@/constants/constants';
+import { cn, formatTimeFromSecToDate } from '@/lib/utils';
 
 interface Props extends HtmlHTMLAttributes<HTMLDivElement> {
   timestamp?: number;
 }
 
 export const GameTimer = ({
-  timestamp = 17384497180000, // Default to 1 hour from now
+  timestamp, // Default to 1 hour from now
   className,
 }: Props) => {
-  const [timeLeft, setTimeLeft] = useState(getRemainingTime(timestamp));
+  const { data: currentRoundInfo } = useReadContract({
+    abi: gameAbi,
+    address: contractAddress,
+    functionName: 'getCurrentRoundInfo',
+  });
+
+  const endTimeSeconds = currentRoundInfo?.[2]
+    ? Number(currentRoundInfo[2].toString())
+    : null;
+
+  const startTimeSeconds = currentRoundInfo?.[1]
+    ? Number(currentRoundInfo[1].toString())
+    : null;
+
+  const [timeLeft, setTimeLeft] = useState({
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
 
   useEffect(() => {
+    if (!endTimeSeconds) return;
     const interval = setInterval(() => {
-      setTimeLeft(getRemainingTime(timestamp));
+      setTimeLeft(getRemainingTime(endTimeSeconds * 1000));
     }, 1000);
     return () => clearInterval(interval);
-  }, [timestamp]);
+  }, [endTimeSeconds, timestamp]);
 
   return (
     <Card
@@ -37,9 +61,22 @@ export const GameTimer = ({
         <TimeUnit label="Seconds" value={timeLeft.seconds} />
       </div>
       <div className="flex w-full flex-col gap-5">
-        <Label title="Participants" value="500" />
-        <Label title="Date Started" value="01.02.2025" />
-        <Label title="Time Started" value="12:00 PM" />
+        <Label
+          title="Date Started"
+          value={formatTimeFromSecToDate(startTimeSeconds)}
+        />
+        <Label
+          title="Time Started"
+          value={formatTimeFromSecToHuman(startTimeSeconds)}
+        />
+        <Label
+          title="Date End"
+          value={formatTimeFromSecToDate(endTimeSeconds)}
+        />
+        <Label
+          title="Time End"
+          value={formatTimeFromSecToHuman(endTimeSeconds)}
+        />
       </div>
     </Card>
   );
@@ -51,8 +88,6 @@ type LabelProps = {
 };
 
 function getRemainingTime(desiredTimestamp: number) {
-  console.log(desiredTimestamp);
-
   const currentTime = Date.now();
   if (currentTime > desiredTimestamp)
     return { hours: 0, minutes: 0, seconds: 0 };
@@ -60,7 +95,6 @@ function getRemainingTime(desiredTimestamp: number) {
 
   const now = new Date();
   const diff = targetTime.getTime() - now.getTime();
-  console.log(targetTime.getTime(), diff);
 
   const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
   const minutes = Math.floor((diff / (1000 * 60)) % 60);

@@ -26,7 +26,7 @@ export default function Games() {
         ref={(el) => el && (sectionsRef.current[0] = el)}
         className="h-[calc(100vh-156px)]"
       >
-        <div className="pb-[100px] pt-10">
+        <div className="pb-[140px] pt-10">
           <Header />
         </div>
         <section className="px-[90px]">

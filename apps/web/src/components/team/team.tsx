@@ -13,9 +13,9 @@ const members = [
   },
   {
     image: '/guy2.png',
-    tgLink: 'https://t.me/minus_002',
-    tgHandle: '@minus_002',
-    name: 'Vova Kovalov',
+    tgLink: 'https://t.me/Amy_Lit',
+    tgHandle: '@Amy_Lit',
+    name: 'Anastasia Kulik',
   },
   {
     image: '/guy3.png',
