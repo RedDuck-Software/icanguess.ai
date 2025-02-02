@@ -1,8 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL =
-  // @ts-expect-error ERROR
-  import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api';
+const API_BASE_URL = 'https://b28f-5-181-248-159.ngrok-free.app/api';
 console.log('API', API_BASE_URL);
 
 export const publicClient = axios.create({

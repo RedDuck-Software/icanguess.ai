@@ -51,10 +51,18 @@ async function bootstrap() {
 
   const isProd = process.env.NODE_ENV === 'production';
   app.enableCors({
-    origin: isProd ? process.env.FRONTEND_URL : 'http://localhost:5173',
+    origin: [
+      'https://ab55-2a09-bac5-597a-52d-00-84-a0.ngrok-free.app',
+      'https://e3d8-5-181-248-159.ngrok-free.app',
+    ],
     methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
     credentials: true,
-    allowedHeaders: ['Content-Type', 'Accept'],
+    allowedHeaders: [
+      'Content-Type',
+      'Accept',
+      'Access-Control-Allow-Origin',
+      'ngrok-skip-browser-warning',
+    ],
   });
 
   const port = process.env.PORT || 3000;

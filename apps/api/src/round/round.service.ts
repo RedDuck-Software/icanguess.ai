@@ -74,16 +74,18 @@ export class RoundService {
     return { roundId: newRound.roundId, signature, targetAddress };
   }
 
-  async tryGuess(roundId: number, prompt: string): Promise<GuessResponse> {
+  async tryGuess(
+    roundId: number,
+    userWallet: string,
+    prompt: string,
+  ): Promise<GuessResponse> {
     const targetRound = await this.prismaService.round.findFirst({
       where: { roundId },
     });
-
     if (!targetRound) throw new BadRequestException('Round is not active');
-    const contract = targetRound?.contract;
 
+    const contract = targetRound.contract;
     const chainAddresses = contractAddresses[this.chainId];
-
     const modeKey = Object.entries(chainAddresses).find(
       ([, address]) => address === contract,
     )?.[0];
@@ -97,19 +99,65 @@ export class RoundService {
     const latestSession = activeSessions[0];
 
     const latestSessionId = Number(latestSession.roundId);
-    const targetDbSessionId = targetRound?.roundId ?? 0;
+    const targetDbSessionId = targetRound.roundId ?? 0;
 
     if (latestSessionId !== targetDbSessionId) {
-      throw new BadRequestException('Invalid round');
+      throw new BadRequestException('Invalid or inactive round');
     }
 
-    // save history to db
+    const userRound = await this.prismaService.userRound.findUnique({
+      where: {
+        userWallet_roundId: {
+          userWallet,
+          roundId: targetRound.id,
+        },
+      },
+    });
+    if (!userRound) {
+      throw new BadRequestException('User is not participating in this round');
+    }
 
-    // await this.prismaService.userRoundGuess;
+    const attemptsUsed = userRound.attemptsUsed;
+    const attemptsBought = userRound.attemptsBought;
+    if (attemptsBought - attemptsUsed <= 0) {
+      throw new BadRequestException('No attempts left');
+    }
 
-    // const secretWords = this.wordsService.getWordsForRound(roundId);
-    // const response = this.aiService.getTemperatureForPrompt(prompt);
+    await this.prismaService.userRound.update({
+      where: {
+        userWallet_roundId: {
+          userWallet,
+          roundId: targetRound.id,
+        },
+      },
+      data: {
+        attemptsUsed: { increment: 1 },
+      },
+    });
 
-    return { word: null, temperature: 30 };
+    if (!targetRound.words) {
+      throw new BadRequestException('Secret words are missing for round');
+    }
+
+    const secretWords = targetRound.words.split(' ');
+    const response = await this.aiService.getTemperatureForPrompt(
+      prompt,
+      secretWords,
+    );
+
+    await this.prismaService.userRoundGuess.create({
+      data: {
+        userPromt: prompt,
+        temperature: response.temperature,
+        guessesWord: response.guessedWord,
+        userRoundUserWallet: userWallet,
+        userRoundRoundId: targetRound.id,
+      },
+    });
+
+    return {
+      word: response.guessedWord ?? null,
+      temperature: response.temperature,
+    };
   }
 }

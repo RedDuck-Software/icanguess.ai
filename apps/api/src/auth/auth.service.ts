@@ -55,11 +55,14 @@ export class AuthService {
       throw new UnauthorizedException('Invalid nonce');
     }
 
-    const expectedDomain =
-      this.configService.get<string>('SIWE_DOMAIN') || 'localhost:5173';
-    if (siweMessage.domain !== expectedDomain) {
+    const expectedDomainsRaw =
+      this.configService.get<string>('SIWE_DOMAINS') ||
+      'ab55-2a09-bac5-597a-52d-00-84-a0.ngrok-free.app,e3d8-5-181-248-159.ngrok-free.app';
+    const expectedDomains = expectedDomainsRaw.split(',');
+
+    if (!expectedDomains.includes(siweMessage.domain)) {
       throw new UnauthorizedException(
-        `Invalid domain. Expected ${expectedDomain} but got ${siweMessage.domain}`,
+        `Invalid domain. Expected ${expectedDomains.join(', ')} but got ${siweMessage.domain}`,
       );
     }
 
