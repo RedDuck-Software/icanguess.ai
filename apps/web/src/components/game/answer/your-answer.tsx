@@ -1,7 +1,7 @@
 import { useAppKit } from '@reown/appkit/react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
-import { encodeAbiParameters, formatUnits } from 'viem';
+import { encodeAbiParameters, formatUnits, zeroAddress } from 'viem';
 import {
   useAccount,
   usePublicClient,
@@ -20,6 +20,7 @@ import { useTakeGuess } from '@/hooks/mutations/use-take-guess';
 import type { Session } from '@/hooks/queries/use-sessions';
 import { useStoredWords } from '@/hooks/queries/use-stored-words';
 import { useUserGuesses } from '@/hooks/queries/use-user-guesses';
+import { AxiosError } from 'axios';
 
 interface Props {
   session: Session;
@@ -86,8 +87,12 @@ export const YourAnswer = ({ session }: Props) => {
     try {
       let tx: `0x${string}` | null = null;
 
-      if (userGuesses.data.attempts.attemptsUser === 0) {
-        if (currentRoundStats[1] === 0n) {
+      if (
+        userGuesses.data.attempts.attemptsBought -
+          userGuesses.data.attempts.attemptsUser ===
+        0
+      ) {
+        if (currentRoundStats[0] === zeroAddress) {
           try {
             const res = await startRoundWithSig();
             const signature = encodeAbiParameters(
@@ -106,7 +111,7 @@ export const YourAnswer = ({ session }: Props) => {
               value: data[0].result,
             });
           } catch (error) {
-            if (error.status === 409) {
+            if (error instanceof AxiosError && error.status === 409) {
               tx = await writeContractAsync({
                 abi: gameAbi,
                 address: contractAddress,
@@ -125,17 +130,27 @@ export const YourAnswer = ({ session }: Props) => {
             value: data[0].result,
           });
         }
-      } else if (userGuesses.data.attempts.attemptsUser > 0) {
+      } else if (
+        userGuesses.data.attempts.attemptsBought -
+          userGuesses.data.attempts.attemptsUser >
+        0
+      ) {
         const res = await takeGuess({ prompt: word, roundId: session.roundId });
         if (res) {
           setTemperature(res.data.temperature);
           if (res.data.word) {
-            const storedAll = JSON.parse(storedWords);
-            const stored = storedAll[session.roundId] as string[];
+            const storedAll = JSON.parse(storedWords) as Record<
+              string,
+              string[]
+            >;
+            const stored = storedAll[session.roundId.toString()] as string[];
             stored[res.data.wordIndex!] = res.data.word;
             localStorage.setItem(
               'words',
-              JSON.stringify({ ...storedAll, [session.roundId]: { stored } }),
+              JSON.stringify({
+                ...storedAll,
+                [session.roundId]: { ...stored },
+              }),
             );
           }
         } else {
@@ -157,8 +172,8 @@ export const YourAnswer = ({ session }: Props) => {
       toast.dismiss(id);
       toast.success('Success');
     } catch (error) {
+      toast.dismiss(id);
       if (error instanceof Error) {
-        toast.dismiss(id);
         toast.error(error.message);
       }
     } finally {
