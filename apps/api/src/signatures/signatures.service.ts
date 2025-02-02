@@ -3,6 +3,7 @@ import { Address, Chain, createWalletClient, Hex, http, keccak256 } from 'viem';
 import { mainnet, arbitrum, sepolia } from 'viem/chains';
 import { ConfigService } from '@nestjs/config';
 import { solidityPacked } from 'ethers';
+import { privateKeyToAccount } from 'viem/accounts';
 
 const START_ROUND_TYPEHASH = 'icanguess.io.signatures.start';
 
@@ -14,6 +15,7 @@ export class SignaturesService {
     const chainId = Number(
       this.configService.get<string>('CHAIN_ID') || sepolia.id,
     );
+
     const chainConfig = this.getChainConfig(chainId);
 
     const encodedData = solidityPacked(
@@ -31,16 +33,17 @@ export class SignaturesService {
 
   private async sign(message: Hex, chainConfig: Chain) {
     const signerPk = this.configService.getOrThrow<Address>('SIGNER_PK');
+    const account = privateKeyToAccount(signerPk);
 
     const client = createWalletClient({
-      account: signerPk,
+      account,
       chain: chainConfig,
       transport: http(),
     });
 
     return await client.signMessage({
       message: { raw: message },
-      account: signerPk,
+      account,
     });
   }
 
