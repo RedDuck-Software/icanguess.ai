@@ -121,7 +121,7 @@ export const YourAnswer = ({ session }: Props) => {
                 value: data[0].result,
               });
             } else {
-              throw new Error(error);
+              throw error;
             }
           }
         } else {

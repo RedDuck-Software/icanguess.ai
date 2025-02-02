@@ -1,5 +1,4 @@
-/* eslint-disable no-inline-styles/no-inline-styles */
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import { formatUnits } from 'viem';
@@ -17,10 +16,10 @@ import { Rules } from '@/components/rules/rules';
 import { Card } from '@/components/ui/card';
 import { contractAddress } from '@/constants/constants';
 import { useSessions } from '@/hooks/queries/use-sessions';
+import { useStoredWords } from '@/hooks/queries/use-stored-words';
 import { useUserGuesses } from '@/hooks/queries/use-user-guesses';
 import { mnemonicList } from '@/lib/mnemonic-list';
 import { routes } from '@/router';
-import { useStoredWords } from '@/hooks/queries/use-stored-words';
 
 export default function Game() {
   const { id } = useParams();
@@ -43,7 +42,10 @@ export default function Game() {
     abi: gameAbi,
     address: contractAddress,
     functionName: 'roundInfos',
-    args: [session?.roundId ? BigInt(session.roundId) : null],
+    args: [BigInt(session?.roundId ?? 0)],
+    query: {
+      enabled: session?.roundId !== undefined && session?.roundId !== null,
+    },
   });
 
   const { data: storedWordsJSON } = useStoredWords();
@@ -58,7 +60,7 @@ export default function Game() {
     ) {
       const newMnemonic = Array.from(
         { length: 9 },
-        (_, i) => mnemonicList[Math.floor(Math.random() * mnemonicList.length)],
+        () => mnemonicList[Math.floor(Math.random() * mnemonicList.length)],
       );
 
       const stored = storedWordsJSON ? JSON.parse(storedWordsJSON) : {};
