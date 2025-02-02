@@ -203,6 +203,13 @@ export const YourAnswer = ({ session }: Props) => {
         <p className="absolute -bottom-8 right-0 font-roboto text-[16px] text-white/50">
           Hot
         </p>
+
+        <div
+          style={{
+            left: temperature !== null ? `${(temperature / 10) * 100}%` : 0,
+          }}
+          className="absolute top-[-4px] h-[32px] w-[4px] rounded bg-white"
+        />
       </div>
       <Input
         value={word}
