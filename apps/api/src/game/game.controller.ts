@@ -2,6 +2,7 @@ import { Controller, Get, Query } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { GetSessionsDto } from './dtos/get-sessions.dto';
 import { GameService } from './game.service';
+import { AiService } from 'src/ai/ai.service';
 
 @ApiTags('Game')
 @Controller('game')
