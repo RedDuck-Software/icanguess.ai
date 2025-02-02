@@ -1,7 +1,8 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Param, ParseIntPipe } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { RoundService } from './round.service';
 import { StartRoundDto } from './dtos/start-round.dto';
+import { TryGuessDto } from './dtos/try-guess.dto';
 
 @ApiTags('Rounds')
 @Controller('rounds')
@@ -16,5 +17,17 @@ export class RoundController {
   })
   startRound(@Body() startRoundDto: StartRoundDto) {
     return this.roundService.startRound(startRoundDto.mode);
+  }
+
+  @Post(':roundId/guess')
+  async tryGuess(
+    @Param('roundId', ParseIntPipe) roundId: number,
+    @Body() tryGuessDto: TryGuessDto,
+  ): Promise<{
+    word: string | null;
+    temperature: number;
+  }> {
+    const { prompt } = tryGuessDto;
+    return await this.roundService.tryGuess(roundId, prompt);
   }
 }

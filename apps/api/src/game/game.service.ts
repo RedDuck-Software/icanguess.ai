@@ -12,7 +12,7 @@ export enum GameMode {
   HARD = 'hard',
 }
 
-const contractAddresses: Record<number, Record<GameMode, Address>> = {
+export const contractAddresses: Record<number, Record<GameMode, Address>> = {
   [sepolia.id]: {
     [GameMode.EASY]: getAddress('0xD46D8f9e1B03bC0BFDa065A1797d45c64d66902c'),
     [GameMode.HARD]: getAddress('0xD46D8f9e1B03bC0BFDa065A1797d45c64d66902c'), // FIXME:

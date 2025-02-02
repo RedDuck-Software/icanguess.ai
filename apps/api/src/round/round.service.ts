@@ -1,27 +1,39 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+} from '@nestjs/common';
 import { AiService } from '../ai/ai.service';
 import { WordsService } from '../words/words.service';
 import { PrismaService } from '../database/prisma.service';
 import { SignaturesService } from '../signatures/signatures.service';
-import { GameMode, GameService } from '../game/game.service';
-import { Address, Chain, keccak256 } from 'viem';
-import { arbitrum, mainnet, sepolia } from 'viem/chains';
+import { contractAddresses, GameMode, GameService } from '../game/game.service';
+import { Address, keccak256 } from 'viem';
+import { sepolia } from 'viem/chains';
 import { privateKeyToAccount } from 'viem/accounts';
+import { ConfigService } from '@nestjs/config';
 
-// type GuessResponse = {
-//   word: string | null;
-//   temperature: number;
-// };
+type GuessResponse = {
+  word: string | null;
+  temperature: number;
+};
 
 @Injectable()
 export class RoundService {
+  private readonly chainId: number;
+
   constructor(
     private readonly aiService: AiService,
     private readonly prismaService: PrismaService,
     private readonly wordsService: WordsService,
     private readonly signaturesService: SignaturesService,
     private readonly gameService: GameService,
-  ) {}
+    private readonly configService: ConfigService,
+  ) {
+    this.chainId = Number(
+      this.configService.get<string>('CHAIN_ID') || sepolia.id,
+    );
+  }
 
   async startRound(
     mode: GameMode,
@@ -62,28 +74,42 @@ export class RoundService {
     return { roundId: newRound.roundId, signature, targetAddress };
   }
 
-  // async tryGuess(roundId: number, prompt: string): Promise<GuessResponse> {
-  //   // check round is active
-  //
-  //   // check rompt validity (lenght, etc.)
-  //
-  //   // no spec symbols
-  //
-  //   // save history to
-  //
-  //   const secretWords = this.wordsService.getWordsForRound(roundId);
-  //   const response = this.aiService.getTemperatureForPrompt(prompt);
-  //
-  //   return { word: null, temperature: 30 };
-  // }
+  async tryGuess(roundId: number, prompt: string): Promise<GuessResponse> {
+    const targetRound = await this.prismaService.round.findFirst({
+      where: { roundId },
+    });
 
-  private getChainConfig(chainId: number) {
-    const chainMapping: Record<number, Chain> = {
-      [mainnet.id]: mainnet,
-      [arbitrum.id]: arbitrum,
-      [sepolia.id]: sepolia,
-    };
+    if (!targetRound) throw new BadRequestException('Round is not active');
+    const contract = targetRound?.contract;
 
-    return chainMapping[chainId] || mainnet;
+    const chainAddresses = contractAddresses[this.chainId];
+
+    const modeKey = Object.entries(chainAddresses).find(
+      ([, address]) => address === contract,
+    )?.[0];
+
+    if (!modeKey) {
+      throw new Error('Contract address does not match any known game mode');
+    }
+    const mode = modeKey as GameMode;
+
+    const activeSessions = await this.gameService.getSessions(mode);
+    const latestSession = activeSessions[0];
+
+    const latestSessionId = Number(latestSession.roundId);
+    const targetDbSessionId = targetRound?.roundId ?? 0;
+
+    if (latestSessionId !== targetDbSessionId) {
+      throw new BadRequestException('Invalid round');
+    }
+
+    // save history to db
+
+    // await this.prismaService.userRoundGuess;
+
+    // const secretWords = this.wordsService.getWordsForRound(roundId);
+    // const response = this.aiService.getTemperatureForPrompt(prompt);
+
+    return { word: null, temperature: 30 };
   }
 }
