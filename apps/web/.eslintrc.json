@@ -24,6 +24,7 @@
     }
   },
   "rules": {
+    "no-inline-styles/ no-inline-styles": "off",
     "import/order": [
       "error",
       {
@@ -51,6 +52,6 @@
       {
         "endOfLine": "auto"
       }
-    ]
+    ],
   }
 }

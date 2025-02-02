@@ -1,10 +1,8 @@
-import { arbitrum, mainnet, sepolia } from '@reown/appkit/networks';
+import {Chain, sepolia} from '@reown/appkit/networks';
 import { createAppKit } from '@reown/appkit/react';
 import { WagmiAdapter } from '@reown/appkit-adapter-wagmi';
 
 import { siweConfig } from './siwe.ts';
-
-// 0. Setup queryClient
 
 // 1. Get projectId from https://cloud.reown.com
 const projectId = 'b484687f762048e470638dfc5535647c';
@@ -18,7 +16,7 @@ const metadata = {
 };
 
 // 3. Set the networks
-const networks = [sepolia];
+const networks = [sepolia] satisfies [Chain, ...Chain[]];
 
 // 4. Create Wagmi Adapter
 export const wagmiAdapter = new WagmiAdapter({
@@ -30,7 +28,6 @@ export const wagmiAdapter = new WagmiAdapter({
 // 5. Create modal
 createAppKit({
   adapters: [wagmiAdapter],
-  // @ts-expect-error ABOBA
   networks,
   projectId,
   metadata,

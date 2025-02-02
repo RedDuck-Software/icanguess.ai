@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useAccount } from 'wagmi';
 
-import { privateClient, publicClient } from '@/lib/httpClient';
+import { privateClient } from '@/lib/httpClient';
 export interface Session {
   rewardsPool: number;
   participants: number;
@@ -14,6 +14,7 @@ export const useUserGuesses = (roundId?: number) => {
   return useQuery({
     queryKey: ['user-guesses', address, roundId],
     enabled: !!roundId && !!address,
+    refetchInterval: 5 * 1000,
     queryFn: async () => {
       return await privateClient.get<{
         attempts: {
