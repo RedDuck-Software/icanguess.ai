@@ -15,6 +15,11 @@ function setupSwagger<T>(app: INestApplication<T>, prefix: string) {
   SwaggerModule.setup(`${prefix}/swagger`, app, document);
 }
 
+(BigInt.prototype as any).toJSON = function () {
+  const int = Number.parseInt(this.toString());
+  return int ?? this.toString();
+};
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 

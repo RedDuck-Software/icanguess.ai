@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { generateNonce, SiweMessage } from 'siwe';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../database/prisma.service';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
@@ -10,6 +11,7 @@ export class AuthService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
   ) {}
 
   async generateNonce(wallet: string): Promise<string> {
@@ -53,7 +55,8 @@ export class AuthService {
       throw new UnauthorizedException('Invalid nonce');
     }
 
-    const expectedDomain = process.env.SIWE_DOMAIN || 'localhost:5173';
+    const expectedDomain =
+      this.configService.get<string>('SIWE_DOMAIN') || 'localhost:5173';
     if (siweMessage.domain !== expectedDomain) {
       throw new UnauthorizedException(
         `Invalid domain. Expected ${expectedDomain} but got ${siweMessage.domain}`,

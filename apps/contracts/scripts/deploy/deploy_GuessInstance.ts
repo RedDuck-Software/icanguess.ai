@@ -1,16 +1,16 @@
-import { parseUnits } from "ethers";
-import { HardhatRuntimeEnvironment } from "hardhat/types";
+import { parseUnits } from 'ethers';
+import { HardhatRuntimeEnvironment } from 'hardhat/types';
 
-import hre from "hardhat";
+import hre from 'hardhat';
 
 const configs = {
   [11155111 as number]: {
-    roundDuration: 3 * 3600,
-    roundStartBuffer: 15 * 60,
+    roundDuration: 1 * 3600,
+    roundStartBuffer: 0,
     platformFee: 10 * 100,
     platformFeeReceiver: undefined,
-    depositPrice: parseUnits("0.1"),
-    depositGuesses: 50n,
+    depositPrice: parseUnits('0.003'),
+    depositGuesses: 20n,
     startSigner: undefined,
   },
 };
@@ -18,11 +18,11 @@ const configs = {
 const deploy = async (hre: HardhatRuntimeEnvironment) => {
   const [deployer, signer] = await hre.ethers.getSigners();
   const guessInstanceFactory =
-    await hre.ethers.getContractFactory("GuessInstance");
+    await hre.ethers.getContractFactory('GuessInstance');
 
   const config = configs[hre.network.config.chainId!];
 
-  await hre.upgrades.deployProxy(
+  const proxy = await hre.upgrades.deployProxy(
     guessInstanceFactory,
     [
       config.roundDuration,
@@ -34,9 +34,11 @@ const deploy = async (hre: HardhatRuntimeEnvironment) => {
       config.startSigner ?? signer.address,
     ],
     {
-      unsafeAllow: ["constructor"],
+      unsafeAllow: ['constructor'],
     },
   );
+
+  console.log({ address: await proxy.getAddress(), signer: signer.address });
 };
 
 deploy(hre)
