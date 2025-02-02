@@ -25,7 +25,7 @@ export class GameController {
   @Get('users/attempts')
   async getUserAttempts(@Query() dto: GetUserAttemptsDto, @Req() req: Request) {
     const attempts = await this.gameService.getUserAttempts(
-      req.user,
+      req.user.wallet,
       +dto.roundId,
       dto.mode,
     );
