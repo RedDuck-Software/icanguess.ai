@@ -12,8 +12,8 @@ export interface History {
 }
 export const useRoundHistory = (roundId: number) => {
   return useQuery({
-    queryKey: ['round-history'],
-    refetchInterval: 5 * 1000,
+    queryKey: ['round-history', roundId],
+    refetchInterval: 1 * 1000,
     queryFn: async () => {
       return await publicClient.get<{ history: History[] }>(
         `/rounds/${roundId}/guess/history`,

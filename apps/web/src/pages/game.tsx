@@ -156,7 +156,7 @@ export default function Game() {
           </section>
           <section className="mb-[200px] flex gap-10 px-[90px]">
             <YourAnswer session={session} />
-            <PreviousAnswers />
+            <PreviousAnswers session={session} />
           </section>
         </>
       )}
