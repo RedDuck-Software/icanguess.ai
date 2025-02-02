@@ -4,9 +4,10 @@ import { ConfigService } from '@nestjs/config';
 import { GraphqlModule } from 'src/graphql/graphql.module';
 import { GameController } from './game.controller';
 import { SignaturesModule } from '../signatures/signatures.module';
+import { PrismaModule } from 'src/database/prisma.module';
 
 @Module({
-  imports: [GraphqlModule, SignaturesModule],
+  imports: [GraphqlModule, SignaturesModule, PrismaModule],
   exports: [GameService],
   controllers: [GameController],
   providers: [

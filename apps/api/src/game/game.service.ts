@@ -4,6 +4,7 @@ import { Address, getAddress } from 'viem';
 import { GET_ROUNDS, GetRoundsResponse } from './game.queues';
 import { sepolia } from 'viem/chains';
 import { ConfigService } from '@nestjs/config';
+import { PrismaService } from 'src/database/prisma.service';
 
 export const INDEXER_URL = 'INDEXER_URL';
 
@@ -28,10 +29,26 @@ export class GameService {
     private readonly indexerUrl: string,
     private readonly gqlService: GraphqlService,
     private readonly configService: ConfigService,
+    private readonly db: PrismaService,
   ) {
     this.chainId = Number(
       this.configService.get<string>('CHAIN_ID') || sepolia.id,
     );
+  }
+
+  async getUserAttempts(user: Address, roundId: number, mode: GameMode) {
+    const contract = this.getContractAddressByMode(mode);
+    const dbUser = await this.db.userRound.findFirst({
+      where: {
+        round: { contract, roundId },
+        userWallet: user,
+      },
+    });
+
+    return {
+      attemptsBought: dbUser?.attemptsBought ?? 0,
+      attemptsUser: dbUser?.attemptsUsed ?? 0,
+    };
   }
 
   async getSessions(mode: GameMode) {
