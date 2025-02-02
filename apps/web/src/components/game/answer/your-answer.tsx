@@ -78,12 +78,13 @@ export const YourAnswer = ({ session }: Props) => {
   const { mutateAsync: takeGuess } = useTakeGuess();
   const { data: storedWords } = useStoredWords();
   const onClick = async () => {
-    if (!currentRoundStats || !userGuesses || !storedWords || !data) return;
-    setLoading(true);
     if (!address) {
       open();
       return;
     }
+    if (!currentRoundStats || !userGuesses || !storedWords || !data) return;
+    setLoading(true);
+
     const id = toast.loading('Loading...');
     try {
       let tx: `0x${string}` | null = null;
@@ -173,8 +174,12 @@ export const YourAnswer = ({ session }: Props) => {
       toast.dismiss(id);
       toast.success('Success');
     } catch (error) {
+      console.log(error);
+
       toast.dismiss(id);
-      if (error instanceof Error) {
+      if (error instanceof AxiosError) {
+        toast.error(error.response?.data?.message?.[0] || error.message);
+      } else if (error instanceof Error) {
         toast.error(error.message);
       }
     } finally {
