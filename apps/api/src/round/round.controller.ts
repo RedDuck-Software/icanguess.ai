@@ -12,7 +12,6 @@ import { RoundService } from './round.service';
 import { StartRoundDto } from './dtos/start-round.dto';
 import { TryGuessDto } from './dtos/try-guess.dto';
 import { Request } from 'express';
-import { Public } from 'src/auth/guards/public.decorator';
 
 @ApiTags('Rounds')
 @Controller('rounds')
