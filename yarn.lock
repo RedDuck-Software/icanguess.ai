@@ -8061,6 +8061,7 @@ __metadata:
     "@types/passport-jwt": "npm:^4"
     "@types/supertest": "npm:^6.0.2"
     ai: "npm:^4.1.16"
+    axios: "npm:^1.7.9"
     class-transformer: "npm:^0.5.1"
     class-validator: "npm:^0.14.1"
     cookie-parser: "npm:^1.4.7"

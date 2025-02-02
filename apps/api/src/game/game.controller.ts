@@ -2,10 +2,8 @@ import { Controller, Get, Param, Query, Req, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { GetSessionsDto } from './dtos/get-sessions.dto';
 import { GameService } from './game.service';
-import { AiService } from 'src/ai/ai.service';
 import { Request, Response } from 'express';
 import { GetUserAttemptsDto } from './dtos/get-attempts.dto';
-import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { Public } from '../auth/guards/public.decorator';
 
 @ApiTags('Game')
