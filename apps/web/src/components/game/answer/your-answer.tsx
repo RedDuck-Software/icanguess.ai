@@ -181,7 +181,8 @@ export const YourAnswer = ({ session }: Props) => {
     }
   };
 
-  console.log(temperature);
+  const leftValue =
+    temperature !== null ? `${(temperature / 10) * 100}%` : '0%';
 
   return (
     <Card className="w-2/3 flex-col gap-10 p-10" variant={'dark'} radius={20}>
@@ -204,10 +205,10 @@ export const YourAnswer = ({ session }: Props) => {
           Hot
         </p>
 
-        <div
-          style={{
-            left: temperature !== null ? `${(temperature / 10) * 100}%` : 0,
-          }}
+        <motion.div
+          initial={{ left: '0%' }}
+          animate={{ left: leftValue }}
+          transition={{ type: 'spring', stiffness: 300, damping: 30 }}
           className="absolute top-[-4px] h-[32px] w-[4px] rounded bg-white"
         />
       </div>

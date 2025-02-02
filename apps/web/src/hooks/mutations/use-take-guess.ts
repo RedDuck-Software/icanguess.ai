@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAccount } from 'wagmi';
 
 import { privateClient } from '../../lib/httpClient';
@@ -10,6 +10,8 @@ interface Data {
 
 export const useTakeGuess = () => {
   const { address } = useAccount();
+  const queryClient = useQueryClient();
+
   return useMutation({
     async mutationFn(data: Data) {
       if (!address) return;
@@ -24,6 +26,9 @@ export const useTakeGuess = () => {
         wordIndex: number | null;
         temperature: number;
       }>(`/rounds/${data.roundId}/guess`, body);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['user-guesses', 'sessions'] });
     },
   });
 };
