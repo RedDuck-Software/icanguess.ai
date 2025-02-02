@@ -2,7 +2,7 @@ export interface FetcherResponse<T> {
   data: T | null;
   status: number;
   statusText: string;
-  error?: string
+  error?: string;
 }
 
 export class Fetcher {
@@ -91,8 +91,7 @@ export class Fetcher {
           error = responseText || response.statusText;
         }
       }
-    } catch {
-    }
+    } catch {}
 
     return {
       data,
@@ -102,9 +101,12 @@ export class Fetcher {
     };
   }
 }
+// @ts-expect-error SKIP
+const apiKey = import.meta.env.VITE_API_BASE_URL;
 
 export const apiClient = () => {
-  return new Fetcher(new URL(''), {
+  return new Fetcher(new URL(apiKey), {
     'Content-Type': 'application/json',
+    'ngrok-skip-browser-warning': 'true',
   });
 };

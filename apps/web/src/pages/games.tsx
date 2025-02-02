@@ -9,8 +9,19 @@ import { Rules } from '@/components/rules/rules';
 import { Card } from '@/components/ui/card';
 import { useSectionScroll } from '@/hooks/use-section-scroll';
 import { routes } from '@/router';
+import { Session as ISession, useSessions } from '@/hooks/queries/use-sessions';
+import { useMemo } from 'react';
+import { formatUnits } from 'viem';
 
 export default function Games() {
+  const { data } = useSessions();
+  console.log(data);
+
+  const sessions = useMemo(() => {
+    if (!data) return [];
+    return data.data.sessions;
+  }, []);
+
   const { sectionsRef } = useSectionScroll();
 
   return (
@@ -31,9 +42,9 @@ export default function Games() {
         </div>
         <section className="px-[90px]">
           <div className="flex w-full items-center gap-10">
-            <Session />
-            <Session />
-            <Session />
+            {sessions.map((s, i) => (
+              <Session index={i} key={s.roundId} session={s} />
+            ))}
           </div>
         </section>
       </div>
@@ -50,24 +61,27 @@ export default function Games() {
   );
 }
 
-const Session = () => {
+const Session = ({ session, index }: { session: ISession; index: number }) => {
   return (
-    <NavLink to={routes.game} className="flex w-full flex-1 flex-col gap-2.5">
+    <NavLink
+      to={'/' + session.roundId.toString()}
+      className="flex w-full flex-1 flex-col gap-2.5"
+    >
       <Card
         variant={'purple'}
-        className="h-[125px] flex-1 justify-between px-10 py-8"
+        className="h-[125px] flex-1 justify-between px-8 py-8"
         radius={20}
       >
         <div className="flex flex-col">
           <p className="font-space text-[30px] uppercase leading-none">
-            1 session
+            {index + 1} session
           </p>
           <p className="font-roboto text-[16px] text-dark/50">Easy Mode</p>
         </div>
         <div className="flex items-center gap-3">
           <div className="flex flex-col items-end">
             <p className="font-roboto text-[30px] font-medium leading-none text-dark">
-              500 ETH
+              {formatUnits(BigInt(session.rewardsPool.toFixed()), 18)} ETH
             </p>
             <p className="font-roboto text-[16px] text-dark/50"> Reward Pool</p>
           </div>

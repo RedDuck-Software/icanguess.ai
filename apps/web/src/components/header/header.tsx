@@ -39,17 +39,13 @@ export const Header = () => {
           {address ? (
             <Popover>
               <PopoverTrigger asChild>
-                <Button
-                  className="w-[200px]"
-                  onClick={() => open()}
-                  size={'sm'}
-                >
+                <Button className="w-[200px]" size={'sm'}>
                   {shortenAddress(address)}
                 </Button>
               </PopoverTrigger>
               <PopoverContent
                 onClick={disconnect}
-                className="h-[46px] w-[200px] border border-white bg-transparent px-6 py-2.5 text-center text-white hover:opacity-80"
+                className="h-[46px] w-[200px] cursor-pointer border border-white bg-transparent px-6 py-2.5 text-center text-xl text-white hover:opacity-80"
               >
                 Disconnect
               </PopoverContent>

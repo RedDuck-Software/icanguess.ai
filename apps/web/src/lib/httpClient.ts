@@ -8,10 +8,16 @@ console.log('API', API_BASE_URL);
 export const publicClient = axios.create({
   baseURL: API_BASE_URL,
   withCredentials: true,
+  headers: {
+    'ngrok-skip-browser-warning': 'true',
+  },
 });
 
 export const privateClient = axios.create({
   baseURL: API_BASE_URL,
+  headers: {
+    'ngrok-skip-browser-warning': 'true',
+  },
 });
 
 privateClient.interceptors.request.use(

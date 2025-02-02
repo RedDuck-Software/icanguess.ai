@@ -14,7 +14,7 @@ const metadata = {
   name: 'icanguess.ai',
   description: 'icanguess.ai game',
   url: 'https://icanguess.ai', // origin must match your domain & subdomain
-  icons: [],
+  icons: ['https://icanguess-ai.netlify.app/icons/blocks.svg'],
 };
 
 // 3. Set the networks
