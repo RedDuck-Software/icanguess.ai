@@ -1,4 +1,6 @@
 import { useAppKit } from '@reown/appkit/react';
+import { AxiosError } from 'axios';
+import { motion } from 'framer-motion';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { encodeAbiParameters, formatUnits, zeroAddress } from 'viem';
@@ -20,7 +22,6 @@ import { useTakeGuess } from '@/hooks/mutations/use-take-guess';
 import type { Session } from '@/hooks/queries/use-sessions';
 import { useStoredWords } from '@/hooks/queries/use-stored-words';
 import { useUserGuesses } from '@/hooks/queries/use-user-guesses';
-import { AxiosError } from 'axios';
 
 interface Props {
   session: Session;
