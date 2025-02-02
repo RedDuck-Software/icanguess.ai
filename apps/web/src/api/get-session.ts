@@ -5,6 +5,15 @@ const SESSION_URL = '/auth/session';
 
 export const getSession = async (): Promise<SIWESession | null> => {
   try {
+    publicClient.interceptors.request.use(
+      (config) => {
+        const token = localStorage.getItem('token');
+        if (token) config.headers['Authorization'] = `Bearer ${token}`;
+        return config;
+      },
+      (error) => Promise.reject(error),
+    );
+
     const { data } = await publicClient.get<{
       address: string;
       chainId: number;

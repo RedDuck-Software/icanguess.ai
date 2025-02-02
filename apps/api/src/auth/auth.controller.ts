@@ -13,7 +13,6 @@ import { AuthService } from './auth.service';
 import { VerifyDto } from './dtos/verify.dto';
 import { NonceDto } from './dtos/nonce.dto';
 import { Request, Response } from 'express';
-import { JwtAuthGuard } from './guards/jwt.guard';
 import { sepolia } from 'viem/chains';
 import { ConfigService } from '@nestjs/config';
 
@@ -26,6 +25,7 @@ export class AuthController {
   ) {}
 
   @Post('nonce')
+  @Public()
   @ApiOperation({ summary: 'Get a nonce' })
   async generateNonce(@Body() dto: NonceDto) {
     return { nonce: await this.authService.generateNonce(dto.wallet) };
@@ -43,23 +43,10 @@ export class AuthController {
       dto.wallet,
     );
 
-    const isProd = process.env.NODE_ENV === 'production';
-    const domain = process.env.COOKIE_DOMAIN || 'localhost';
-
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: isProd,
-      sameSite: isProd ? 'none' : 'lax',
-      domain: domain,
-      maxAge: 1000 * 60 * 60 * 24, // 1 day
-      path: '/',
-    });
-
-    return { success: true };
+    return { token };
   }
 
   @Get('session')
-  @UseGuards(JwtAuthGuard)
   getSession(@Req() req: Request) {
     if (!req.user) return null;
 
@@ -74,7 +61,6 @@ export class AuthController {
     };
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get('signout')
   @ApiOperation({ summary: 'Sign out and clear the session' })
   signOut(@Req() req: Request) {

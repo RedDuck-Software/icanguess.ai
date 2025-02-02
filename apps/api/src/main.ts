@@ -49,7 +49,6 @@ async function bootstrap() {
   app.setGlobalPrefix(globalPrefix);
   setupSwagger(app, globalPrefix);
 
-  const isProd = process.env.NODE_ENV === 'production';
   app.enableCors({
     origin: [
       'https://ab55-2a09-bac5-597a-52d-00-84-a0.ngrok-free.app',
@@ -61,6 +60,7 @@ async function bootstrap() {
       'Content-Type',
       'Accept',
       'Access-Control-Allow-Origin',
+      'Authorization',
       'ngrok-skip-browser-warning',
     ],
   });
