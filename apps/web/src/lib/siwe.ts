@@ -33,13 +33,15 @@ const verifyMessage = async (args: SIWEVerifyMessageArgs) => {
     };
 
     const { accountAddress } = data as { accountAddress: Address };
-    console.log({ message, signature, accountAddress });
     const response = await postVerify(message, signature, accountAddress);
 
     if (!response.data) {
       return false;
     }
 
+    localStorage.setItem('token', response.data.token);
+
+    console.log(1);
     return true;
   } catch {
     return false;
