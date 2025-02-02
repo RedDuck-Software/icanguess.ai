@@ -80,7 +80,7 @@ export class RoundService {
     const targetRound = await this.prismaService.round.findFirst({
       where: { roundId },
     });
-    if (!targetRound) throw new BadRequestException('Round is not active');
+    if (!targetRound) return [];
 
     const history = await this.prismaService.userRoundGuess.findMany({
       where: {
