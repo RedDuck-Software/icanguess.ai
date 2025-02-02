@@ -146,7 +146,7 @@ export const YourAnswer = ({ session }: Props) => {
               string[]
             >;
             const stored = storedAll[session.roundId.toString()] as string[];
-            stored[res.data.wordIndex!] = res.data.word;
+            stored[res.data.wordIndex! + 9] = res.data.word;
             localStorage.setItem(
               'words',
               JSON.stringify({
