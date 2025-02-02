@@ -16,6 +16,7 @@ import { ConfigService } from '@nestjs/config';
 type GuessResponse = {
   word: string | null;
   temperature: number;
+  wordIndex?: number;
 };
 
 @Injectable()
@@ -155,8 +156,15 @@ export class RoundService {
       },
     });
 
+    let wordIndex: number | undefined = undefined;
+
+    if (response.guessedWord) {
+      wordIndex = secretWords.indexOf(response.guessedWord);
+    }
+
     return {
       word: response.guessedWord ?? null,
+      wordIndex,
       temperature: response.temperature,
     };
   }
