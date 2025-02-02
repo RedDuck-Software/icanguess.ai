@@ -1,8 +1,7 @@
-import { useMutation } from '@tanstack/react-query';
-import type { Address } from 'viem';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAccount } from 'wagmi';
 
-import { publicClient } from '../../lib/httpClient';
+import { privateClient } from '../../lib/httpClient';
 
 interface Data {
   roundId: number;
@@ -11,6 +10,8 @@ interface Data {
 
 export const useTakeGuess = () => {
   const { address } = useAccount();
+  const queryClient = useQueryClient();
+
   return useMutation({
     async mutationFn(data: Data) {
       if (!address) return;
@@ -20,11 +21,14 @@ export const useTakeGuess = () => {
         walletAddress: address,
       };
 
-      return await publicClient.post<{
+      return await privateClient.post<{
         word: string | null;
         wordIndex: number | null;
         temperature: number;
       }>(`/rounds/${data.roundId}/guess`, body);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['user-guesses', 'sessions'] });
     },
   });
 };

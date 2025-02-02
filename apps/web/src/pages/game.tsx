@@ -125,7 +125,8 @@ export default function Game() {
                   <p className="font-space text-[30px] uppercase">Attempts</p>
                   <div className="flex h-[60px] w-[60px] items-center justify-center rounded-[20px] border border-dark-gray">
                     <p className="font-roboto text-[30px] font-medium text-dark">
-                      {userGuesses?.data.attemptsUser || 0}
+                      {(userGuesses?.data.attempts.attemptsBought || 0) -
+                        (userGuesses?.data.attempts.attemptsUser || 0)}
                     </p>
                   </div>
                 </Card>

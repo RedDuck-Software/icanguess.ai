@@ -1,7 +1,9 @@
 import { useAppKit } from '@reown/appkit/react';
+import { AxiosError } from 'axios';
+import { motion } from 'framer-motion';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
-import { encodeAbiParameters, formatUnits } from 'viem';
+import { encodeAbiParameters, formatUnits, zeroAddress } from 'viem';
 import {
   useAccount,
   usePublicClient,
@@ -58,7 +60,6 @@ export const YourAnswer = ({ session }: Props) => {
     functionName: 'roundInfos',
     args: [BigInt(session.roundId)],
   });
-  console.log(currentRoundStats);
 
   const buttonText = useMemo(() => {
     if (!address) return 'Connect Wallet';
@@ -77,35 +78,52 @@ export const YourAnswer = ({ session }: Props) => {
   const { mutateAsync: takeGuess } = useTakeGuess();
   const { data: storedWords } = useStoredWords();
   const onClick = async () => {
-    if (!currentRoundStats || !userGuesses || !storedWords || !data) return;
-    setLoading(true);
     if (!address) {
       open();
       return;
     }
+    if (!currentRoundStats || !userGuesses || !storedWords || !data) return;
+    setLoading(true);
+
     const id = toast.loading('Loading...');
     try {
       let tx: `0x${string}` | null = null;
 
-      if (userGuesses.data.attemptsUser === 0) {
-        if (currentRoundStats[1] === 0n) {
-          const res = await startRoundWithSig();
+      if (
+        userGuesses.data.attempts.attemptsBought -
+          userGuesses.data.attempts.attemptsUser ===
+        0
+      ) {
+        if (currentRoundStats[0] === zeroAddress) {
+          try {
+            const res = await startRoundWithSig();
+            const signature = encodeAbiParameters(
+              [
+                { name: 'x', type: 'address' },
+                { name: 'sig', type: 'bytes' },
+              ],
+              [res.data.targetAddress, res.data.signature],
+            );
 
-          const signature = encodeAbiParameters(
-            [
-              { name: 'x', type: 'address' },
-              { name: 'sig', type: 'bytes' },
-            ],
-            [res.data.targetAddress, res.data.signature],
-          );
-
-          tx = await writeContractAsync({
-            abi: gameAbi,
-            address: contractAddress,
-            functionName: 'depositWithSig',
-            args: [signature],
-            value: data[0].result,
-          });
+            tx = await writeContractAsync({
+              abi: gameAbi,
+              address: contractAddress,
+              functionName: 'depositWithSig',
+              args: [signature],
+              value: data[0].result,
+            });
+          } catch (error) {
+            if (error instanceof AxiosError && error.status === 409) {
+              tx = await writeContractAsync({
+                abi: gameAbi,
+                address: contractAddress,
+                functionName: 'deposit',
+                value: data[0].result,
+              });
+            } else {
+              throw new Error(error);
+            }
+          }
         } else {
           tx = await writeContractAsync({
             abi: gameAbi,
@@ -114,17 +132,27 @@ export const YourAnswer = ({ session }: Props) => {
             value: data[0].result,
           });
         }
-      } else if (userGuesses.data.attemptsUser > 0) {
+      } else if (
+        userGuesses.data.attempts.attemptsBought -
+          userGuesses.data.attempts.attemptsUser >
+        0
+      ) {
         const res = await takeGuess({ prompt: word, roundId: session.roundId });
         if (res) {
           setTemperature(res.data.temperature);
           if (res.data.word) {
-            const storedAll = JSON.parse(storedWords);
-            const stored = storedAll[session.roundId] as string[];
+            const storedAll = JSON.parse(storedWords) as Record<
+              string,
+              string[]
+            >;
+            const stored = storedAll[session.roundId.toString()] as string[];
             stored[res.data.wordIndex!] = res.data.word;
             localStorage.setItem(
               'words',
-              JSON.stringify({ ...storedAll, [session.roundId]: { stored } }),
+              JSON.stringify({
+                ...storedAll,
+                [session.roundId]: { ...stored },
+              }),
             );
           }
         } else {
@@ -146,8 +174,12 @@ export const YourAnswer = ({ session }: Props) => {
       toast.dismiss(id);
       toast.success('Success');
     } catch (error) {
-      if (error instanceof Error) {
-        toast.dismiss(id);
+      console.log(error);
+
+      toast.dismiss(id);
+      if (error instanceof AxiosError) {
+        toast.error(error.response?.data?.message?.[0] || error.message);
+      } else if (error instanceof Error) {
         toast.error(error.message);
       }
     } finally {
@@ -155,7 +187,8 @@ export const YourAnswer = ({ session }: Props) => {
     }
   };
 
-  console.log(temperature);
+  const leftValue =
+    temperature !== null ? `${(temperature / 10) * 100}%` : '0%';
 
   return (
     <Card className="w-2/3 flex-col gap-10 p-10" variant={'dark'} radius={20}>
@@ -177,6 +210,13 @@ export const YourAnswer = ({ session }: Props) => {
         <p className="absolute -bottom-8 right-0 font-roboto text-[16px] text-white/50">
           Hot
         </p>
+
+        <motion.div
+          initial={{ left: '0%' }}
+          animate={{ left: leftValue }}
+          transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+          className="absolute top-[-4px] h-[32px] w-[4px] rounded bg-white"
+        />
       </div>
       <Input
         value={word}

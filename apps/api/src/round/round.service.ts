@@ -52,7 +52,8 @@ export class RoundService {
       throw new ConflictException('Round already started');
     }
 
-    const secretWords = await this.wordsService.generateWords();
+    const wordsCount = mode === GameMode.EASY ? 3 : 12;
+    const secretWords = await this.wordsService.generateWords(wordsCount);
 
     const pk = keccak256(Buffer.from(secretWords, 'utf-8'));
     const { address: targetAddress } = privateKeyToAccount(pk);
