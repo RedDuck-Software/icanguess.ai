@@ -9,4 +9,7 @@ export class TryGuessDto {
     message: 'Prompt cannot contain any special characters.',
   })
   prompt: string;
+
+  @IsString()
+  walletAddress: string;
 }

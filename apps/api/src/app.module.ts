@@ -10,6 +10,8 @@ import { GameModule } from './game/game.module';
 import { EVENTS_QUEUE_NAME } from './queue-processor/queues';
 import { WordsModule } from './words/words.module';
 import { RoundModule } from './round/round.module';
+import { JwtAuthGuard } from './auth/guards/jwt.guard';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -45,6 +47,11 @@ import { RoundModule } from './round/round.module';
     RoundModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+  ],
 })
 export class AppModule {}

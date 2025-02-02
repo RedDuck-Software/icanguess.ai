@@ -6,6 +6,7 @@ import { AiService } from 'src/ai/ai.service';
 import { Request, Response } from 'express';
 import { GetUserAttemptsDto } from './dtos/get-attempts.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { Public } from '../auth/guards/public.decorator';
 
 @ApiTags('Game')
 @Controller('game')
@@ -13,6 +14,7 @@ export class GameController {
   constructor(private readonly gameService: GameService) {}
 
   @Get('sessions')
+  @Public()
   @ApiOperation({ summary: 'Gets all game sessions for a mode' })
   @ApiResponse({ status: 201, description: 'Signature created successfully.' })
   async getAllSession(@Query() startGameDto: GetSessionsDto) {
@@ -21,7 +23,6 @@ export class GameController {
   }
 
   @Get('users/attempts')
-  @UseGuards(JwtAuthGuard)
   async getUserAttempts(@Query() dto: GetUserAttemptsDto, @Req() req: Request) {
     const attempts = await this.gameService.getUserAttempts(
       req.user,

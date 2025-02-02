@@ -27,7 +27,7 @@ export class RoundController {
     word: string | null;
     temperature: number;
   }> {
-    const { prompt } = tryGuessDto;
-    return await this.roundService.tryGuess(roundId, prompt);
+    const { prompt, walletAddress } = tryGuessDto;
+    return await this.roundService.tryGuess(roundId, walletAddress, prompt);
   }
 }
