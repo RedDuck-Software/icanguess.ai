@@ -1,8 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
-import type { Address } from 'viem';
 import { useAccount } from 'wagmi';
 
-import { publicClient } from '../../lib/httpClient';
+import { privateClient } from '../../lib/httpClient';
 
 interface Data {
   roundId: number;
@@ -20,7 +19,7 @@ export const useTakeGuess = () => {
         walletAddress: address,
       };
 
-      return await publicClient.post<{
+      return await privateClient.post<{
         word: string | null;
         wordIndex: number | null;
         temperature: number;

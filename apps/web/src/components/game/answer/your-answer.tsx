@@ -58,7 +58,6 @@ export const YourAnswer = ({ session }: Props) => {
     functionName: 'roundInfos',
     args: [BigInt(session.roundId)],
   });
-  console.log(currentRoundStats);
 
   const buttonText = useMemo(() => {
     if (!address) return 'Connect Wallet';
@@ -87,25 +86,37 @@ export const YourAnswer = ({ session }: Props) => {
     try {
       let tx: `0x${string}` | null = null;
 
-      if (userGuesses.data.attemptsUser === 0) {
+      if (userGuesses.data.attempts.attemptsUser === 0) {
         if (currentRoundStats[1] === 0n) {
-          const res = await startRoundWithSig();
+          try {
+            const res = await startRoundWithSig();
+            const signature = encodeAbiParameters(
+              [
+                { name: 'x', type: 'address' },
+                { name: 'sig', type: 'bytes' },
+              ],
+              [res.data.targetAddress, res.data.signature],
+            );
 
-          const signature = encodeAbiParameters(
-            [
-              { name: 'x', type: 'address' },
-              { name: 'sig', type: 'bytes' },
-            ],
-            [res.data.targetAddress, res.data.signature],
-          );
-
-          tx = await writeContractAsync({
-            abi: gameAbi,
-            address: contractAddress,
-            functionName: 'depositWithSig',
-            args: [signature],
-            value: data[0].result,
-          });
+            tx = await writeContractAsync({
+              abi: gameAbi,
+              address: contractAddress,
+              functionName: 'depositWithSig',
+              args: [signature],
+              value: data[0].result,
+            });
+          } catch (error) {
+            if (error.status === 409) {
+              tx = await writeContractAsync({
+                abi: gameAbi,
+                address: contractAddress,
+                functionName: 'deposit',
+                value: data[0].result,
+              });
+            } else {
+              throw new Error(error);
+            }
+          }
         } else {
           tx = await writeContractAsync({
             abi: gameAbi,
@@ -114,7 +125,7 @@ export const YourAnswer = ({ session }: Props) => {
             value: data[0].result,
           });
         }
-      } else if (userGuesses.data.attemptsUser > 0) {
+      } else if (userGuesses.data.attempts.attemptsUser > 0) {
         const res = await takeGuess({ prompt: word, roundId: session.roundId });
         if (res) {
           setTemperature(res.data.temperature);
