@@ -77,7 +77,7 @@ export const YourAnswer = ({ session }: Props) => {
   const { mutateAsync: takeGuess } = useTakeGuess();
   const { data: storedWords } = useStoredWords();
   const onClick = async () => {
-    if (!currentRoundStats || !userGuesses || !storedWords) return;
+    if (!currentRoundStats || !userGuesses || !storedWords || !data) return;
     setLoading(true);
     if (!address) {
       open();
@@ -104,12 +104,14 @@ export const YourAnswer = ({ session }: Props) => {
             address: contractAddress,
             functionName: 'depositWithSig',
             args: [signature],
+            value: data[0].result,
           });
         } else {
           tx = await writeContractAsync({
             abi: gameAbi,
             address: contractAddress,
             functionName: 'deposit',
+            value: data[0].result,
           });
         }
       } else if (userGuesses.data.attemptsUser > 0) {
