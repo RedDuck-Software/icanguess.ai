@@ -11,7 +11,7 @@ type DepositedEventPayload = {
   amount: string;
   roundId: string;
   user: Address;
-  guessPassAmount: string;
+  boughtAttempts: string;
 };
 
 @Processor(EVENTS_QUEUE_NAME)
@@ -20,6 +20,7 @@ export class EventProcessorService extends WorkerHost {
 
   constructor(private readonly db: PrismaService) {
     super();
+    console.log('INITED');
   }
 
   async process(job: Job<EventNotification, any, string>): Promise<any> {
@@ -35,6 +36,25 @@ export class EventProcessorService extends WorkerHost {
   async processDepositedEvent(ev: EventNotification<DepositedEventPayload>) {
     await this.db.$transaction(
       async (db) => {
+        let indexedEv = await db.indexedEvent.findUnique({
+          where: {
+            id: ev.logIndex,
+          },
+        });
+
+        if (indexedEv) {
+          this.logger.warn(
+            `Event ${ev.logIndex} was already processed, skipping`,
+          );
+          return;
+        }
+
+        indexedEv = await db.indexedEvent.create({
+          data: {
+            id: ev.logIndex,
+          },
+        });
+
         let user = await db.user.findUnique({
           where: {
             wallet: ev.eventData.user,
@@ -49,9 +69,25 @@ export class EventProcessorService extends WorkerHost {
           });
         }
 
+        let round = await db.round.findFirst({
+          where: {
+            roundId: +ev.eventData.roundId,
+            contract: ev.contract,
+          },
+        });
+
+        if (!round) {
+          round = await db.round.create({
+            data: {
+              roundId: +ev.eventData.roundId,
+              contract: ev.contract,
+            },
+          });
+        }
+
         let userRound = await db.userRound.findFirst({
           where: {
-            roundId: ev.eventData.roundId,
+            roundId: round.id,
             userWallet: ev.eventData.user,
           },
         });
@@ -59,7 +95,7 @@ export class EventProcessorService extends WorkerHost {
         if (!userRound) {
           userRound = await db.userRound.create({
             data: {
-              roundId: ev.eventData.roundId,
+              roundId: round.id,
               userWallet: ev.eventData.user,
             },
           });
@@ -68,13 +104,13 @@ export class EventProcessorService extends WorkerHost {
         await db.userRound.update({
           where: {
             userWallet_roundId: {
-              roundId: ev.eventData.roundId,
+              roundId: round.id,
               userWallet: ev.eventData.user,
             },
           },
           data: {
             attemptsBought:
-              userRound.attemptsBought + +ev.eventData.guessPassAmount,
+              userRound.attemptsBought + +ev.eventData.boughtAttempts,
           },
         });
       },

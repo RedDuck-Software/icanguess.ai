@@ -69,3 +69,9 @@ model UserRoundGuess {
 
   @@map("user_round_guess")
 }
+
+model IndexedEvent {
+  id String @id
+
+  @@map("indexed_event")
+}

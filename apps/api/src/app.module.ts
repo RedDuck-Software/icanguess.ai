@@ -7,6 +7,7 @@ import { AiModule } from './ai/ai.module';
 import { GraphqlModule } from './graphql/graphql.module';
 import { SignaturesModule } from './signatures/signatures.module';
 import { GameModule } from './game/game.module';
+import { EVENTS_QUEUE_NAME } from './queue-processor/queues';
 
 @Module({
   imports: [
@@ -26,6 +27,15 @@ import { GameModule } from './game/game.module';
             url: redisUrl,
           },
         };
+      },
+    }),
+    BullModule.registerQueue({
+      name: EVENTS_QUEUE_NAME,
+      defaultJobOptions: {
+        removeOnFail: false,
+        removeOnComplete: true,
+        attempts: 100,
+        backoff: { type: 'fixed', delay: 10000 },
       },
     }),
     GameModule,

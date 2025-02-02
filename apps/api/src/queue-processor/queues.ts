@@ -6,7 +6,8 @@ export type EventNotification<TEventData = Object> = {
   chainId: number;
   txCaller: Address;
   txHash: Hex;
-  logIndex: number;
+  contract: string;
+  logIndex: string;
   txTimestamp: number;
 };
 
