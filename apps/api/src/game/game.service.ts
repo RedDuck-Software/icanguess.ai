@@ -3,36 +3,39 @@ import { GraphqlService } from 'src/graphql/graphql.service';
 import { Address, getAddress } from 'viem';
 import { GET_ROUNDS, GetRoundsResponse } from './game.queues';
 import { sepolia } from 'viem/chains';
+import { ConfigService } from '@nestjs/config';
 
-export const INDEXER_URL = 'INDEXER_URL' as const;
+export const INDEXER_URL = 'INDEXER_URL';
 
 export enum GameMode {
   EASY = 'easy',
   HARD = 'hard',
 }
 
-const contractAddresses = {
+const contractAddresses: Record<number, Record<GameMode, Address>> = {
   [sepolia.id]: {
-    ['easy']: getAddress('0xD46D8f9e1B03bC0BFDa065A1797d45c64d66902c'),
-    ['hard']: getAddress('0xD46D8f9e1B03bC0BFDa065A1797d45c64d66902c'), // FIXME:
+    [GameMode.EASY]: getAddress('0xD46D8f9e1B03bC0BFDa065A1797d45c64d66902c'),
+    [GameMode.HARD]: getAddress('0xD46D8f9e1B03bC0BFDa065A1797d45c64d66902c'), // FIXME:
   },
 };
 
 @Injectable()
 export class GameService {
+  private readonly chainId: number;
+
   constructor(
     @Inject(INDEXER_URL)
     private readonly indexerUrl: string,
     private readonly gqlService: GraphqlService,
-  ) {}
+    private readonly configService: ConfigService,
+  ) {
+    this.chainId = Number(
+      this.configService.get<string>('CHAIN_ID') || sepolia.id,
+    );
+  }
 
   async getSessions(mode: GameMode) {
-    return await this._getGameSessions(
-      contractAddresses[
-        // FIXME: use chain id from .env
-        sepolia.id
-      ][mode],
-    );
+    return await this._getGameSessions(this.getContractAddressByMode(mode));
   }
 
   private async _getGameSessions(contract: Address) {
@@ -96,4 +99,8 @@ export class GameService {
 
     return { currentRoundId, roundStart, roundEnd, roundStartBufferEnd };
   };
+
+  getContractAddressByMode(mode: GameMode) {
+    return contractAddresses[this.chainId][mode];
+  }
 }

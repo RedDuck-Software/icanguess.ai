@@ -38,7 +38,7 @@ export class EventProcessorService extends WorkerHost {
       async (db) => {
         let indexedEv = await db.indexedEvent.findUnique({
           where: {
-            id: ev.logIndex,
+            id: ev.logIndex.toString(),
           },
         });
 
@@ -51,7 +51,7 @@ export class EventProcessorService extends WorkerHost {
 
         indexedEv = await db.indexedEvent.create({
           data: {
-            id: ev.logIndex,
+            id: ev.logIndex.toString(),
           },
         });
 

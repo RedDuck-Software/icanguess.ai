@@ -8,6 +8,8 @@ import { GraphqlModule } from './graphql/graphql.module';
 import { SignaturesModule } from './signatures/signatures.module';
 import { GameModule } from './game/game.module';
 import { EVENTS_QUEUE_NAME } from './queue-processor/queues';
+import { WordsModule } from './words/words.module';
+import { RoundModule } from './round/round.module';
 
 @Module({
   imports: [
@@ -39,6 +41,8 @@ import { EVENTS_QUEUE_NAME } from './queue-processor/queues';
       },
     }),
     GameModule,
+    WordsModule,
+    RoundModule,
   ],
   controllers: [],
   providers: [],
