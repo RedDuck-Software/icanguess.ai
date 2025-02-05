@@ -40,6 +40,7 @@ export class AuthService {
     message: string,
     signature: string,
     wallet: string,
+    chainId: number,
   ): Promise<string> {
     const normalizedWallet = wallet.toLowerCase();
     let siweMessage: SiweMessage;
@@ -56,8 +57,7 @@ export class AuthService {
     }
 
     const expectedDomainsRaw =
-      this.configService.get<string>('SIWE_DOMAINS') ||
-      'ab55-2a09-bac5-597a-52d-00-84-a0.ngrok-free.app,e3d8-5-181-248-159.ngrok-free.app';
+      this.configService.get<string>('SIWE_DOMAINS') || 'localhost:5173';
     const expectedDomains = expectedDomainsRaw.split(',');
 
     if (!expectedDomains.includes(siweMessage.domain)) {
@@ -81,7 +81,7 @@ export class AuthService {
       throw new UnauthorizedException('User is blocked or does not exist');
     }
 
-    const payload = { wallet: normalizedWallet, roles: user.roles };
+    const payload = { wallet: normalizedWallet, roles: user.roles, chainId };
     return this.jwtService.sign(payload);
   }
 }

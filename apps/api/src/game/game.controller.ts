@@ -3,7 +3,7 @@ import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { GetSessionsDto } from './dtos/get-sessions.dto';
 import { GameService } from './game.service';
 import { Request, Response } from 'express';
-import { GetUserAttemptsDto } from './dtos/get-attempts.dto';
+import { GetUserAttemptsDto } from '../round/dtos/get-attempts.dto';
 import { Public } from '../auth/guards/public.decorator';
 
 @ApiTags('Game')
@@ -16,17 +16,10 @@ export class GameController {
   @ApiOperation({ summary: 'Gets all game sessions for a mode' })
   @ApiResponse({ status: 201, description: 'Signature created successfully.' })
   async getAllSession(@Query() startGameDto: GetSessionsDto) {
-    const sessions = await this.gameService.getSessions(startGameDto.mode);
-    return { sessions };
-  }
-
-  @Get('users/attempts')
-  async getUserAttempts(@Query() dto: GetUserAttemptsDto, @Req() req: Request) {
-    const attempts = await this.gameService.getUserAttempts(
-      req.user.wallet,
-      +dto.roundId,
-      dto.mode,
+    const sessions = await this.gameService.getSessions(
+      +startGameDto.chainId,
+      startGameDto.mode,
     );
-    return { attempts };
+    return { sessions };
   }
 }

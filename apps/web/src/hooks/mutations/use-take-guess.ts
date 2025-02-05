@@ -5,6 +5,7 @@ import { privateClient } from '../../lib/httpClient';
 
 interface Data {
   roundId: number;
+  chainId: number;
   prompt: string;
 }
 
@@ -18,14 +19,15 @@ export const useTakeGuess = () => {
 
       const body = {
         prompt: data.prompt,
-        walletAddress: address,
+        roundId: data.roundId,
+        chainId: data.chainId,
       };
 
       return await privateClient.post<{
         word: string | null;
         wordIndex: number | null;
         temperature: number;
-      }>(`/rounds/${data.roundId}/guess`, body);
+      }>(`/round/guess`, body);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['user-guesses', 'sessions'] });

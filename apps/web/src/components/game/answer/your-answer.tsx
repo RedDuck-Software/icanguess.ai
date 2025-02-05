@@ -22,6 +22,8 @@ import { useTakeGuess } from '@/hooks/mutations/use-take-guess';
 import type { Session } from '@/hooks/queries/use-sessions';
 import { useStoredWords } from '@/hooks/queries/use-stored-words';
 import { useUserGuesses } from '@/hooks/queries/use-user-guesses';
+import { useQueryChain } from '@/hooks/use-query-chain';
+import { GameMode } from '@/common';
 
 interface Props {
   session: Session;
@@ -30,6 +32,7 @@ export const YourAnswer = ({ session }: Props) => {
   const { address } = useAccount();
   const { open } = useAppKit();
 
+  const chain = useQueryChain();
   const { data } = useReadContracts({
     contracts: [
       {
@@ -96,7 +99,10 @@ export const YourAnswer = ({ session }: Props) => {
       ) {
         if (currentRoundStats[0] === zeroAddress) {
           try {
-            const res = await startRoundWithSig();
+            const res = await startRoundWithSig({
+              mode: GameMode.EASY,
+              chainId: chain.id,
+            });
             const signature = encodeAbiParameters(
               [
                 { name: 'x', type: 'address' },

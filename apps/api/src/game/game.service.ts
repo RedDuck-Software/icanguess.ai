@@ -5,57 +5,24 @@ import { GET_ROUNDS, GetRoundsResponse } from './game.queues';
 import { sepolia } from 'viem/chains';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from 'src/database/prisma.service';
+import { GameMode } from 'src/network/addresses';
+import { NetworkService } from 'src/network/network.service';
 
 export const INDEXER_URL = 'INDEXER_URL';
 
-export enum GameMode {
-  EASY = 'easy',
-  HARD = 'hard',
-}
-
-export const contractAddresses: Record<number, Record<GameMode, Address>> = {
-  [sepolia.id]: {
-    [GameMode.EASY]: getAddress('0xD46D8f9e1B03bC0BFDa065A1797d45c64d66902c'),
-    [GameMode.HARD]: getAddress('0xD46D8f9e1B03bC0BFDa065A1797d45c64d66902c'), // FIXME:
-  },
-};
-
 @Injectable()
 export class GameService {
-  private readonly chainId: number;
-
   constructor(
     @Inject(INDEXER_URL)
     private readonly indexerUrl: string,
     private readonly gqlService: GraphqlService,
-    private readonly configService: ConfigService,
     private readonly db: PrismaService,
-  ) {
-    this.chainId = Number(
-      this.configService.get<string>('CHAIN_ID') || sepolia.id,
-    );
-  }
+    private readonly networkService: NetworkService,
+  ) {}
 
-  async getUserAttempts(user: Address, roundId: number, mode: GameMode) {
-    const contract = this.getContractAddressByMode(mode);
-    const dbUser = await this.db.userRound.findFirst({
-      where: {
-        round: { contract, roundId },
-        userWallet: user.toLowerCase(),
-      },
-    });
+  async getSessions(chainId: number, mode: GameMode) {
+    const contract = this.getContractAddressByMode(chainId, mode);
 
-    return {
-      attemptsBought: dbUser?.attemptsBought ?? 0,
-      attemptsUser: dbUser?.attemptsUsed ?? 0,
-    };
-  }
-
-  async getSessions(mode: GameMode) {
-    return await this._getGameSessions(this.getContractAddressByMode(mode));
-  }
-
-  private async _getGameSessions(contract: Address) {
     const res = await this.gqlService.getQueryResult<GetRoundsResponse>(
       this.indexerUrl,
       GET_ROUNDS,
@@ -117,7 +84,9 @@ export class GameService {
     return { currentRoundId, roundStart, roundEnd, roundStartBufferEnd };
   };
 
-  getContractAddressByMode(mode: GameMode) {
-    return contractAddresses[this.chainId][mode];
+  public getContractAddressByMode(chainId: number, mode: GameMode) {
+    return this.networkService.getContractAddresses(chainId).guessInstances[
+      mode
+    ];
   }
 }

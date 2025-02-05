@@ -73,6 +73,7 @@ export class EventProcessorService extends WorkerHost {
           where: {
             roundId: +ev.eventData.roundId,
             contract: ev.contract,
+            chainId: ev.chainId,
           },
         });
 
@@ -81,6 +82,7 @@ export class EventProcessorService extends WorkerHost {
             data: {
               roundId: +ev.eventData.roundId,
               contract: ev.contract,
+              chainId: ev.chainId,
             },
           });
         }

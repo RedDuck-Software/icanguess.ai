@@ -5,9 +5,10 @@ import { GraphqlModule } from 'src/graphql/graphql.module';
 import { GameController } from './game.controller';
 import { SignaturesModule } from '../signatures/signatures.module';
 import { PrismaModule } from 'src/database/prisma.module';
+import { NetworkModule } from 'src/network/network.module';
 
 @Module({
-  imports: [GraphqlModule, SignaturesModule, PrismaModule],
+  imports: [GraphqlModule, SignaturesModule, PrismaModule, NetworkModule],
   exports: [GameService],
   controllers: [GameController],
   providers: [

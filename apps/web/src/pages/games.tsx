@@ -12,9 +12,13 @@ import { Card } from '@/components/ui/card';
 import type { Session as ISession } from '@/hooks/queries/use-sessions';
 import { useSessions } from '@/hooks/queries/use-sessions';
 import { useSectionScroll } from '@/hooks/use-section-scroll';
+import { useQueryChain } from '@/hooks/use-query-chain';
+import { GameMode } from '@/common';
 
 export default function Games() {
-  const { data } = useSessions();
+  const chain = useQueryChain();
+
+  const { data } = useSessions(chain.id, GameMode.EASY);
 
   const sessions = useMemo(() => {
     if (!data) return [];

@@ -1,20 +1,15 @@
-import {
-  Controller,
-  Post,
-  Body,
-  Param,
-  ParseIntPipe,
-  Get,
-  Req,
-} from '@nestjs/common';
+import { Controller, Post, Body, Get, Query } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { RoundService } from './round.service';
 import { StartRoundDto } from './dtos/start-round.dto';
 import { TryGuessDto } from './dtos/try-guess.dto';
-import { Request } from 'express';
+import { GetUserAttemptsDto } from './dtos/get-attempts.dto';
+import { RequestUser, UserClaims } from 'src/auth/decorators/request-user';
+import { getAddress } from 'ethers';
+import { GetHistoryDto } from './dtos/get-history-dto.dto';
 
 @ApiTags('Rounds')
-@Controller('rounds')
+@Controller('round')
 export class RoundController {
   constructor(private readonly roundService: RoundService) {}
 
@@ -24,32 +19,54 @@ export class RoundController {
     status: 201,
     description: 'Secret words generated successfully.',
   })
-  startRound(@Body() startRoundDto: StartRoundDto) {
-    return this.roundService.startRound(startRoundDto.mode);
+  startRound(@Body() dto: StartRoundDto) {
+    return this.roundService.startRound({
+      chainId: +dto.chainId,
+      mode: dto.mode,
+    });
   }
 
-  @Post(':roundId/guess')
+  @Post('guess')
   async tryGuess(
-    @Param('roundId', ParseIntPipe) roundId: number,
-    @Body() tryGuessDto: TryGuessDto,
+    @RequestUser() user: UserClaims,
+    @Body() dto: TryGuessDto,
   ): Promise<{
     word: string | null;
     temperature: number;
   }> {
-    const { prompt, walletAddress } = tryGuessDto;
-    return await this.roundService.tryGuess(roundId, walletAddress, prompt);
+    return await this.roundService.tryGuess({
+      roundId: +dto.roundId,
+      userWallet: getAddress(user.wallet),
+      prompt: dto.prompt,
+      chainId: +dto.chainId,
+    });
   }
 
-  @Get(':roundId/guess/history')
+  @Get('guess/history')
   async getGuessingHistory(
-    @Param('roundId', ParseIntPipe) roundId: number,
-    @Req() req: Request,
+    @RequestUser() user: UserClaims,
+    @Query() dto: GetHistoryDto,
   ) {
     return {
-      history: await this.roundService.getGuessingHistory(
-        roundId,
-        req.user.wallet,
-      ),
+      history: await this.roundService.getGuessingHistory({
+        roundId: +dto.roundId,
+        userWallet: user.wallet,
+        chainId: +dto.chainId,
+      }),
     };
+  }
+
+  @Get('user/attempts')
+  async getUserAttempts(
+    @RequestUser() user: UserClaims,
+    @Query() dto: GetUserAttemptsDto,
+  ) {
+    const attempts = await this.roundService.getUserAttempts({
+      user: user.wallet,
+      roundId: +dto.roundId,
+      mode: dto.mode,
+      chainId: +dto.chainId,
+    });
+    return { attempts };
   }
 }

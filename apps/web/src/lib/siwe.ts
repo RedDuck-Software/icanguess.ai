@@ -29,11 +29,17 @@ async function getSession(): Promise<SIWESession | null> {
 const verifyMessage = async (args: SIWEVerifyMessageArgs) => {
   try {
     const { message, signature, data } = args as SIWEVerifyMessageArgs & {
-      data: { accountAddress: Address };
+      data: { accountAddress: Address; chainId: string };
     };
 
+    const chainIdExtracted = +data.chainId.split(':')[1];
     const { accountAddress } = data as { accountAddress: Address };
-    const response = await postVerify(message, signature, accountAddress);
+    const response = await postVerify(
+      message,
+      signature,
+      accountAddress,
+      chainIdExtracted,
+    );
 
     if (!response.data) {
       return false;
@@ -41,7 +47,6 @@ const verifyMessage = async (args: SIWEVerifyMessageArgs) => {
 
     localStorage.setItem('token', response.data.token);
 
-    console.log(1);
     return true;
   } catch {
     return false;

@@ -7,11 +7,11 @@ import { AiService } from '../ai/ai.service';
 import { WordsService } from '../words/words.service';
 import { PrismaService } from '../database/prisma.service';
 import { SignaturesService } from '../signatures/signatures.service';
-import { contractAddresses, GameMode, GameService } from '../game/game.service';
+import { GameService } from '../game/game.service';
 import { Address, keccak256 } from 'viem';
-import { sepolia } from 'viem/chains';
 import { privateKeyToAccount } from 'viem/accounts';
-import { ConfigService } from '@nestjs/config';
+import { GameMode } from 'src/network/addresses';
+import { NetworkService } from 'src/network/network.service';
 
 type GuessResponse = {
   word: string | null;
@@ -19,32 +19,40 @@ type GuessResponse = {
   wordIndex?: number;
 };
 
+const wordsCountPerMode = {
+  [GameMode.EASY]: 3,
+  [GameMode.HARD]: 9,
+};
 @Injectable()
 export class RoundService {
-  private readonly chainId: number;
-
   constructor(
     private readonly aiService: AiService,
     private readonly prismaService: PrismaService,
     private readonly wordsService: WordsService,
     private readonly signaturesService: SignaturesService,
     private readonly gameService: GameService,
-    private readonly configService: ConfigService,
-  ) {
-    this.chainId = Number(
-      this.configService.get<string>('CHAIN_ID') || sepolia.id,
-    );
-  }
+    private readonly networkService: NetworkService,
+  ) {}
 
-  async startRound(
-    mode: GameMode,
-  ): Promise<{ roundId: number; signature: Address; targetAddress: Address }> {
+  async startRound({
+    chainId,
+    mode,
+  }: {
+    chainId: number;
+    mode: GameMode;
+  }): Promise<{ roundId: number; signature: Address; targetAddress: Address }> {
+    const contract = this.gameService.getContractAddressByMode(chainId, mode);
+
     const latestDbSession = await this.prismaService.round.findFirst({
       orderBy: { createdAt: 'desc' },
+      where: {
+        contract,
+        chainId,
+      },
     });
     const latestDbSessionId = latestDbSession?.roundId ?? 0;
 
-    const activeSessions = await this.gameService.getSessions(mode);
+    const activeSessions = await this.gameService.getSessions(chainId, mode);
     const latestSession = activeSessions[0];
     const latestSessionId = Number(latestSession.roundId);
 
@@ -52,58 +60,103 @@ export class RoundService {
       throw new ConflictException('Round already started');
     }
 
-    const wordsCount = mode === GameMode.EASY ? 3 : 12;
+    const wordsCount = wordsCountPerMode[mode];
     const secretWords = await this.wordsService.generateWords(wordsCount);
 
     const pk = keccak256(Buffer.from(secretWords, 'utf-8'));
     const { address: targetAddress } = privateKeyToAccount(pk);
 
-    const signature = await this.signaturesService.signGameStart(
-      latestSessionId,
+    const signature = await this.signaturesService.signGameStart({
+      roundId: latestSessionId,
+      chainId,
       targetAddress,
-    );
+    });
 
-    const contractAddress = this.gameService.getContractAddressByMode(mode);
+    const contractAddress = this.gameService.getContractAddressByMode(
+      chainId,
+      mode,
+    );
 
     const newRound = await this.prismaService.round.create({
       data: {
         roundId: latestSessionId,
         contract: contractAddress,
         words: secretWords,
+        chainId,
       },
     });
 
     return { roundId: newRound.roundId, signature, targetAddress };
   }
 
-  async getGuessingHistory(roundId: number, userWallet: string) {
-    const targetRound = await this.prismaService.round.findFirst({
-      where: { roundId },
+  async getUserAttempts({
+    chainId,
+    mode,
+    roundId,
+    user,
+  }: {
+    user: Address;
+    roundId: number;
+    chainId: number;
+    mode: GameMode;
+  }) {
+    const contract = this.gameService.getContractAddressByMode(chainId, mode);
+    const dbUser = await this.prismaService.userRound.findFirst({
+      where: {
+        round: { contract, roundId, chainId },
+        userWallet: user.toLowerCase(),
+      },
     });
-    if (!targetRound) return [];
 
+    return {
+      attemptsBought: dbUser?.attemptsBought ?? 0,
+      attemptsUser: dbUser?.attemptsUsed ?? 0,
+    };
+  }
+
+  async getGuessingHistory({
+    roundId,
+    chainId,
+    userWallet,
+  }: {
+    chainId: number;
+    roundId: number;
+    userWallet: string;
+  }) {
     const history = await this.prismaService.userRoundGuess.findMany({
       where: {
-        userRoundRoundId: targetRound.id,
-        userRoundUserWallet: userWallet.toLowerCase(),
+        userRound: {
+          userWallet,
+          round: {
+            chainId,
+            roundId,
+          },
+        },
       },
     });
 
     return history;
   }
 
-  async tryGuess(
-    roundId: number,
-    userWallet: string,
-    prompt: string,
-  ): Promise<GuessResponse> {
+  async tryGuess({
+    prompt,
+    roundId,
+    chainId,
+    userWallet,
+  }: {
+    roundId: number;
+    chainId: number;
+    userWallet: string;
+    prompt: string;
+  }): Promise<GuessResponse> {
     const targetRound = await this.prismaService.round.findFirst({
       where: { roundId },
     });
     if (!targetRound) throw new BadRequestException('Round is not active');
 
     const contract = targetRound.contract;
-    const chainAddresses = contractAddresses[this.chainId];
+    const chainAddresses =
+      this.networkService.getContractAddresses(chainId).guessInstances;
     const modeKey = Object.entries(chainAddresses).find(
       ([, address]) => address === contract,
     )?.[0];
@@ -113,7 +166,7 @@ export class RoundService {
     }
     const mode = modeKey as GameMode;
 
-    const activeSessions = await this.gameService.getSessions(mode);
+    const activeSessions = await this.gameService.getSessions(chainId, mode);
     const latestSession = activeSessions[0];
 
     const latestSessionId = Number(latestSession.roundId);

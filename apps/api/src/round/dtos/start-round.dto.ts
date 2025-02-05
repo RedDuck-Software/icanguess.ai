@@ -1,6 +1,6 @@
-import { IsEnum } from 'class-validator';
+import { IsEnum, IsNumberString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { GameMode } from '../../game/game.service';
+import { GameMode } from 'src/network/addresses';
 
 export class StartRoundDto {
   @ApiProperty({
@@ -10,4 +10,7 @@ export class StartRoundDto {
   })
   @IsEnum(GameMode)
   mode: GameMode;
+
+  @IsNumberString()
+  chainId: string;
 }

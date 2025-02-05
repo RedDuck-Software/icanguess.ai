@@ -10,13 +10,13 @@ export interface History {
   userRoundUserWallet: string;
   userRoundRoundId: string;
 }
-export const useRoundHistory = (roundId: number) => {
+export const useRoundHistory = (chainId: number, roundId: number) => {
   return useQuery({
-    queryKey: ['round-history', roundId],
+    queryKey: ['round-history', roundId, chainId],
     refetchInterval: 1 * 1000,
     queryFn: async () => {
       return await publicClient.get<{ history: History[] }>(
-        `/rounds/${roundId}/guess/history`,
+        `/round/guess/history?chainId=${chainId}&roundId=${roundId}`,
       );
     },
   });

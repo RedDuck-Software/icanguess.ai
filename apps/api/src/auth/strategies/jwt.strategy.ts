@@ -4,13 +4,15 @@ import { User } from '@prisma/client';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PrismaService } from '../../database/prisma.service';
 import { ConfigService } from '@nestjs/config';
+import { NetworkService } from 'src/network/network.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   private readonly logger = new Logger(JwtStrategy.name);
   constructor(
-    private readonly configService: ConfigService,
+    configService: ConfigService,
     private readonly prismaService: PrismaService,
+    private readonly networkService: NetworkService,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -19,7 +21,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: { wallet: string }): Promise<unknown> {
+  async validate(payload: {
+    wallet: string;
+    chainId: number;
+  }): Promise<unknown> {
     const user: User | null = await this.prismaService.user
       .findFirst({ where: { wallet: payload.wallet } })
       .catch((err) => {
@@ -29,6 +34,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
     if (!user || user.isBlocked) {
       throw new UnauthorizedException();
+    }
+
+    if (!this.networkService.isNetworkSupported(payload.chainId)) {
+      throw new UnauthorizedException('Incorrect authorized chainId');
     }
 
     return payload;

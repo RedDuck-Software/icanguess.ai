@@ -34,6 +34,7 @@ model Round {
   id String @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
 
   roundId  Int
+  chainId  Int
   contract String
   words    String?
 

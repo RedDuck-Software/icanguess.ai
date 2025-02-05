@@ -4,19 +4,27 @@ import { mainnet, arbitrum, sepolia } from 'viem/chains';
 import { ConfigService } from '@nestjs/config';
 import { solidityPacked } from 'ethers';
 import { privateKeyToAccount } from 'viem/accounts';
+import { NetworkService } from 'src/network/network.service';
 
 const START_ROUND_TYPEHASH = 'icanguess.io.signatures.start';
 
 @Injectable()
 export class SignaturesService {
-  constructor(private readonly configService: ConfigService) {}
+  constructor(
+    private readonly networkService: NetworkService,
+    private readonly configService: ConfigService,
+  ) {}
 
-  async signGameStart(roundId: number, targetAddress: string) {
-    const chainId = Number(
-      this.configService.get<string>('CHAIN_ID') || sepolia.id,
-    );
-
-    const chainConfig = this.getChainConfig(chainId);
+  async signGameStart({
+    chainId,
+    roundId,
+    targetAddress,
+  }: {
+    roundId: number;
+    chainId: number;
+    targetAddress: string;
+  }) {
+    const chainConfig = this.networkService.getNetwork(chainId);
 
     const encodedData = solidityPacked(
       ['uint256', 'address', 'uint256', 'bytes32'],
@@ -45,15 +53,5 @@ export class SignaturesService {
       message: { raw: message },
       account,
     });
-  }
-
-  private getChainConfig(chainId: number) {
-    const chainMapping: Record<number, Chain> = {
-      [mainnet.id]: mainnet,
-      [arbitrum.id]: arbitrum,
-      [sepolia.id]: sepolia,
-    };
-
-    return chainMapping[chainId] || mainnet;
   }
 }

@@ -35,15 +35,15 @@ async function bootstrap() {
   );
 
   app.use(cookieParser());
-  app.use(
-    session({
-      name: 'siwe-quickstart',
-      secret: 'siwe-quickstart-secret',
-      resave: true,
-      saveUninitialized: true,
-      cookie: { secure: false, sameSite: true },
-    }),
-  );
+  // app.use(
+  //   session({
+  //     name: 'siwe-quickstart',
+  //     secret: 'siwe-quickstart-secret',
+  //     resave: true,
+  //     saveUninitialized: true,
+  //     cookie: { secure: false, sameSite: true },
+  //   }),
+  // );
 
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
@@ -53,8 +53,12 @@ async function bootstrap() {
     origin: [
       'https://ab55-2a09-bac5-597a-52d-00-84-a0.ngrok-free.app',
       'https://e3d8-5-181-248-159.ngrok-free.app',
+      'https://icanguess.com',
+      'https://icanguess-ai.netlify.app/',
+      'http://localhost:5173',
     ],
-    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+
+    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
     credentials: true,
     allowedHeaders: [
       'Content-Type',

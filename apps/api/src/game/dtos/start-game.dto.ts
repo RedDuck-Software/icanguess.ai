@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsString } from 'class-validator';
+import { IsNumber, IsNumberString, IsString } from 'class-validator';
 
 export class StartGameDto {
   @ApiProperty({
@@ -15,4 +15,11 @@ export class StartGameDto {
   })
   @IsString()
   targetAddress: string;
+
+  @ApiProperty({
+    description: 'The network id',
+    example: 11155111,
+  })
+  @IsNumberString()
+  chainId: string;
 }

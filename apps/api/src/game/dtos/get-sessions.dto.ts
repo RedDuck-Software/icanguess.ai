@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsNumber, IsString } from 'class-validator';
-import { GameMode } from '../game.service';
+import { IsEnum, IsNumber, IsNumberString, IsString } from 'class-validator';
+import { GameMode } from 'src/network/addresses';
 
 export class GetSessionsDto {
   @ApiProperty({
@@ -10,4 +10,11 @@ export class GetSessionsDto {
   })
   @IsEnum(GameMode)
   mode: GameMode;
+
+  @ApiProperty({
+    description: 'The network id',
+    example: 11155111,
+  })
+  @IsNumberString()
+  chainId: string;
 }

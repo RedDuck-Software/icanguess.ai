@@ -9,10 +9,11 @@ export interface Session {
   roundStartTs: number;
   roundEndTs: number;
 }
-export const useUserGuesses = (roundId?: number) => {
+
+export const useUserGuesses = (chainId: number, roundId?: number) => {
   const { address } = useAccount();
   return useQuery({
-    queryKey: ['user-guesses', address, roundId],
+    queryKey: ['user-guesses', address, roundId, chainId],
     enabled: !!roundId && !!address,
     refetchInterval: 5 * 1000,
     queryFn: async () => {
@@ -21,7 +22,9 @@ export const useUserGuesses = (roundId?: number) => {
           attemptsBought: number;
           attemptsUser: number;
         };
-      }>(`/game/users/attempts?mode=easy&roundId=${roundId}`);
+      }>(
+        `/game/users/attempts?mode=easy&roundId=${roundId}&chainId=${chainId}`,
+      );
     },
   });
 };

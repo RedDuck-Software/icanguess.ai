@@ -13,8 +13,8 @@ import { AuthService } from './auth.service';
 import { VerifyDto } from './dtos/verify.dto';
 import { NonceDto } from './dtos/nonce.dto';
 import { Request, Response } from 'express';
-import { sepolia } from 'viem/chains';
 import { ConfigService } from '@nestjs/config';
+import { RequestUser, UserClaims } from 'src/auth/decorators/request-user';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -41,23 +41,17 @@ export class AuthController {
       dto.message,
       dto.signature,
       dto.wallet,
+      +dto.chainId,
     );
 
     return { token };
   }
 
   @Get('session')
-  getSession(@Req() req: Request) {
-    if (!req.user) return null;
-
-    const chainId = Number(
-      this.configService.get<string>('CHAIN_ID') || sepolia.id,
-    );
-
-    const user = req.user as { wallet: string };
+  getSession(@RequestUser() user: UserClaims) {
     return {
       address: user.wallet,
-      chainId,
+      chainId: user.chainId,
     };
   }
 

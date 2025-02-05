@@ -6,10 +6,12 @@ export const postVerify = async (
   message: string,
   signature: string,
   wallet: string,
+  chainId: number,
 ) => {
   return publicClient.post(VERIFY_URL, {
     message,
     signature,
     wallet,
+    chainId,
   });
 };

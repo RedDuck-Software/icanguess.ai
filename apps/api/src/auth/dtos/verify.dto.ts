@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumberString, IsString } from 'class-validator';
 
 export class VerifyDto {
   @ApiProperty({
@@ -25,4 +25,12 @@ export class VerifyDto {
   @IsString()
   @IsNotEmpty()
   signature: string;
+
+  @ApiProperty({
+    example: '11155111',
+    description: 'Chain id',
+  })
+  @IsNumberString()
+  @IsNotEmpty()
+  chainId: string;
 }

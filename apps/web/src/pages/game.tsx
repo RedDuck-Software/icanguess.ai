@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import { formatUnits } from 'viem';
-import { useReadContract } from 'wagmi';
+import { useAccount, useConfig, useReadContract } from 'wagmi';
 
 import { gameAbi } from '@/abi/game-abi';
 import { Footer } from '@/components/footer/footer';
@@ -18,14 +18,18 @@ import { contractAddress } from '@/constants/constants';
 import { useSessions } from '@/hooks/queries/use-sessions';
 import { useStoredWords } from '@/hooks/queries/use-stored-words';
 import { useUserGuesses } from '@/hooks/queries/use-user-guesses';
-import { mnemonicList } from '@/lib/mnemonic-list';
 import { routes } from '@/router';
+import { generateMnemonic, english } from 'viem/accounts';
+import { GameMode } from '@/common';
+import { useQueryChain } from '@/hooks/use-query-chain';
 
 export default function Game() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const { data: sessionsRes } = useSessions();
+  const chain = useQueryChain();
+
+  const { data: sessionsRes } = useSessions(chain.id, GameMode.EASY);
   const sessions = useMemo(() => {
     if (!sessionsRes) return [];
     return sessionsRes.data.sessions;
@@ -58,10 +62,7 @@ export default function Game() {
       (storedWordsJSON &&
         !JSON.parse(storedWordsJSON)[session.roundId.toString()])
     ) {
-      const newMnemonic = Array.from(
-        { length: 9 },
-        () => mnemonicList[Math.floor(Math.random() * mnemonicList.length)],
-      );
+      const newMnemonic = generateMnemonic(english).split(' ').slice(0, 9);
 
       const stored = storedWordsJSON ? JSON.parse(storedWordsJSON) : {};
 

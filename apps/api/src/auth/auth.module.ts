@@ -8,6 +8,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { JwtAuthGuard } from './guards/jwt.guard';
 import { options } from '../config/jwt-module-async-options';
 import { PassportModule } from '@nestjs/passport';
+import { NetworkModule } from 'src/network/network.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { PassportModule } from '@nestjs/passport';
     JwtModule.registerAsync(options()),
     PrismaModule,
     JwtModule,
+    NetworkModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy, JwtAuthGuard],
