@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import { formatUnits } from 'viem';
-import { useAccount, useConfig, useReadContract } from 'wagmi';
+import { useReadContract } from 'wagmi';
 
 import { gameAbi } from '@/abi/game-abi';
 import { Footer } from '@/components/footer/footer';
@@ -42,15 +42,15 @@ export default function Game() {
     return find ?? null;
   }, [id, sessions]);
 
-  const { data: currentRoundStats } = useReadContract({
-    abi: gameAbi,
-    address: contractAddress,
-    functionName: 'roundInfos',
-    args: [BigInt(session?.roundId ?? 0)],
-    query: {
-      enabled: session?.roundId !== undefined && session?.roundId !== null,
-    },
-  });
+  // const { data: currentRoundStats } = useReadContract({
+  //   abi: gameAbi,
+  //   address: contractAddress,
+  //   functionName: 'roundInfos',
+  //   args: [BigInt(session?.roundId ?? 0)],
+  //   query: {
+  //     enabled: session?.roundId !== undefined && session?.roundId !== null,
+  //   },
+  // });
 
   const { data: storedWordsJSON } = useStoredWords();
 
@@ -78,7 +78,7 @@ export default function Game() {
     return JSON.parse(storedWordsJSON)[session.roundId.toString()] as string[];
   }, [session, storedWordsJSON]);
 
-  const { data: userGuesses } = useUserGuesses(session?.roundId);
+  const { data: userGuesses } = useUserGuesses(chain.id, session?.roundId);
 
   if (!id) {
     toast.error('Please find valid game');
@@ -142,7 +142,7 @@ export default function Game() {
                 <p className="font-space text-[30px] uppercase">Reward Pool</p>
                 <div className="flex items-center gap-3">
                   <p className="font-roboto text-[30px] font-medium text-dark">
-                    {formatUnits(currentRoundStats?.[1] || 0n, 18)} ETH
+                    {formatUnits(BigInt(session.rewardsPool), 18)} ETH
                   </p>
                   <img
                     src="https://www.iconarchive.com/download/i109534/cjdowner/cryptocurrency-flat/Ethereum-ETH.1024.png"

@@ -143,7 +143,12 @@ export const YourAnswer = ({ session }: Props) => {
           userGuesses.data.attempts.attemptsUser >
         0
       ) {
-        const res = await takeGuess({ prompt: word, roundId: session.roundId });
+        const res = await takeGuess({
+          prompt: word,
+          roundId: session.roundId,
+          chainId: chain.id,
+        });
+
         if (res) {
           setTemperature(res.data.temperature);
           if (res.data.word) {

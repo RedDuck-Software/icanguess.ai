@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { publicClient } from '@/lib/httpClient';
 import { GameMode } from '@/common';
 export interface Session {
-  rewardsPool: number;
+  rewardsPool: string;
   participants: number;
   roundId: number;
   roundStartTs: number;

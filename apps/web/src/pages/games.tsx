@@ -65,9 +65,11 @@ export default function Games() {
 }
 
 const Session = ({ session, index }: { session: ISession; index: number }) => {
+  const chain = useQueryChain();
+
   return (
     <NavLink
-      to={'/' + session.roundId.toString()}
+      to={'/game/' + session.roundId.toString() + `?chainId=${chain.id}`}
       className="flex w-full flex-1 flex-col gap-2.5"
     >
       <Card

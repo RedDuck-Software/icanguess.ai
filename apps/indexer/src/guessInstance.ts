@@ -1,5 +1,10 @@
 import { ponder } from 'ponder:registry';
-import { getCurrentRoundInfo, notifyEvent } from './common';
+import {
+  constructId,
+  getCurrentRoundInfo,
+  notifyEvent,
+  upsertNetwork,
+} from './common';
 import { guessInstanceAbi } from '../abis/guessInstanceAbi';
 import { claim, deposit, guessInstance, round, userRound } from 'ponder:schema';
 import { addresses } from '../ponder.config';
@@ -64,13 +69,15 @@ ponder.on('guessInstance:setup', async ({ context, event }) => {
       platformFeeReceiver,
       depositPrice,
       guessPassAmount,
+      ...(await upsertNetwork(context)),
     });
   }
 });
 
 ponder.on('guessInstance:RoundInitialized', async ({ context, event }) => {
   const res = await context.db.find(guessInstance, {
-    id: event.log.address,
+    contract: event.log.address,
+    networkId: context.network.chainId,
   });
 
   const { currentRoundId, roundEnd, roundStart, roundStartBufferEnd } =
@@ -80,24 +87,29 @@ ponder.on('guessInstance:RoundInitialized', async ({ context, event }) => {
       res!.roundStartBuffer,
     );
 
+  const id = constructId(
+    context,
+    event.args.roundId.toString() + event.log.address,
+  );
   const existing = await context.db.find(round, {
-    id: currentRoundId.toString() + event.log.address,
+    id,
   });
 
   if (existing) return;
 
   const evData = await context.db.insert(round).values({
-    id: currentRoundId.toString() + event.log.address,
+    id,
     claimed: false,
     contract: event.log.address,
     roundEndTs: roundEnd,
     roundStartTs: roundStart,
-    roundId: currentRoundId,
+    roundId: event.args.roundId,
     totalDeposited: 0n,
     target: event.args.target,
     roundStartBufferEndTs: roundStartBufferEnd,
-    guessInstanceId: event.log.address,
+    guessContract: event.log.address,
     participants: 0n,
+    ...(await upsertNetwork(context)),
   });
 
   await notifyEvent('round-initialized', evData, event, context);
@@ -105,7 +117,8 @@ ponder.on('guessInstance:RoundInitialized', async ({ context, event }) => {
 
 ponder.on('guessInstance:Deposited', async ({ context, event }) => {
   const guessInstanceRes = await context.db.find(guessInstance, {
-    id: event.log.address,
+    contract: event.log.address,
+    networkId: context.network.chainId,
   });
 
   const evData = await context.db.insert(deposit).values({
@@ -113,9 +126,13 @@ ponder.on('guessInstance:Deposited', async ({ context, event }) => {
     amount: event.args.amount,
     roundId: event.args.roundId,
     user: event.args.user,
+    ...(await upsertNetwork(context)),
   });
 
-  const rId = event.args.roundId.toString() + event.log.address;
+  const rId = constructId(
+    context,
+    event.args.roundId.toString() + event.log.address,
+  );
 
   const userRoundEntity = await context.db.find(userRound, {
     id: rId + event.args.user,
@@ -126,6 +143,7 @@ ponder.on('guessInstance:Deposited', async ({ context, event }) => {
       id: rId + event.args.user,
       roundId: rId,
       user: event.transaction.from,
+      ...(await upsertNetwork(context)),
     });
   }
 
@@ -147,10 +165,16 @@ ponder.on('guessInstance:Claim', async ({ context, event }) => {
     id: event.log.id,
     receiver: event.args.receiver,
     roundId: event.args.roundId,
+    ...(await upsertNetwork(context)),
   });
 
   await context.db
-    .update(round, { id: event.args.roundId.toString() + event.log.address })
+    .update(round, {
+      id: constructId(
+        context,
+        event.args.roundId.toString() + event.log.address,
+      ),
+    })
     .set(() => ({
       claimed: true,
       claimedAt: event.block.timestamp,

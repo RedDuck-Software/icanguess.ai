@@ -1,4 +1,4 @@
-import { Chain, sepolia } from '@reown/appkit/networks';
+import { abstract, aurora, Chain, sepolia } from '@reown/appkit/networks';
 import { createAppKit } from '@reown/appkit/react';
 import { WagmiAdapter } from '@reown/appkit-adapter-wagmi';
 
@@ -15,9 +15,13 @@ const metadata = {
   url: 'https://icanguess.ai', // origin must match your domain & subdomain
   icons: ['https://icanguess-ai.netlify.app/icons/blocks.svg'],
 };
-
 // 3. Set the networks
-const networks = [sepolia] satisfies [Chain, ...Chain[]];
+const environment = import.meta.env.ENVIRONMENT ?? 'development';
+
+const devNetworks = [sepolia] satisfies [Chain, ...Chain[]];
+const prodNetworks = [aurora, abstract] satisfies [Chain, ...Chain[]];
+
+const networks = environment === 'development' ? devNetworks : prodNetworks;
 
 // 4. Create Wagmi Adapter
 export const wagmiAdapter = new WagmiAdapter({

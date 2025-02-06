@@ -27,7 +27,9 @@ export class GameService {
       this.indexerUrl,
       GET_ROUNDS,
       {
-        contract,
+        contract: contract.toLowerCase(),
+        networkIdFloat: chainId,
+        networkIdInt: chainId,
       },
     );
 

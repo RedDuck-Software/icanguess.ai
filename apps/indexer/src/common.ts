@@ -1,7 +1,8 @@
 import { Context, Event } from 'ponder:registry';
 import { replaceBigInts } from '@ponder/utils';
-import { Hex, Address } from 'viem';
+import { Hex, Address, keccak256 } from 'viem';
 import { eventsQueue } from '../ponder.config';
+import { network } from 'ponder:schema';
 
 export const getCurrentRoundInfo = (
   timestamp: bigint,
@@ -47,4 +48,20 @@ export const notifyEvent = async <TEvData extends Object>(
   const payloadSerialized = replaceBigInts(payload, (v) => String(v));
 
   await eventsQueue.add('event-notifications', payloadSerialized);
+};
+
+export const constructId = (context: Context, baseId: bigint | string) => {
+  const id = baseId.toString() + '-' + context.network.chainId;
+  return keccak256(Buffer.from(id));
+};
+
+export const upsertNetwork = async (context: Context) => {
+  const db = context.db;
+
+  await db
+    .insert(network)
+    .values({ id: context.network.chainId.toString() })
+    .onConflictDoNothing();
+
+  return { networkId: context.network.chainId };
 };
