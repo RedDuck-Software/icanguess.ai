@@ -69,7 +69,7 @@ const Session = ({ session, index }: { session: ISession; index: number }) => {
 
   return (
     <NavLink
-      to={'/game/' + session.roundId.toString() + `?chainId=${chain.id}`}
+      to={`/game/${chain.id}/${session.roundId.toString()}`}
       className="flex w-full flex-1 flex-col gap-2.5"
     >
       <Card
@@ -86,7 +86,7 @@ const Session = ({ session, index }: { session: ISession; index: number }) => {
         <div className="flex items-center gap-3">
           <div className="flex flex-col items-end">
             <p className="font-roboto text-[30px] font-medium leading-none text-dark">
-              {formatUnits(BigInt(session.rewardsPool.toFixed()), 18)} ETH
+              {formatUnits(BigInt(session.rewardsPool), 18)} ETH
             </p>
             <p className="font-roboto text-[16px] text-dark/50"> Reward Pool</p>
           </div>

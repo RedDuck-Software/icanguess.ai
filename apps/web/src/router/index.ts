@@ -13,7 +13,7 @@ function lazyWithRetry(dynamicImportFn: () => any) {
 export const routes = {
   root: '/',
   games: '/games',
-  game: '/game/:id',
+  game: '/game/:chainId/:id',
 } as const;
 
 export const router = createBrowserRouter([
