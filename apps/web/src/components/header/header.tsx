@@ -45,7 +45,7 @@ export const Header = () => {
               </PopoverTrigger>
               <PopoverContent
                 onClick={disconnect}
-                className="h-[46px] w-[200px] cursor-pointer border border-white bg-transparent px-6 py-2.5 text-center text-xl text-white hover:opacity-80"
+                className="relative z-50 h-[46px] w-[200px] cursor-pointer border border-white bg-dark bg-transparent px-6 py-2.5 text-center text-xl text-white hover:opacity-80 [&_div]:bg-dark"
               >
                 Disconnect
               </PopoverContent>

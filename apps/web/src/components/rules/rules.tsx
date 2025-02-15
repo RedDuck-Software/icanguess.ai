@@ -2,11 +2,12 @@ import { forwardRef } from 'react';
 
 import { Card } from '../ui/card';
 const rules = [
-  'Lorem ipsum dolor sit amet consectetur. At pharetra facilisis magna at orci gravida donec sit turpis. ',
-  'Purus congue augue pharetra ornare amet. ',
-  'Consequat ullamcorper eget iaculis ac ipsum mattis donec. A at volutpat diam diam gravida sit. ',
-  'Quam est congue laoreet dolor iaculis quis. A',
-  'met diam lorem at libero lorem cursus faucibus ut.',
+  'The game starts automatically based on a timer.There is no minimum or maximum number of participants required to start the game.',
+  'Enter words between 3 to 20 characters long that can bring you closer to victory for a better user experience. The AI will guide you by indicating how close you are to the correct word. Words cannot contain hyphens and spaces.',
+  'The prize pool is formed from the contributions of all participants in the game session, minus a 10% administrator fee.',
+  'The first player to guess all the target words (depending on the mode) and claim the prize before time runs out wins.',
+  'To participate in a single game session, a user must pay 0.0015 ETH for 50 attempts (~$5). Additional sets of 50 attempts can be purchased at the same price within the same session.',
+  'Each game session lasts 1 hour, regardless of whether the words are guessed or not. If no one guesses the words and the 24-hour cycle ends, all funds roll over into a new session with a new address, where the reward remains the same but the words change completely',
 ];
 
 export const Rules = forwardRef<HTMLDivElement>((_, ref) => {
@@ -27,7 +28,7 @@ export const Rules = forwardRef<HTMLDivElement>((_, ref) => {
             <h2 className="font-space text-[80px] text-dark">Rules</h2>
             <div>
               {rules.map((rule, i) => (
-                <p className="font-roboto text-[20px] text-dark" key={rule}>
+                <p className="font-roboto text-[17px] text-dark" key={rule}>
                   {i + 1}. {rule}
                 </p>
               ))}

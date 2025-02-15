@@ -141,7 +141,7 @@ export default function Game() {
                 <p className="font-space text-[30px] uppercase">Reward Pool</p>
                 <div className="flex items-center gap-3">
                   <p className="font-roboto text-[30px] font-medium text-dark">
-                    {formatUnits(currentRoundStats?.[1] || 0n, 18)} ETH
+                    {formatUnits(BigInt(session.rewardsPool), 18)} ETH
                   </p>
                   <img
                     src="https://www.iconarchive.com/download/i109534/cjdowner/cryptocurrency-flat/Ethereum-ETH.1024.png"

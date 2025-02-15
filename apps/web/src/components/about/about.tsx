@@ -80,13 +80,15 @@ export const About = forwardRef<HTMLDivElement>((_, ref) => {
 
           <div className="relative z-30 flex h-full flex-1 flex-col items-center justify-center gap-20 px-20">
             <p className="font-roboto text-[20px] text-white">
-              Lorem ipsum dolor sit amet consectetur. Sed turpis id elit laoreet
-              leo facilisi ac. Eros sem sit enim a vestibulum adipiscing
-              consequat. Amet diam velit fames non orci nullam. Nascetur nunc
-              laoreet eget malesuada porttitor elit etiam. Risus facilisis
-              habitant lectus tortor mauris. Tortor consectetur etiam felis
-              duis. Nisl fermentum feugiat suspendisse aliquam. Sit nunc sed
-              pellentesque ut est pretium. Lectus quis vel nulla magna bibendum.
+              <span className="text-[22px] font-bold">
+                Dive into a game of intuition and deduction!
+              </span>
+              <br /> AICANGUESS.AI is an AI-powered GameFi platform where anyone
+              can participate in guessing mnemonic phrase words and claim the
+              grand prize — the entire reward pool. Players can choose between
+              two difficulty levels: easy and hard, and start with either one.
+              Our AI agent will guide you toward victory. Compete against other
+              players, invite friends, and have fun!
             </p>
           </div>
         </div>
