@@ -12795,6 +12795,12 @@ __metadata:
   languageName: node
   linkType: hard
 
+"icanguess.ai.character@workspace:apps/eliza":
+  version: 0.0.0-use.local
+  resolution: "icanguess.ai.character@workspace:apps/eliza"
+  languageName: unknown
+  linkType: soft
+
 "icanguess.ai@workspace:.":
   version: 0.0.0-use.local
   resolution: "icanguess.ai@workspace:."
