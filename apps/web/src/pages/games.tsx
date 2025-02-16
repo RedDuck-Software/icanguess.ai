@@ -22,7 +22,29 @@ export default function Games() {
   }, [data]);
 
   const { sectionsRef } = useSectionScroll();
-
+  // const sessions: ISession[] = [
+  //   {
+  //     participants: 1,
+  //     rewardsPool: 0,
+  //     roundEndTs: 0,
+  //     roundId: 1,
+  //     roundStartTs: 0,
+  //   },
+  //   {
+  //     participants: 1,
+  //     rewardsPool: 0,
+  //     roundEndTs: 0,
+  //     roundId: 1,
+  //     roundStartTs: 0,
+  //   },
+  //   {
+  //     participants: 1,
+  //     rewardsPool: 0,
+  //     roundEndTs: 0,
+  //     roundId: 1,
+  //     roundStartTs: 0,
+  //   },
+  // ];
   return (
     <div
       style={{
@@ -40,7 +62,7 @@ export default function Games() {
           <Header />
         </div>
         <section className="px-[90px]">
-          <div className="flex w-full items-center gap-10">
+          <div className="flex w-full max-w-full items-center gap-10">
             {sessions.map((s, i) => (
               <Session index={i} key={s.roundId} session={s} />
             ))}

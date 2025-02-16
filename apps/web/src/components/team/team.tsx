@@ -66,7 +66,7 @@ export const Team = forwardRef<HTMLDivElement>((_, ref) => {
           <h2 className="font-space text-[80px] text-dark">Team Members</h2>
           <div className="flex items-center gap-5">
             {members.map((member) => (
-              <Member {...member} />
+              <Member {...member} key={member.name} />
             ))}
           </div>
         </div>

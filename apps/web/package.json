@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@formkit/auto-animate": "^0.8.2",
+    "@radix-ui/react-dialog": "^1.1.6",
     "@radix-ui/react-popover": "^1.1.5",
     "@radix-ui/react-slot": "^1.1.1",
     "@reown/appkit": "^1.6.5",

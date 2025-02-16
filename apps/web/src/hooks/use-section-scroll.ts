@@ -1,7 +1,10 @@
+import { useAppKitState } from '@reown/appkit/react';
 import { useInView } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 
 export const useSectionScroll = () => {
+  const { open } = useAppKitState();
+
   const sectionsRef = useRef<HTMLDivElement[]>([]);
   const [isScrolling, setIsScrolling] = useState(false);
   const [currentSection, setCurrentSection] = useState(0);
@@ -9,7 +12,7 @@ export const useSectionScroll = () => {
   const isInView = useInView(ref, { once: true });
   useEffect(() => {
     const handleScroll = (event: WheelEvent) => {
-      if (isScrolling) return;
+      if (isScrolling || open) return;
       setIsScrolling(true);
 
       const delta = event.deltaY;
@@ -39,7 +42,7 @@ export const useSectionScroll = () => {
 
     window.addEventListener('wheel', handleScroll, { passive: false });
     return () => window.removeEventListener('wheel', handleScroll);
-  }, [currentSection, isScrolling]);
+  }, [currentSection, isScrolling, open]);
 
   return { sectionsRef, isInView, ref };
 };

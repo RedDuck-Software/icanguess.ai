@@ -77,7 +77,7 @@ export const Footer = forwardRef<HTMLDivElement, Props>(({ isDark }, ref) => {
       </div>
     </section>
   ) : (
-    <section className="relative z-30 h-[78vh] max-h-[800px] w-full">
+    <section className="relative z-30 w-full">
       <Card
         className="h-full w-full flex-col gap-10 rounded-b-none p-10"
         variant={'dark'}
