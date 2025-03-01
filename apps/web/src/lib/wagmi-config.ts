@@ -1,4 +1,4 @@
-import {Chain, sepolia} from '@reown/appkit/networks';
+import { auroraTestnet, Chain, sepolia } from '@reown/appkit/networks';
 import { createAppKit } from '@reown/appkit/react';
 import { WagmiAdapter } from '@reown/appkit-adapter-wagmi';
 
@@ -16,7 +16,7 @@ const metadata = {
 };
 
 // 3. Set the networks
-const networks = [sepolia] satisfies [Chain, ...Chain[]];
+const networks = [sepolia, auroraTestnet] satisfies [Chain, ...Chain[]];
 
 // 4. Create Wagmi Adapter
 export const wagmiAdapter = new WagmiAdapter({

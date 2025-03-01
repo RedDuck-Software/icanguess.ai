@@ -6,7 +6,7 @@ import { guessInstanceAbi } from './abis/guessInstanceAbi';
 import { EventNotification } from './src/common';
 
 import dotenv from 'dotenv';
-import { sepolia } from 'viem/chains';
+import { auroraTestnet, sepolia } from 'viem/chains';
 
 dotenv.config();
 
@@ -34,13 +34,20 @@ export const eventsQueue = new Queue<EventNotification>('event-notifications', {
 
 export const addresses = {
   [sepolia.id]: [getAddress('0xD46D8f9e1B03bC0BFDa065A1797d45c64d66902c')],
+  [auroraTestnet.id]: [
+    getAddress('0x2f755809cFC4a83bc15E287f99426Fc6F8716c28'),
+  ],
 };
 
 export default createConfig({
   networks: {
     sepolia: {
-      chainId: 11155111,
+      chainId: sepolia.id,
       transport: http(process.env.PONDER_RPC_URL_11155111),
+    },
+    auroraTestnet: {
+      chainId: auroraTestnet.id,
+      transport: http(process.env.PONDER_RPC_URL_1313161555),
     },
   },
   contracts: {
@@ -49,6 +56,10 @@ export default createConfig({
       network: {
         sepolia: {
           startBlock: 7619668,
+          address: addresses[sepolia.id],
+        },
+        auroraTestnet: {
+          startBlock: 188949283,
           address: addresses[sepolia.id],
         },
       },

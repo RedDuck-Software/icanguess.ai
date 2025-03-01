@@ -1,4 +1,4 @@
-import { mainnet, sepolia } from '@reown/appkit/networks';
+import { auroraTestnet, mainnet, sepolia } from '@reown/appkit/networks';
 import {
   createSIWEConfig,
   formatMessage,
@@ -61,7 +61,7 @@ export const siweConfig = createSIWEConfig({
   getMessageParams: async () => ({
     domain: window.location.host,
     uri: window.location.origin,
-    chains: [sepolia.id, mainnet.id],
+    chains: [sepolia.id, mainnet.id, auroraTestnet.id],
     statement: 'Please sign with your account',
   }),
   createMessage,

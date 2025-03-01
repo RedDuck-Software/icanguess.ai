@@ -13,6 +13,15 @@ const configs = {
     depositGuesses: 20n,
     startSigner: undefined,
   },
+  [1313161555 as number]: {
+    roundDuration: 1 * 3600,
+    roundStartBuffer: 0,
+    platformFee: 10 * 100,
+    platformFeeReceiver: undefined,
+    depositPrice: parseUnits('0.00001'),
+    depositGuesses: 20n,
+    startSigner: undefined,
+  },
 };
 
 const deploy = async (hre: HardhatRuntimeEnvironment) => {

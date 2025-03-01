@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Address, Chain, createWalletClient, Hex, http, keccak256 } from 'viem';
-import { mainnet, arbitrum, sepolia } from 'viem/chains';
+import { mainnet, arbitrum, sepolia, auroraTestnet } from 'viem/chains';
 import { ConfigService } from '@nestjs/config';
 import { solidityPacked } from 'ethers';
 import { privateKeyToAccount } from 'viem/accounts';
@@ -52,6 +52,7 @@ export class SignaturesService {
       [mainnet.id]: mainnet,
       [arbitrum.id]: arbitrum,
       [sepolia.id]: sepolia,
+      [auroraTestnet.id]: auroraTestnet,
     };
 
     return chainMapping[chainId] || mainnet;

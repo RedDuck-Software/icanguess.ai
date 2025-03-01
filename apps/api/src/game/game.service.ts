@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { GraphqlService } from 'src/graphql/graphql.service';
 import { Address, getAddress } from 'viem';
 import { GET_ROUNDS, GetRoundsResponse } from './game.queues';
-import { sepolia } from 'viem/chains';
+import { auroraTestnet, sepolia } from 'viem/chains';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from 'src/database/prisma.service';
 
@@ -17,6 +17,10 @@ export const contractAddresses: Record<number, Record<GameMode, Address>> = {
   [sepolia.id]: {
     [GameMode.EASY]: getAddress('0xD46D8f9e1B03bC0BFDa065A1797d45c64d66902c'),
     [GameMode.HARD]: getAddress('0xD46D8f9e1B03bC0BFDa065A1797d45c64d66902c'), // FIXME:
+  },
+  [auroraTestnet.id]: {
+    [GameMode.EASY]: getAddress('0x2f755809cFC4a83bc15E287f99426Fc6F8716c28'),
+    [GameMode.HARD]: getAddress('0x2f755809cFC4a83bc15E287f99426Fc6F8716c28'), // FIXME:
   },
 };
 
