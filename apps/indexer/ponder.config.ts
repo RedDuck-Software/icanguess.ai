@@ -39,6 +39,13 @@ export const addresses = {
   ],
 };
 
+auroraTestnet.contracts = {
+  multicall3: {
+    address: '0x65f957Da089fe87CB977BeC8179c93446F4a8D4F',
+    blockCreated: 188950192,
+  },
+};
+
 export default createConfig({
   networks: {
     sepolia: {
@@ -59,7 +66,7 @@ export default createConfig({
           address: addresses[sepolia.id],
         },
         auroraTestnet: {
-          startBlock: 188949283,
+          startBlock: 188950192,
           address: addresses[sepolia.id],
         },
       },
