@@ -8,6 +8,7 @@
   "scripts": {
     "build": "nest build",
     "generate": "yarn prisma generate",
+    "migrate": "yarn prisma migrate deploy",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
