@@ -1,9 +1,10 @@
 {
-  "name": "my-app",
+  "name": "indexer",
   "version": "0.0.1",
   "private": true,
   "type": "module",
   "scripts": {
+    "build": "echo 'skipping build for indexer'",
     "dev": "ponder dev",
     "start": "ponder start",
     "db": "ponder db",
