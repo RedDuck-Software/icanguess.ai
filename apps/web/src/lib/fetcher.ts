@@ -101,7 +101,6 @@ export class Fetcher {
     };
   }
 }
-// @ts-expect-error SKIP
 const apiKey = import.meta.env.VITE_API_BASE_URL;
 
 export const apiClient = () => {
