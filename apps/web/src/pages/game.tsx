@@ -2,9 +2,6 @@ import { useMemo } from 'react';
 import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import { formatUnits } from 'viem';
-import { useReadContract } from 'wagmi';
-
-import { gameAbi } from '@/abi/game-abi';
 import { Footer } from '@/components/footer/footer';
 import { PreviousAnswers } from '@/components/game/answer/previous-answers';
 import { YourAnswer } from '@/components/game/answer/your-answer';
@@ -14,7 +11,6 @@ import { Header } from '@/components/header/header';
 import { Mode } from '@/components/mode/mode';
 import { Rules } from '@/components/rules/rules';
 import { Card } from '@/components/ui/card';
-import { contractAddress } from '@/constants/constants';
 import { useSessions } from '@/hooks/queries/use-sessions';
 import { useStoredWords } from '@/hooks/queries/use-stored-words';
 import { useUserGuesses } from '@/hooks/queries/use-user-guesses';
@@ -38,15 +34,15 @@ export default function Game() {
     return find ?? null;
   }, [id, sessions]);
 
-  const { data: currentRoundStats } = useReadContract({
-    abi: gameAbi,
-    address: contractAddress,
-    functionName: 'roundInfos',
-    args: [BigInt(session?.roundId ?? 0)],
-    query: {
-      enabled: session?.roundId !== undefined && session?.roundId !== null,
-    },
-  });
+  // const { data: currentRoundStats } = useReadContract({
+  //   abi: gameAbi,
+  //   address: contractAddress,
+  //   functionName: 'roundInfos',
+  //   args: [BigInt(session?.roundId ?? 0)],
+  //   query: {
+  //     enabled: session?.roundId !== undefined && session?.roundId !== null,
+  //   },
+  // });
 
   const { data: storedWordsJSON } = useStoredWords();
 
