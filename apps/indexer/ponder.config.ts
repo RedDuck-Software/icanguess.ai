@@ -59,7 +59,7 @@ export default createConfig({
       network: {
         auroraTestnet: {
           startBlock: 188950192,
-          address: addresses[sepolia.id],
+          address: addresses[auroraTestnet.id],
         },
       },
     },
