@@ -3,7 +3,7 @@ import { AxiosError } from 'axios';
 import { motion } from 'framer-motion';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
-import { encodeAbiParameters, formatUnits, zeroAddress } from 'viem';
+import { encodeAbiParameters, formatUnits, keccak256, zeroAddress } from 'viem';
 import {
   useAccount,
   usePublicClient,
@@ -61,12 +61,6 @@ export const YourAnswer = ({ session }: Props) => {
     args: [BigInt(session.roundId)],
   });
 
-  const buttonText = useMemo(() => {
-    if (!address) return 'Connect Wallet';
-
-    return 'Take a guess';
-  }, [address]);
-
   const [temperature, setTemperature] = useState<null | number>(null);
 
   const [loading, setLoading] = useState(false);
@@ -77,6 +71,16 @@ export const YourAnswer = ({ session }: Props) => {
   const { data: userGuesses } = useUserGuesses(session?.roundId);
   const { mutateAsync: takeGuess } = useTakeGuess();
   const { data: storedWords } = useStoredWords();
+  const words =
+    (JSON.parse(storedWords ?? '') as { mnemonic: string[] })?.mnemonic ?? null;
+  const buttonText = useMemo(() => {
+    if (!address) return 'Connect Wallet';
+
+    if (words?.length === 12) return 'Claim';
+
+    return 'Take a guess';
+  }, [address]);
+
   const onClick = async () => {
     if (!address) {
       open();
@@ -89,7 +93,14 @@ export const YourAnswer = ({ session }: Props) => {
     try {
       let tx: `0x${string}` | null = null;
 
-      if (
+      if (words?.length === 12) {
+        tx = await writeContractAsync({
+          abi: gameAbi,
+          address: contractAddress,
+          functionName: 'claim',
+          args: [keccak256(`0x${words.join(' ')}`)],
+        });
+      } else if (
         userGuesses.data.attempts.attemptsBought -
           userGuesses.data.attempts.attemptsUser ===
         0
@@ -159,13 +170,6 @@ export const YourAnswer = ({ session }: Props) => {
           console.log('SOMETHING WENT WRONG');
         }
       }
-
-      // tx = await writeContractAsync({
-      //   abi: gameAbi,
-      //   address: contractAddress,
-      //   functionName: 'claim',
-      //   args: [''],
-      // });
 
       if (tx) {
         await publicClient?.waitForTransactionReceipt({ hash: tx });
