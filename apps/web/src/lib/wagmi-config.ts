@@ -1,4 +1,4 @@
-import { auroraTestnet, Chain, sepolia } from '@reown/appkit/networks';
+import { auroraTestnet, Chain } from '@reown/appkit/networks';
 import { createAppKit } from '@reown/appkit/react';
 import { WagmiAdapter } from '@reown/appkit-adapter-wagmi';
 

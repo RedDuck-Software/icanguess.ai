@@ -1,4 +1,4 @@
-import { auroraTestnet, mainnet, sepolia } from '@reown/appkit/networks';
+import { auroraTestnet } from '@reown/appkit/networks';
 import {
   createSIWEConfig,
   formatMessage,
