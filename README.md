@@ -1,6 +1,6 @@
 # icanguess.ai
 
-This mono-repository contains a codebase for a `icanguess.ai` project developed specifically for ETHKyiv Impulse hackathon 2025.
+This mono-repository contains a codebase for a `icanguess.ai` project developed specifically for One Trillion Agents Hackathon.
 
 ## Project structure
 
@@ -10,7 +10,8 @@ This mono-repository contains a codebase for a `icanguess.ai` project developed 
 - ./apps/web - contains frontend app and all related ui components
 - ./apps/eliza - contains character definition for elizaOS AI Agent
 
-### To run the project locally you need to have the following installed:
+### To run the project locally you need to have the following installed
+
 - node
 - redis
 - postgresql

@@ -72,7 +72,7 @@ export const Footer = forwardRef<HTMLDivElement, Props>(({ isDark }, ref) => {
           ref={ref}
           className="text-center font-space text-[20px] uppercase text-dark"
         >
-          The product is made specifically for ETHKyiv Impulse
+          The product is made specifically for One Trillion Agents Hackathon
         </p>
       </div>
     </section>
@@ -121,7 +121,7 @@ export const Footer = forwardRef<HTMLDivElement, Props>(({ isDark }, ref) => {
             </a>
           </div>
           <p ref={ref} className="text-center font-space text-[20px] uppercase">
-            The product is made specifically for ETHKyiv Impulse
+            The product is made specifically for One Trillion Agents Hackathon
           </p>
         </div>
       </Card>
