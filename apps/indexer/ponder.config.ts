@@ -48,10 +48,6 @@ auroraTestnet.contracts = {
 
 export default createConfig({
   networks: {
-    sepolia: {
-      chainId: sepolia.id,
-      transport: http(process.env.PONDER_RPC_URL_11155111),
-    },
     auroraTestnet: {
       chainId: auroraTestnet.id,
       transport: http(process.env.PONDER_RPC_URL_1313161555),
@@ -61,10 +57,6 @@ export default createConfig({
     guessInstance: {
       abi: guessInstanceAbi,
       network: {
-        sepolia: {
-          startBlock: 7619668,
-          address: addresses[sepolia.id],
-        },
         auroraTestnet: {
           startBlock: 188950192,
           address: addresses[sepolia.id],
