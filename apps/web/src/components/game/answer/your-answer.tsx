@@ -44,6 +44,7 @@ export const YourAnswer = ({ session }: Props) => {
       },
     ],
   });
+
   const depositPrice = useMemo(() => {
     if (!data || !data[0].result) return '0';
     return formatUnits(data[0].result, 18);
@@ -71,8 +72,16 @@ export const YourAnswer = ({ session }: Props) => {
   const { data: userGuesses } = useUserGuesses(session?.roundId);
   const { mutateAsync: takeGuess } = useTakeGuess();
   const { data: storedWords } = useStoredWords();
-  const words =
-    (JSON.parse(storedWords ?? '') as { mnemonic: string[] })?.mnemonic ?? null;
+
+  const words = useMemo(() => {
+    if (!storedWords) return [];
+    const parsed = JSON.parse(storedWords) as Record<string, string[]>;
+
+    console.log('pARSED', parsed[session.roundId.toString()]);
+
+    return parsed[session.roundId.toString()] ?? [];
+  }, [storedWords]);
+
   const buttonText = useMemo(() => {
     if (!address) return 'Connect Wallet';
 
@@ -107,7 +116,10 @@ export const YourAnswer = ({ session }: Props) => {
       ) {
         if (currentRoundStats[0] === zeroAddress) {
           try {
+            console.log('hello');
+
             const res = await startRoundWithSig();
+            console.log('hello2');
             const signature = encodeAbiParameters(
               [
                 { name: 'x', type: 'address' },
