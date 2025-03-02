@@ -85,6 +85,15 @@ export const YourAnswer = ({ session }: Props) => {
   const buttonText = useMemo(() => {
     if (!address) return 'Connect Wallet';
 
+    if (
+      userGuesses &&
+      userGuesses.data.attempts.attemptsBought -
+        userGuesses.data.attempts.attemptsUser ===
+        0
+    ) {
+      return 'Buy attempts';
+    }
+
     if (words?.length === 12) return 'Claim';
 
     return 'Take a guess';
@@ -116,10 +125,8 @@ export const YourAnswer = ({ session }: Props) => {
       ) {
         if (currentRoundStats[0] === zeroAddress) {
           try {
-            console.log('hello');
-
             const res = await startRoundWithSig();
-            console.log('hello2');
+
             const signature = encodeAbiParameters(
               [
                 { name: 'x', type: 'address' },

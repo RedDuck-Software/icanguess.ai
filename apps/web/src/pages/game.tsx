@@ -93,9 +93,11 @@ export default function Game() {
         <Header />
       </div>
       {!session ? (
-        <h1 className="font-space text-[80px] text-dark">
-          Please proceed to newer session
-        </h1>
+        <NavLink to={routes.games}>
+          <h1 className="px-[90px] font-space text-[80px] text-white">
+            Please proceed to newer session
+          </h1>
+        </NavLink>
       ) : (
         <>
           <section className="px-[90px]">
