@@ -53,6 +53,8 @@ async function bootstrap() {
     origin: [
       'https://ab55-2a09-bac5-597a-52d-00-84-a0.ngrok-free.app',
       'https://e3d8-5-181-248-159.ngrok-free.app',
+      'https://icanguess-ai.netlify.app',
+      'http://www.icanguess.com',
     ],
     methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
     credentials: true,
