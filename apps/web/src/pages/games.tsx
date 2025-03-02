@@ -40,19 +40,6 @@ export default function Games() {
           <Header />
         </div>
         <section className="mb-[100px] px-[90px]">
-          <h3 className="font-space text-[30px] uppercase leading-none text-white">
-            Aurora
-          </h3>
-          <div className="flex w-full items-center gap-10">
-            {sessions.map((s, i) => (
-              <Session index={i} key={s.roundId} session={s} />
-            ))}
-          </div>
-        </section>
-        <section className="px-[90px]">
-          <h3 className="font-space text-[30px] uppercase leading-none text-white">
-            Sepolia
-          </h3>
           <div className="flex w-full items-center gap-10">
             {sessions.map((s, i) => (
               <Session index={i} key={s.roundId} session={s} />
