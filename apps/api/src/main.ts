@@ -55,6 +55,7 @@ async function bootstrap() {
       'https://e3d8-5-181-248-159.ngrok-free.app',
       'https://icanguess-ai.netlify.app',
       'http://www.icanguess.com',
+      'http://localhost:5173',
     ],
     methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
     credentials: true,

@@ -61,7 +61,7 @@ export const siweConfig = createSIWEConfig({
   getMessageParams: async () => ({
     domain: window.location.host,
     uri: window.location.origin,
-    chains: [sepolia.id, mainnet.id, auroraTestnet.id],
+    chains: [auroraTestnet.id],
     statement: 'Please sign with your account',
   }),
   createMessage,

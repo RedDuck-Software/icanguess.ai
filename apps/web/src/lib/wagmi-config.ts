@@ -16,7 +16,7 @@ const metadata = {
 };
 
 // 3. Set the networks
-const networks = [sepolia, auroraTestnet] satisfies [Chain, ...Chain[]];
+const networks = [auroraTestnet] satisfies [Chain, ...Chain[]];
 
 // 4. Create Wagmi Adapter
 export const wagmiAdapter = new WagmiAdapter({
