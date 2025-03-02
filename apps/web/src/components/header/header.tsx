@@ -36,6 +36,7 @@ export const Header = () => {
           <NavLink to={routes.root} className="font-space text-2xl text-white">
             icanguess.ai
           </NavLink>
+
           {address ? (
             <Popover>
               <PopoverTrigger asChild>
