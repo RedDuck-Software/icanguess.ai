@@ -12,6 +12,9 @@ import { useSessions } from '@/hooks/queries/use-sessions';
 import { useSectionScroll } from '@/hooks/use-section-scroll';
 
 export default function Home() {
+  if (typeof window !== 'undefined') {
+    console.log(window);
+  }
   useSessions();
   const { isInView, sectionsRef, ref } = useSectionScroll();
   return (
